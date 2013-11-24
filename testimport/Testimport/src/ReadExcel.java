@@ -1,0 +1,56 @@
+
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
+public class ReadExcel {
+
+	ArrayList<Student> students=new ArrayList<Student>();
+  private String inputFile;
+
+  public void setInputFile(String inputFile) {
+    this.inputFile = inputFile;
+  }
+
+  public void read() throws IOException  {
+    File inputWorkbook = new File(inputFile);
+    Workbook w;
+    try {
+      w = Workbook.getWorkbook(inputWorkbook);
+      // Get the first sheet
+      Sheet sheet = w.getSheet(0);
+      // Loop over first 10 column and lines
+
+      
+        for (int i = 1; i < sheet.getRows(); i++) {        	
+            String FirstName= sheet.getCell(0, i).getContents();
+        	String LastName= sheet.getCell(1, i).getContents();
+        	String AndrewID= sheet.getCell(2, i).getContents();
+        	String ProgramTrack= sheet.getCell(3, i).getContents();
+        	String FullTime= sheet.getCell(2, i).getContents();
+        	String Country= sheet.getCell(5, i).getContents();
+            String Semester= sheet.getCell(6, i).getContents();
+            Student stu=new Student( AndrewID, FirstName, LastName, ProgramTrack, FullTime, Country,  Semester);
+            students.add(stu);
+        	
+      }
+    } catch (BiffException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) throws IOException {
+    ReadExcel test = new ReadExcel();
+    test.setInputFile("testExcelSheet.xls");
+    test.read();
+ 
+  }
+
+} 
