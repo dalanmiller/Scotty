@@ -6,5 +6,8 @@
 *.ear
 /bin
 
+.classpath
+
+
 #SILLY MACS!
 .DS_Store
