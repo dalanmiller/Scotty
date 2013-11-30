@@ -3,10 +3,11 @@ package com.cmu.scotty.controller;
 import java.io.*;
 import java.util.*;
 import com.cmu.scotty.model.*;
+import com.cmu.scotty.exception.*;
 
 public class ReadText {
 	
-	public ArrayList<Student> Read(String path) throws IOException,Exception{ 
+	public ArrayList<Student> Read(String path) throws IOException,wrongtextexception{ 
 		File file= new File(path);
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String tempString;
@@ -14,7 +15,7 @@ public class ReadText {
         while ((tempString = reader.readLine()) != null) {
         	content.add(tempString);}
         	reader.close();
-		if (!content.get(1).contains("CLASS ROSTER")) throw new Exception();
+		if (!content.get(1).contains("CLASS ROSTER")) throw new wrongtextexception();
 		
 		ArrayList<Student> students= new ArrayList<Student>();
 		for(int i=11;i<content.size()-1;i++){
