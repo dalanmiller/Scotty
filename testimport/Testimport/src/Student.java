@@ -8,6 +8,7 @@ public class Student {
 	private String Country;
 	private String Semester;
 	
+	
 	public Student(String AndrewID,String FirstName,String LastName,
 			String ProgramTrack,String FullTime,String Country, String Semester){
 		this.AndrewID=AndrewID;
