@@ -1,7 +1,12 @@
 *.class
+myDB
+scottyDB
+.classpath
+
 
 # Package Files #
 *.jar
 *.war
 *.ear
+.metadata
 /bin
