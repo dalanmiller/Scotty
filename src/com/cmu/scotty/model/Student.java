@@ -22,6 +22,16 @@ public class Student {
 		this.semester=Semester;
 		this.photoPath=null;
 	}
+	public Student(String AndrewID){
+		this.andrewID=AndrewID;
+		this.firstName=null;
+		this.lastName=null;
+		this.programTrack=null;
+		this.fullTime=null;
+		this.country=null;
+		this.semester=null;
+		this.photoPath=null;
+	}
 	
 	public String getPhotoPath() {
 		return photoPath;
