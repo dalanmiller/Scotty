@@ -1,8 +1,0 @@
-/**
- * 
- */
-/**
- * @author simius
- *
- */
-package GUI;
