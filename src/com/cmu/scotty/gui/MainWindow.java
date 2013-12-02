@@ -1,8 +1,10 @@
 package com.cmu.scotty.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -31,7 +34,8 @@ import javax.swing.BoxLayout;
 
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints; //similar to the last one, nice 
+import java.awt.GridBagConstraints;
+import javax.swing.SwingConstants; //similar to the last one, nice 
 
 public class MainWindow {
 
@@ -54,7 +58,7 @@ public class MainWindow {
 	private JPanel jpImportTxt = new JPanel();
 	private JPanel jpImportImg = new JPanel(); 
 	//Panel excel import
-	private JLabel lblImportExcel = new JLabel("Excel file");
+	private JLabel lblImportExcel = new JLabel("Excel file*");
 	private JTextField jtfExcelPath = new JTextField();
 	private JButton jbtBrowseExcel = new JButton("Browse");
 	private File importExcelFile = new File(""); 
@@ -68,13 +72,14 @@ public class MainWindow {
 	private FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("TXT", "txt");
 	private JFileChooser jfcImportTxtFile = new JFileChooser();
 	//Panel Folder Import
-	private JLabel lblImportImg = new JLabel("Image folder");
+	private JLabel lblImportImg = new JLabel("Image folder*");
 	private JTextField jtfImgPath = new JTextField();
 	private JButton jbtBrowseImg = new JButton("Browse");
 	private File importImgFile = new File(""); 
-//	private FileNameExtensionFilter filterImg = new FileNameExtensionFilter("Directory", "");
 	private JFileChooser jfcImportImgFile = new JFileChooser();
-	
+	//Panel Next Import
+	private JPanel jpImportNext = new JPanel();
+	private JButton jbtImportNext = new JButton("Next>>");
 	/**
 	 * Launch the application.
 	 */
@@ -87,9 +92,9 @@ public class MainWindow {
 		          	UIManager.setLookAndFeel(new SubstanceRavenGraphiteLookAndFeel());
 		        } catch (Exception e) {
 		        	e.printStackTrace();
-		          //System.out.println("Substance Graphite failed to initialize");
 		        }
 		        MainWindow window = new MainWindow();
+		        
 				window.frame.setVisible(true);
 		      }
 		 });
@@ -108,6 +113,7 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -116,9 +122,7 @@ public class MainWindow {
 		jmb.add(jmSkin);
 		
 		
-		//	TEST CODE
-	//	JLabel lblThisIsPanel = new JLabel("Import File");
-	//	jpImport.add(lblThisIsPanel);
+	
 		
 		JLabel lblThisIsPane2 = new JLabel("PanelFilter");
 		jpFilter.add(lblThisIsPane2);
@@ -128,7 +132,7 @@ public class MainWindow {
 		
 		
 		
-		//Left Side-Buttons
+		//Top Side-Buttons
 		jbtImport = new JButton("Import");
 		jbtImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -172,21 +176,26 @@ public class MainWindow {
 		jpStatic.add(jbtImport);
 		jpStatic.add(jbtFilter);
 		jpStatic.add(jbtExport);
-		
+		jbtImport.setEnabled(true);
+		jbtImport.setSelected(true);
+		jbtFilter.setEnabled(false);
+		jbtExport.setEnabled(false);
+	//	jpStatic.set
 		
 		
 		//PanelImport
-		jpImport.setLayout(new GridLayout(3, 1, 0, 0));
+		jpImport.setLayout(new GridLayout(4, 1, 0, 0));
 		jpImport.add(jpImportExcel);
 		jpImport.add(jpImportTxt);
 		jpImport.add(jpImportImg);
-		//PanelExcelImport
+		jpImport.add(jpImportNext);
 		jpImportExcel.setLayout(null);
-		lblImportExcel.setBounds(28, 34, 69, 15);
+		lblImportExcel.setBounds(32, 0, 66, 59);
 		jpImportExcel.add(lblImportExcel);
-		jtfExcelPath.setBounds(107, 30, 167, 23);
+		jtfExcelPath.setBounds(122, 18, 204, 23);
 		jpImportExcel.add(jtfExcelPath);
 		jfcImportExcelFile.setFileFilter(filterExcel);
+		jbtBrowseExcel.setBounds(352, 18, 69, 23);
 		jbtBrowseExcel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int returnVal = jfcImportExcelFile.showOpenDialog(jbtBrowseExcel);			
@@ -196,14 +205,14 @@ public class MainWindow {
 				}
 			}
 		});
-		jbtBrowseExcel.setBounds(286, 30, 69, 23);
 		jpImportExcel.add(jbtBrowseExcel);
 		
 		//PanelTxtImport
 		jpImportTxt.setLayout(null);
-		lblImportTxt.setBounds(28, 34, 69, 15);
+		lblImportTxt.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImportTxt.setBounds(31, 0, 69, 59);
 		jpImportTxt.add(lblImportTxt);
-		jtfTxtPath.setBounds(107, 30, 167, 23);
+		jtfTxtPath.setBounds(122, 18, 204, 23);
 		jpImportTxt.add(jtfTxtPath);
 		jfcImportTxtFile.setFileFilter(filterTxt);
 		jbtBrowseTxt.addActionListener(new ActionListener() {
@@ -215,16 +224,15 @@ public class MainWindow {
 				}
 			}
 		});
-		jbtBrowseTxt.setBounds(286, 30, 69, 23);
+		jbtBrowseTxt.setBounds(352, 18, 69, 23);
 		jpImportTxt.add(jbtBrowseTxt);
 		//PanelImgPath
 		jfcImportImgFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 		jpImportImg.setLayout(null);
-		lblImportImg.setBounds(28, 34, 69, 15);
+		lblImportImg.setBounds(24, 0, 82, 62);
 		jpImportImg.add(lblImportImg);
-		jtfImgPath.setBounds(107, 30, 167, 23);
+		jtfImgPath.setBounds(122, 20, 204, 23);
 		jpImportImg.add(jtfImgPath);
-	//	jfcImportTxtFile.setFileFilter(filterImg);
 		jbtBrowseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int returnVal = jfcImportImgFile.showOpenDialog(jbtBrowseImg);			
@@ -234,9 +242,33 @@ public class MainWindow {
 				}
 			}
 		});
-		jbtBrowseImg.setBounds(286, 30, 69, 23);
+		jbtBrowseImg.setBounds(352, 20, 69, 23);
 		jpImportImg.add(jbtBrowseImg);
-		
+		jpImportNext.setLayout(null);
+		jbtImportNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(jtfExcelPath.getText().trim().length()<1 || jtfImgPath.getText().trim().length()<1){
+					if(jtfExcelPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose the Excel Path!");
+					else if(jtfImgPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose the Image Source Folder!");
+				}
+				else{					
+				jpImport.setVisible(false);
+				jbtFilter.setEnabled(true);
+				jpFilter.setVisible(true);
+				jpExport.setVisible(false);
+				jbtImport.setSelected(false);
+				jbtFilter.setSelected(true);
+				jbtExport.setSelected(false);
+				frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+				}
+				
+			}
+		});
+		jbtImportNext.setBounds(352, 29, 69, 23);
+		//PanelNextImport
+		jpImportNext.add(jbtImportNext);
 		
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
@@ -245,7 +277,8 @@ public class MainWindow {
 		jpFilter.setVisible(false);
 		jpFilter.setVisible(false);
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-		frame.setJMenuBar(jmb);
+	//	frame.setJMenuBar(jmb);
+		frame.setLocationRelativeTo(null);
 		
 	}
 
