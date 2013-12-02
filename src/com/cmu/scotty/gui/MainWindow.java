@@ -31,7 +31,8 @@ import javax.swing.BoxLayout;
 
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints; //similar to the last one, nice 
+import java.awt.GridBagConstraints;
+import javax.swing.SwingConstants; //similar to the last one, nice 
 
 public class MainWindow {
 
@@ -53,6 +54,7 @@ public class MainWindow {
 	private JPanel jpImportExcel = new JPanel();
 	private JPanel jpImportTxt = new JPanel();
 	private JPanel jpImportImg = new JPanel(); 
+	private JPanel jpImportNext = new JPanel();
 	//Panel excel import
 	private JLabel lblImportExcel = new JLabel("Excel file");
 	private JTextField jtfExcelPath = new JTextField();
@@ -72,8 +74,9 @@ public class MainWindow {
 	private JTextField jtfImgPath = new JTextField();
 	private JButton jbtBrowseImg = new JButton("Browse");
 	private File importImgFile = new File(""); 
-//	private FileNameExtensionFilter filterImg = new FileNameExtensionFilter("Directory", "");
 	private JFileChooser jfcImportImgFile = new JFileChooser();
+	//Panel Next Import
+	private JButton jbtImportNext = new JButton("Next>>");
 	
 	/**
 	 * Launch the application.
@@ -176,15 +179,16 @@ public class MainWindow {
 		
 		
 		//PanelImport
-		jpImport.setLayout(new GridLayout(3, 1, 0, 0));
+		jpImport.setLayout(new GridLayout(4, 1, 0, 0));
 		jpImport.add(jpImportExcel);
 		jpImport.add(jpImportTxt);
 		jpImport.add(jpImportImg);
+		jpImport.add(jpImportNext);
 		//PanelExcelImport
 		jpImportExcel.setLayout(null);
-		lblImportExcel.setBounds(28, 34, 69, 15);
+		lblImportExcel.setBounds(28, 31, 69, 15);
 		jpImportExcel.add(lblImportExcel);
-		jtfExcelPath.setBounds(107, 30, 167, 23);
+		jtfExcelPath.setBounds(107, 27, 167, 23);
 		jpImportExcel.add(jtfExcelPath);
 		jfcImportExcelFile.setFileFilter(filterExcel);
 		jbtBrowseExcel.addActionListener(new ActionListener() {
@@ -196,7 +200,7 @@ public class MainWindow {
 				}
 			}
 		});
-		jbtBrowseExcel.setBounds(286, 30, 69, 23);
+		jbtBrowseExcel.setBounds(286, 27, 69, 23);
 		jpImportExcel.add(jbtBrowseExcel);
 		
 		//PanelTxtImport
@@ -236,7 +240,15 @@ public class MainWindow {
 		});
 		jbtBrowseImg.setBounds(286, 30, 69, 23);
 		jpImportImg.add(jbtBrowseImg);
-		
+		jpImportNext.setLayout(null);
+		jpImportNext.setLayout(null);
+		jbtImportNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		jbtImportNext.setBounds(286, 27, 69, 23);
+		jpImportNext.add(jbtImportNext);
 		
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.WEST);
