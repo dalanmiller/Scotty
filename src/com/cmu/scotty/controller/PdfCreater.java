@@ -30,7 +30,7 @@ public class PdfCreater {
      * @throws DocumentException 
      * @throws IOException */
 
-	public static void main(String[]args) throws IOException, DocumentException{
+	/*public static void main(String[]args) throws IOException, DocumentException{
 		ArrayList<Student> s=new<Student> ArrayList();
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F");
@@ -44,9 +44,9 @@ public class PdfCreater {
 		PdfCreater c= new PdfCreater(s);
 		c.printTable();
 	}
+	*/
 	
-	
-    public static final String RESULT
+    public static String RESULT
         = "src/Student_List.pdf";
     /** The movie poster. */
     public ArrayList <String> image=new<String> ArrayList();
@@ -63,7 +63,7 @@ public class PdfCreater {
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-    PdfCreater(ArrayList<Student> s){
+    public PdfCreater(ArrayList<Student> s){
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
     		program.add(s.get(i).getProgramTrack());
@@ -75,7 +75,12 @@ public class PdfCreater {
     		intake.add(s.get(i).getSemester());
     	}
     }
-    public void printTable()
+    
+    public void setExportLocation(String path){
+    	RESULT=path;
+    }
+    
+    public void printTable1()
         throws IOException, DocumentException {
     	// step 1
     
@@ -91,14 +96,119 @@ public class PdfCreater {
         document.open();
         // step 4
   
-       //createFirstTable();
-       // createSecondTable();
-        createThirdTable();
-       // createForthTable();
-       // createFifthTable();
-       // createSixthTable();
+       createFirstTable();
+      
         document.close();
         }
+    
+    public void printTable2()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+          
+          createSecondTable();
+         
+            document.close();
+            }
+    
+    public void printTable3()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+           
+            createThirdTable();
+       
+            document.close();
+            }
+    
+    public void printTable4()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+        
+            createForthTable();
+           
+            document.close();
+            }
+    
+    public void printTable5()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+      
+            createFifthTable();
+        
+            document.close();
+            }
+    
+    public void printTable6()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+      
+            createSixthTable();
+            document.close();
+            }
         // step 5
 
    
