@@ -1,5 +1,5 @@
 package com.cmu.scotty.controller;
 
-public class PdfCreater {
+public class PDFCreater {
 
 }
