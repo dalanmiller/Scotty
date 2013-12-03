@@ -8,6 +8,16 @@ scottyDB
 *.jar
 *.war
 *.ear
+*.xml
+*.properties
+*.mf
+*.log
+DerbyTest.java
+TestaDB.java
+PDFCreator.java
+Student.java
+StudentDao.java
+Student.java
 .metadata
 /bin
 
