@@ -1,0 +1,27 @@
+
+                                  CLASS ROSTER
+
+Run Date: 13-nov-2013      Course: 91802  Sect: K   INFORMTN SYS MANGERS
+Semester: F13              College:  HC   Department:  PMP
+
+                           Instructor(s): VISWANATHAN, M.
+
+Name                      Class  Col Dept G/O  Units UserID                 Mid Fin Def
+_______________________________________________________________________________________
+
+Superman, Sam             Master HC  PPA  M    12.0  ssam                              
+
+Batman, Fred              Master HC  PPA  M    12.0  fad1                            
+
+Thor, Jim                 Master HC  AIT  M    12.0  grep4                          
+
+Spiderman, Jill           Master HC  PPA  M    12.0  mik3                          
+
+Godzilla, Andy           Master HC  PPA  M    12.0  abmr                           
+
+Flash, Dick               Master HC  PPA  M    12.0  random3                           
+
+Doctor, Evil              Master HC  PPA  M    12.0  evil3                                     
+
+
+Total Number Of Students In Course  91802  Section  K   is        7

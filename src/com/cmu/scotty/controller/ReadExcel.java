@@ -17,10 +17,11 @@ public class ReadExcel {
 	    w = Workbook.getWorkbook(inputWorkbook);
 	    Sheet sheet = w.getSheet(0);
 	    ArrayList<Student> students =new ArrayList<Student>();
-	    if(!(sheet.getCell(0,0).equals("First Name")&& sheet.getCell(1,0).equals("Last Name")
-	    		&&sheet.getCell(2,0).equals("Andrew ID")&&sheet.getCell(4,0).equals("Program Track")
-	    		&&sheet.getCell(5,0).equals("Part-time/Full Time")&&sheet.getCell(6,0).equals("Country")
-	    		&&sheet.getCell(7,0).equals("Semester"))) throw new wrongexcelexception();
+
+	    if(!(sheet.getCell(0,0).getContents().equals("First Name")&& sheet.getCell(1,0).getContents().equals("Last Name")
+	    		&&sheet.getCell(2,0).getContents().equals("Andrew ID")&&sheet.getCell(3,0).getContents().equals("Program Track")
+	    		&&sheet.getCell(4,0).getContents().equals("Part-time/Full Time")&&sheet.getCell(5,0).getContents().equals("Country")
+	    		&&sheet.getCell(6,0).getContents().equals("Semester"))) throw new wrongexcelexception();
 	    for (int i = 1; i < sheet.getRows(); i++) {
 	    	String FirstName= sheet.getCell(0, i).getContents();
 	    	String LastName= sheet.getCell(1, i).getContents();

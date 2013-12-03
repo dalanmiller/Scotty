@@ -7,8 +7,8 @@ import com.cmu.scotty.exception.*;
 
 public class ReadText {
 	
-	public ArrayList<Student> Read(String path) throws IOException,wrongtextexception{ 
-		File file= new File(path);
+	public ArrayList<Student> Read(String inputtext) throws IOException,wrongtextexception{ 
+		File file= new File(inputtext);
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String tempString;
         ArrayList<String> content =new ArrayList<String>();
@@ -20,8 +20,10 @@ public class ReadText {
 		ArrayList<Student> students= new ArrayList<Student>();
 		for(int i=11;i<content.size()-1;i++){
 			if (content.get(i).trim()==null &&content.get(i+1).trim()==null) break;
-			String []stu=content.get(i).split("  ");
-			String andrewID=stu[stu.length-1];
+			if (content.get(i).equals("")) continue;
+			
+			String []stu=content.get(i).trim().split("  ");
+			String andrewID=stu[stu.length-1].trim();
 			Student s=new Student(andrewID);
 			students.add(s);
 		}
