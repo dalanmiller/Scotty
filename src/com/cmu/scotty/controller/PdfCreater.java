@@ -24,7 +24,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
-public class PdfCreater {
+public class PDFCreater {
  
     /** The resulting PDF. 
      * @throws DocumentException 
@@ -63,7 +63,7 @@ public class PdfCreater {
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-    public PdfCreater(ArrayList<Student> s){
+    public PDFCreater(ArrayList<Student> s){
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
     		program.add(s.get(i).getProgramTrack());
