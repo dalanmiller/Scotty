@@ -30,7 +30,7 @@ public class PdfCreater {
      * @throws DocumentException 
      * @throws IOException */
 
-	/*public static void main(String[]args) throws IOException, DocumentException{
+	public static void main(String[]args) throws IOException, DocumentException{
 		ArrayList<Student> s=new<Student> ArrayList();
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F");
@@ -41,10 +41,30 @@ public class PdfCreater {
 		s.add(a);
 		s.add(a);
 		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
+		s.add(a);
 		PdfCreater c= new PdfCreater(s);
-		c.printTable();
+		c.printTable3();
 	}
-	*/
+
 	
     public static String RESULT
         = "src/Student_List.pdf";
@@ -80,48 +100,7 @@ public class PdfCreater {
     	RESULT=path;
     }
     
-    public void printTable1()
-        throws IOException, DocumentException {
-    	// step 1
-    
-        document
-            = new Document(PageSize.A4, 30, 30, 30, 30);
-        // step 2
-        
-        PdfWriter writer
-            = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
-        writer.setCompressionLevel(0);
-        // step 3
-        document.setMargins(20,20,0,30);
-        document.open();
-        // step 4
-  
-       createFirstTable();
-      
-        document.close();
-        }
-    
-    public void printTable2()
-            throws IOException, DocumentException {
-        	// step 1
-        
-            document
-                = new Document(PageSize.A4, 30, 30, 30, 30);
-            // step 2
-            
-            PdfWriter writer
-                = PdfWriter.getInstance(document, new FileOutputStream(RESULT));
-            writer.setCompressionLevel(0);
-            // step 3
-            document.setMargins(20,20,0,30);
-            document.open();
-            // step 4
-      
-          
-          createSecondTable();
-         
-            document.close();
-            }
+   
     
     public void printTable3()
             throws IOException, DocumentException {
@@ -144,7 +123,7 @@ public class PdfCreater {
        
             document.close();
             }
-    
+    /*
     public void printTable4()
             throws IOException, DocumentException {
         	// step 1
@@ -211,155 +190,8 @@ public class PdfCreater {
             }
         // step 5
 
-   
-    public void createFirstTable() throws DocumentException, IOException {
-    	int n=1-(image.size())%1;
-    	
-    	// a table with three columns
-        PdfPTable table = new PdfPTable(1);
-        PdfPTable table1 =new PdfPTable(7);
-	    table.setTotalWidth(PageSize.A4.getWidth() - 45);
-	    table.setLockedWidth(true);
-
-        PdfPCell cell;
-        cell = new PdfPCell();
-        cell.setBorder(0);
-        Image logo = Image.getInstance(LOGO);
-        logo.scaleAbsoluteHeight(20);
-        logo.scaleAbsoluteWidth(20);
-        logo.scalePercent(23);
-        cell.setColspan(4);
-        cell.addElement(logo);
-        table1.addCell(cell);
-     
-        cell = new PdfPCell();
-        cell.setColspan(3);
-        cell.setBorder(0);
-        cell.addElement(new Phrase(TITLE));
-        table1.addCell(cell);
-        document.add(table1);
-    	
-    	
-        // the cell object
-        for(int i=0; i<image.size();i++){
-        
-        		int[] cellWidth = {200};
-        
-        		table.setWidths(cellWidth);
-        		cell = new PdfPCell();
-            	cell.setBorder(0);
-            	cell.setPaddingLeft(200);
-        	    Paragraph p = new Paragraph();
-        	  
-        
-        	    
-        
-        	      Phrase ph = new Phrase();
-        	      if(image!=null){
-        	    Image img = Image.getInstance(image.get(i));
-       
-            	img.scaleToFit(300, 135);
-            	img.scalePercent(100);
-    	  
-    
-    	         ph.add(new Chunk(img, 0, 0, true));
-        	      }
-    	         ph.add(new Phrase("\n"+firstname.get(i)+" "));
-    	         ph.add(new Phrase(lastname.get(i)+" "));
-    	         ph.add(new Phrase("\n"+email.get(i)+" "));
-    	         ph.add(new Phrase("\nPROGRAM: "+program.get(i)+" "));
-    	         ph.add(new Phrase("\n"+time.get(i)+" "));
-    	         ph.add(new Phrase("|"+country.get(i)+" "));
-    	         ph.add(new Phrase("|"+intake.get(i)+" "));
-    	         p.add(ph);
-    	         p.setAlignment(Element.ALIGN_CENTER);
-    	         
-    	           cell.addElement(p);
-    	           cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    	       	table.addCell(cell);
-           
-      
-    }
-       for(int j=0; j<n;j++){
-    	   cell = new PdfPCell();
-       	cell.setBorder(0);
-        	table.addCell(cell);
-        }
-      document.add(table);
-    }
-    
-    public void createSecondTable() throws DocumentException, IOException {
-    	int n=2-(image.size())%2;
-    	
-    	// a table with three columns
-        PdfPTable table = new PdfPTable(2);
-        PdfPTable table1 =new PdfPTable(7);
-	    table.setTotalWidth(PageSize.A4.getWidth() - 45);
-	    table.setLockedWidth(true);
-
-        PdfPCell cell;
-        cell = new PdfPCell();
-        cell.setBorder(0);
-        Image logo = Image.getInstance(LOGO);
-        logo.scaleAbsoluteHeight(20);
-        logo.scaleAbsoluteWidth(20);
-        logo.scalePercent(23);
-        cell.setColspan(4);
-        cell.addElement(logo);
-        table1.addCell(cell);
-     
-        cell = new PdfPCell();
-        cell.setColspan(3);
-        cell.setBorder(0);
-        cell.addElement(new Phrase(TITLE));
-        table1.addCell(cell);
-        document.add(table1);
-    	
-    	
-        // the cell object
-        for(int i=0; i<image.size();i++){
-        
-        		int[] cellWidth = {150, 150};
-        
-        		table.setWidths(cellWidth);
-        		cell = new PdfPCell();
-            	cell.setBorder(0);
-        	    Paragraph p = new Paragraph();
-        	  
-        
-        	    Phrase ph = new Phrase();
-        
-        	    if(image.get(i)!=null){
-        	    Image img = Image.getInstance(image.get(i));
-       
-            	img.scaleToFit(300, 135);
-            	img.scalePercent(60);
-    	      
-    
-
-   	         ph.add(new Chunk(img, 0, 0, true));
-        	    }
-   	         ph.add(new Phrase("\n"+firstname.get(i)+" "));
-   	         ph.add(new Phrase(lastname.get(i)+" "));
-   	         ph.add(new Phrase("\n"+email.get(i)+" "));
-   	         ph.add(new Phrase("\nPROGRAM: "+program.get(i)+" "));
-   	         ph.add(new Phrase("\n"+time.get(i)+" "));
-   	         ph.add(new Phrase("|"+country.get(i)+" "));
-   	         ph.add(new Phrase("|"+intake.get(i)+" "));
-   	         p.add(ph);
-   	         p.setAlignment(Element.ALIGN_CENTER);
-    	           cell.addElement(p);
-    	           cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-    	       	table.addCell(cell);
-      
-    }
-       for(int j=0; j<n;j++){
-    	   cell = new PdfPCell();
-       	cell.setBorder(0);
-        	table.addCell(cell);
-        }
-      document.add(table);
-    }
+   */
+ 
     
     public void createThirdTable() throws DocumentException, IOException {
     	int n=3-(image.size())%3;
@@ -371,27 +203,29 @@ public class PdfCreater {
 	    table.setLockedWidth(true);
 
         PdfPCell cell;
-        cell = new PdfPCell();
-        cell.setBorder(0);
-        Image logo = Image.getInstance(LOGO);
-        logo.scaleAbsoluteHeight(20);
-        logo.scaleAbsoluteWidth(20);
-        logo.scalePercent(23);
-        cell.setColspan(4);
-        cell.addElement(logo);
-        table1.addCell(cell);
-     
-        cell = new PdfPCell();
-        cell.setColspan(3);
-        cell.setBorder(0);
-        cell.addElement(new Phrase(TITLE));
-        table1.addCell(cell);
-        document.add(table1);
+   
     	
     	
         // the cell object
         for(int i=0; i<image.size();i++){
-        
+        	if (i%9==0){
+
+                cell = new PdfPCell();
+                cell.setBorder(0);
+                Image logo = Image.getInstance(LOGO);
+                logo.scaleAbsoluteHeight(20);
+                logo.scaleAbsoluteWidth(20);
+                logo.scalePercent(23);
+                cell.setColspan(2);
+                cell.addElement(logo);
+                table.addCell(cell);
+             
+                cell = new PdfPCell();
+            
+                cell.setBorder(0);
+                cell.addElement(new Phrase(TITLE));
+                table.addCell(cell);
+        	}
         		int[] cellWidth = {100, 100,100};
         
         		table.setWidths(cellWidth);
@@ -418,6 +252,7 @@ public class PdfCreater {
    	         ph.add(new Phrase("\n"+time.get(i)+" "));
    	         ph.add(new Phrase("|"+country.get(i)+" "));
    	         ph.add(new Phrase("|"+intake.get(i)+" "));
+   	         ph.add(new Phrase("\n \n \n  "));
    	         p.add(ph);
    	         p.setAlignment(Element.ALIGN_CENTER);
  
@@ -436,7 +271,7 @@ public class PdfCreater {
         }
       document.add(table);
     }
- 
+ /*
     public void createForthTable() throws DocumentException, IOException {
     	int n=4-(image.size())%4;
     	
@@ -661,6 +496,6 @@ public class PdfCreater {
         }
       document.add(table);
     }
-    
+ */   
 
 }
