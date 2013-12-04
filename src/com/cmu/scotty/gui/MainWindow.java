@@ -1,5 +1,8 @@
 package com.cmu.scotty.gui;
 
+import com.cmu.scotty.model.*;
+import com.cmu.scotty.controller.*;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -7,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -25,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
 
@@ -35,10 +40,16 @@ import javax.swing.BoxLayout;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.SwingConstants; //similar to the last one, nice 
+
+import javax.swing.SwingConstants; 
+
+
 
 public class MainWindow {
 
+	//Test for import File
+	
+	
 	private JFrame frame;
 	private JPanel jpStatic = new JPanel();
 	private JPanel jpImport = new JPanel();
@@ -48,10 +59,6 @@ public class MainWindow {
 	private JButton jbtFilter;
 	private JButton jbtExport;
 	private JMenuBar jmb = new JMenuBar();
-
-	
-
-//	private FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("txt");
 	
 	//Panel Import
 	private JPanel jpImportExcel = new JPanel();
@@ -80,6 +87,7 @@ public class MainWindow {
 	//Panel Next Import
 	private JPanel jpImportNext = new JPanel();
 	private JButton jbtImportNext = new JButton("Next>>");
+	
 	/**
 	 * Launch the application.
 	 */
@@ -173,6 +181,8 @@ public class MainWindow {
 		
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
+	//	jpStatic.setLayout(null);
+	//	jpStatic.setSize(frame.getWidth(),1000000);
 		jpStatic.add(jbtImport);
 		jpStatic.add(jbtFilter);
 		jpStatic.add(jbtExport);
@@ -180,7 +190,7 @@ public class MainWindow {
 		jbtImport.setSelected(true);
 		jbtFilter.setEnabled(false);
 		jbtExport.setEnabled(false);
-	//	jpStatic.set
+		
 		
 		
 		//PanelImport
@@ -266,7 +276,7 @@ public class MainWindow {
 				
 			}
 		});
-		jbtImportNext.setBounds(352, 29, 69, 23);
+		jbtImportNext.setBounds(352, 10, 69, 23);
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 		
@@ -279,7 +289,8 @@ public class MainWindow {
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 	//	frame.setJMenuBar(jmb);
 		frame.setLocationRelativeTo(null);
-		
+		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
+		frame.setIconImage(ico.getImage());
 	}
 
 }
