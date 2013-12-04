@@ -1,12 +1,13 @@
 
 public class Student {
-	private String AndrewID;
-	private String FirstName;
-	private String LastName;
-	private String ProgramTrack;
-	private String FullTime;
-	private String Country;
-	private String Semester;
+	private String andrewID;
+	private String firstName;
+	private String lastName;
+	private String programTrack;
+	private String fullTime;
+	private String country;
+	private String semester;
+	private String photoPath;
 	
 	
 	public Student(String AndrewID,String FirstName,String LastName,
