@@ -63,6 +63,7 @@ public class PdfCreater {
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
+    
     public PdfCreater(ArrayList<Student> s){
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
