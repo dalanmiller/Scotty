@@ -1,6 +1,7 @@
 package com.cmu.scotty.controller;
 
 
+import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,6 +14,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
@@ -80,7 +82,7 @@ public class PdfCreator {
     		image.add(s.get(i).getPhotoPath());
     		program.add(s.get(i).getProgramTrack());
     		firstname.add(s.get(i).getFirstName());
-    		lastname.add(s.get(i).getLastName());
+    		lastname.add(s.get(i).getLastName().toUpperCase());
     		email.add(s.get(i).getAndrewID()+"@andrew.cmu.edu");
     		time.add(s.get(i).getFullTime());
     		country.add(s.get(i).getCountry());
@@ -130,8 +132,11 @@ public class PdfCreator {
 
         PdfPCell cell;
 
-    	
-    	
+        Font font = FontFactory.getFont("Impact",12,Font.UNDERLINE);
+        Font font1= FontFactory.getFont("Impact",12,Font.BOLD);
+      
+        font.setColor(30, 144, 255);;
+        Font fontbold = FontFactory.getFont("Times-Roman", 12, Font.BOLD);
         // the cell object
         for(int i=0; i<image.size();i++){
         	
@@ -149,8 +154,15 @@ public class PdfCreator {
                 cell = new PdfPCell();
           
                 cell.setBorder(0);
-                cell.addElement(new Phrase(TITLE));
+                cell.addElement(new Phrase(TITLE,fontbold));
+                
                 table.addCell(cell);
+               /* cell.setBorder(0);
+                table.addCell(" ");
+                table.addCell(" ");
+
+                table.addCell(" ");*/
+
                 
         	}
         
@@ -173,9 +185,9 @@ public class PdfCreator {
 
    	         ph.add(new Chunk(img, 0, 0, true));
         	    }
-   	         ph.add(new Phrase("\n"+firstname.get(i)+" "));
-   	         ph.add(new Phrase(lastname.get(i)+" "));
-   	         ph.add(new Phrase("\n"+email.get(i)+" "));
+   	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
+   	         ph.add(new Phrase(lastname.get(i)+" ",font1));
+   	         ph.add(new Phrase("\n"+email.get(i)+" ",font));
    	         ph.add(new Phrase("\nPROGRAM: "+program.get(i)+" "));
    	         ph.add(new Phrase("\n"+time.get(i)+" "));
    	         ph.add(new Phrase("|"+country.get(i)+" "));
