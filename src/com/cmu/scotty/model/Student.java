@@ -1,3 +1,4 @@
+
 package com.cmu.scotty.model;
 
 
@@ -11,19 +12,20 @@ public class Student {
 	private String semester;
 	private String photoPath;
 	
-	public Student(String AndrewID,String FirstName,String LastName,
-			String ProgramTrack,String FullTime,String Country, String Semester){
-		this.andrewID=AndrewID;
-		this.firstName=FirstName;
-		this.lastName=LastName;
-		this.programTrack=ProgramTrack;
-		this.fullTime=FullTime;
-		this.country=Country;
-		this.semester=Semester;
-		this.photoPath=null;
+	public Student(String andrewID,String firstName,String lastName,
+			String programTrack,String fullTime,String country, String semester, String photoPath){
+		this.andrewID=andrewID;
+		this.firstName=firstName;
+		this.lastName=lastName;
+		this.programTrack=programTrack;
+		this.fullTime=fullTime;
+		this.country=country;
+		this.semester=semester;
+		this.photoPath=photoPath;
 	}
-	public Student(String AndrewID){
-		this.andrewID=AndrewID;
+	
+	public Student(String andrewID){
+		this.andrewID=andrewID;
 		this.firstName=null;
 		this.lastName=null;
 		this.programTrack=null;
@@ -33,6 +35,63 @@ public class Student {
 		this.photoPath=null;
 	}
 	
+	
+	public String getAndrewID() {
+		return andrewID;
+	}
+
+	public void setAndrewID(String andrewID) {
+		this.andrewID = andrewID;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getProgramTrack() {
+		return programTrack;
+	}
+
+	public void setProgramTrack(String programTrack) {
+		this.programTrack = programTrack;
+	}
+
+	public String getFullTime() {
+		return fullTime;
+	}
+
+	public void setFullTime(String fullTime) {
+		this.fullTime = fullTime;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+	
 	public String getPhotoPath() {
 		return photoPath;
 	}
@@ -40,35 +99,7 @@ public class Student {
 	public void setPhotoPath(String photoPath) {
 		this.photoPath = photoPath;
 	}
-
-	public String getAndrewID() {
-		return andrewID;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public String getProgramTrack() {
-		return programTrack;
-	}
-
-	public String getFullTime() {
-		return fullTime;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public String getSemester() {
-		return semester;
-	}
-
+	
 	public Student(){
 		this.andrewID=null;
 		this.firstName=null;
