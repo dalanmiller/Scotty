@@ -1,5 +1,5 @@
 package com.cmu.scotty.exception;
 
-public class wrongexcelexception extends Exception {
+public class WrongExcelException extends Exception {
 
 }

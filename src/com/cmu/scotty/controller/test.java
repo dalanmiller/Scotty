@@ -10,7 +10,7 @@ import com.cmu.scotty.model.Student;
 
 public class test {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try{
 			System.out.println("hahaha");
@@ -27,7 +27,10 @@ public class test {
 		catch(wrongexcelexception wee){System.out.print("wee");}
 		catch(wrongphotofolderexception wpfe){System.out.print("wpfe");}
 		catch(wrongtextexception wte){System.out.print("wte");}
-		catch(BiffException be)	{System.out.print("be");}	
-	}
+		catch(BiffException be)	{System.out.print("be");} catch (wrongphotoexception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}*/
 
 }
