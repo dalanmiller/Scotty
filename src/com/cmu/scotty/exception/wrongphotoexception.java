@@ -1,5 +1,5 @@
 package com.cmu.scotty.exception;
 
-public class wrongphotoexception extends Exception {
+public class WrongPhotoException extends Exception {
 
 }
