@@ -37,16 +37,18 @@ public class PdfCreator {
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
 		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
+		Student b= new Student("a","asdf","asdf",
+				"MISM","F/T","China", "13F","");
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
+		s.add(b);
 		s.add(a);
 		s.add(a);
-		s.add(a);
-		s.add(a);
+		s.add(b);
 		s.add(a);
 		s.add(a);
 		s.add(a);
@@ -71,7 +73,9 @@ public class PdfCreator {
     public ArrayList <String> intake=new<String> ArrayList();
     
     public static final String LOGO
-    ="/Users/ruiwang/Pictures/logo.jpg";
+    ="lib/logo/logo.jpg";
+    public static final String UNAVAILABILE
+    ="lib/logo/nopic.png";
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
@@ -176,7 +180,7 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
-        	    if(image.get(i)!=null){
+        	    if(image.get(i)!=null && !image.get(i).isEmpty()){
         	    Image img = Image.getInstance(image.get(i));
        
             	img.scaleToFit(300, 135);
@@ -184,6 +188,12 @@ public class PdfCreator {
     	     
 
    	         ph.add(new Chunk(img, 0, 0, true));
+        	    }else{
+        	    	
+        	    	Image img= Image.getInstance(UNAVAILABILE);
+        	    	img.scaleToFit(300, 135);
+                	img.scalePercent(90);
+                	ph.add(new Chunk(img, 0, 0, true));
         	    }
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
    	         ph.add(new Phrase(lastname.get(i)+" ",font1));
