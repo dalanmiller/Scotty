@@ -145,6 +145,7 @@ public class MainWindow {
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
+	private JTextField textField;
 	
 	/**
 	 * Launch the application.
@@ -216,10 +217,10 @@ public class MainWindow {
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-		
+		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+
 		
 		frame.setLocationRelativeTo(null);
 		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
@@ -239,6 +240,7 @@ public class MainWindow {
 		jpImportExcel.setLayout(null);
 		lblImportExcel.setBounds(30, 18, 66, 59);
 		jpImportExcel.add(lblImportExcel);
+		jtfExcelPath.setEditable(false);
 		jtfExcelPath.setBounds(127, 36, 283, 23);
 		jpImportExcel.add(jtfExcelPath);
 		jfcImportExcelFile.setFileFilter(filterExcel);
@@ -259,6 +261,7 @@ public class MainWindow {
 		lblImportTxt.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImportTxt.setBounds(33, 19, 61, 59);
 		jpImportTxt.add(lblImportTxt);
+		jtfTxtPath.setEditable(false);
 		jtfTxtPath.setBounds(127, 37, 282, 23);
 		jpImportTxt.add(jtfTxtPath);
 		jfcImportTxtFile.setFileFilter(filterTxt);
@@ -278,6 +281,7 @@ public class MainWindow {
 		jpImportImg.setLayout(null);
 		lblImportImg.setBounds(22, 11, 82, 62);
 		jpImportImg.add(lblImportImg);
+		jtfImgPath.setEditable(false);
 		jtfImgPath.setBounds(127, 31, 283, 23);
 		jpImportImg.add(jtfImgPath);
 		jbtBrowseImg.addActionListener(new ActionListener() {
@@ -444,8 +448,14 @@ public class MainWindow {
 		
 		//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
 		//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
+		
+
 
 		countryOptions.add("Global");
+		
+		for (String country: controller.selectCountries()){
+			countryOptions.add(country);
+		}
 	
 		lblNewLabel.setBounds(0, 39, 43, 14);
 		
@@ -486,9 +496,10 @@ public class MainWindow {
 		//Path Export Panel
 		jpPathExport.setLayout(null);
 		jpPathExport.setLayout(null);
-		lalPdfExport.setBounds(20, 42, 78, 15);
+		lalPdfExport.setBounds(20, 68, 78, 15);
 		jpPathExport.add(lalPdfExport);
-		jtfPdfPath.setBounds(20, 67, 175, 22);
+		jtfPdfPath.setEditable(false);
+		jtfPdfPath.setBounds(20, 86, 175, 22);
 		jpPathExport.add(jtfPdfPath);
 		jfcExportPdfFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 		jbtPdfBrowse.addActionListener(new ActionListener() {
@@ -502,13 +513,14 @@ public class MainWindow {
 			}
 		});
 		
-		jbtPdfBrowse.setBounds(205, 66, 69, 23);
+		jbtPdfBrowse.setBounds(205, 86, 69, 23);
 		jpPathExport.add(jbtPdfBrowse);
-		lalPdfName.setBounds(20, 108, 54, 15);
+		lalPdfName.setBounds(20, 119, 54, 15);
 		jpPathExport.add(lalPdfName);
-		jtfFileName.setBounds(20, 136, 175, 22);
+		jtfFileName.setBounds(20, 136, 220, 22);
 		jpPathExport.add(jtfFileName);
-		lal_pdf.setBounds(205, 139, 24, 15);
+		lal_pdf.setForeground(Color.DARK_GRAY);
+		lal_pdf.setBounds(250, 140, 24, 15);
 		jpPathExport.add(lal_pdf);
 		jbtExportPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -516,6 +528,16 @@ public class MainWindow {
 		});
 		jbtExportPdf.setBounds(20, 197, 123, 30);
 		jpPathExport.add(jbtExportPdf);
+		
+		textField = new JTextField();
+		textField.setFont(new Font("Calibri", Font.PLAIN, 10));
+		textField.setBounds(20, 39, 254, 20);
+		jpPathExport.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblReportTitle = new JLabel("Report Title");
+		lblReportTitle.setBounds(20, 21, 78, 15);
+		jpPathExport.add(lblReportTitle);
 		jpPreviewExport.setLayout(null);
 		jpPreviewWindow.setBorder(new TitledBorder(null, "File Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		jpPreviewWindow.setBounds(10, 10, 228, 320);
@@ -584,21 +606,6 @@ public class MainWindow {
 			}
 		});
 		
-
-		/*MainWindow layout
-		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
-		
-	
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-		button.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		button.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-		jpFilter.add(button);
-//		frame.setJMenuBar(jmb);
-		frame.setLocationRelativeTo(null);
-		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
-		frame.setIconImage(ico.getImage());*/
 	}
 	public JComboBox getProgramSelector() {
 		return programSelector;
