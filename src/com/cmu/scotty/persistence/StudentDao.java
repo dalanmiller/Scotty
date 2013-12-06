@@ -163,6 +163,123 @@ public class StudentDao {
         }
     }
     
+    
+    public void updateStudent(Student student)
+    {
+        try
+        {    
+        	if(conn==null)
+        	{
+        		conn = createConnection();
+        	}
+            stmt = conn.createStatement();
+            
+            //String[] studentCol = new String[8];
+
+            int count = 0;
+            
+            //String firstName = student.getFirstName().trim().toUpperCase();
+            //String lastName = student.getLastName().trim().toUpperCase();
+            //String programTrack = student.getProgramTrack().trim().toUpperCase();
+            String fullTime = student.getFullTime().trim().toUpperCase();
+            String country = student.getCountry().trim().toUpperCase();
+            String semester = student.getSemester().trim().toUpperCase();
+            String pathName = student.getPhotoPath().trim().toUpperCase();
+            String andrewId = student.getAndrewID().trim();
+            
+            String query = " update " + tableName + " set " ;
+            
+            	            	
+            	if(student.getFirstName()!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " firstname " + " = " + "'" + student.getFirstName().trim().toUpperCase() + "'";
+            		count++;
+            	}
+            
+            	if(student.getLastName()!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " lastName " + " = " + "'" + student.getLastName().trim().toUpperCase() + "'";
+                    count++;        	
+            	}
+            	if(student.getProgramTrack()!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " programTrack " + " = " + "'" + student.getProgramTrack().trim().toUpperCase() + "'";
+            	    count++;
+            	}
+            
+            	if(student.getFullTime()!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " fullTime " + " = " + "'" + student.getFullTime().trim().toUpperCase() + "'";
+            		count++;
+            	}
+            	
+            	if(student.getCountry()!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " country " + " = " + "'" + student.getCountry().trim().toUpperCase() + "'";
+            		count++;
+            	}
+            
+            	if(semester!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " semester " + " = " + "'" + semester + "'";
+            		count++;
+            	}
+            	if(pathName!=null)
+            	{
+            		if(count>0)
+                	{
+                		query = query + " , ";
+                	}
+            		query = query + " pathName " + " = " + pathName;
+            		count++;
+            	}            
+            	            	
+            query = query + " where andrewId = '" + student.getAndrewID() + "' ";
+            
+       		    /* + "'" + student.getAndrewID() + "'," 
+       		     + "'" + student.getFirstName().trim().toUpperCase() + "',"
+       		     + "'" + student.getLastName().trim().toUpperCase() + "',"
+       		     + "'" + student.getProgramTrack().trim().toUpperCase() + "',"
+       		     + "'" + student.getFullTime().trim().toUpperCase() + "',"
+       		     + "'" + student.getCountry().trim().toUpperCase() + "',"
+       		     + "'" + student.getSemester().trim().toUpperCase() + "',"
+       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";*/
+            
+            System.out.println(query);
+            
+            stmt.executeUpdate(query);            		     
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+    }
+    
     public ArrayList<Student> selectStudent(String columnName, String columnValue)
     {   
     	
@@ -220,17 +337,22 @@ public class StudentDao {
     }
     
     
-    public ArrayList<Student> selectStudent(ArrayList<String> columnName, ArrayList<String> columnValue) throws ArrayListDoesNotMatch
+    public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws ArrayListDoesNotMatch
     {   
     	
     	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
     	
+    	int count = 0;
+    	
     	String query = null;
     	
-    	Iterator colNmeItr = columnName.iterator();
-    	Iterator colValItr = columnValue.iterator();
+    	Iterator colNmeItr = columnNameArr.iterator();
+    	Iterator colValItr = columnValueArr.iterator();
     	
-    	if(columnName.size()!=columnValue.size())
+    	String columnName = null;
+    	String columnValue = null;
+    	
+    	if(columnNameArr.size()!=columnValueArr.size())
     	{
     		ArrayListDoesNotMatch arrDoesNMat = new ArrayListDoesNotMatch();
     		throw  arrDoesNMat;
@@ -244,18 +366,28 @@ public class StudentDao {
         	}
         	
         	stmt = conn.createStatement();
-          
-        	query = "select * from " + tableName;
+        	  
+        	query = "select * from " + tableName + " where ";
         	
-        	/*while(colNmeItr.hasNext()){
+        	while(colNmeItr.hasNext()){
         		
-        		query = "select * from " + tableName 
-           		        + " where " + colNmeItr.next() 
-           		        + " = " + "'" + columnValue.trim().toUpperCase() 
-           		        + "'"; 
+        		columnName = (String)colNmeItr.next();
+        		columnValue = (String)colValItr.next();
         		
-        	}*/
+        		if(count==0)
+        	    {
+        			query = query + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
+        	    }
+        		else
+        		{
+        			query = query + " and " + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
+        		}
+        		
+        	    count++;
+        	    
+        	}
         	
+        	System.out.println(query);
         	
             
             ResultSet results = stmt.executeQuery(query);
