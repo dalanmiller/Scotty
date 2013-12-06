@@ -6,6 +6,7 @@ import com.cmu.scotty.controller.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
@@ -41,7 +42,9 @@ import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
-import javax.swing.SwingConstants; 
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import java.awt.Color; 
 
 
 
@@ -58,7 +61,7 @@ public class MainWindow {
 	private JButton jbtImport;
 	private JButton jbtFilter;
 	private JButton jbtExport;
-	private JMenuBar jmb = new JMenuBar();
+
 	
 	//Panel Import
 	private JPanel jpImportExcel = new JPanel();
@@ -72,7 +75,7 @@ public class MainWindow {
 	private FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("Excel", "xls", "xlsx");
 	private JFileChooser jfcImportExcelFile = new JFileChooser();
 	//Panel Txt Import
-	private JLabel lblImportTxt = new JLabel("Txt file");
+	private JLabel lblImportTxt = new JLabel("Text file");
 	private JTextField jtfTxtPath = new JTextField();
 	private JButton jbtBrowseTxt = new JButton("Browse");
 	private File importTxtFile = new File(""); 
@@ -88,6 +91,24 @@ public class MainWindow {
 	private JPanel jpImportNext = new JPanel();
 	private JButton jbtImportNext = new JButton("Next>>");
 	
+	
+	
+	
+	//Panel Path Export
+	private JPanel jpPathExport = new JPanel();
+	private JLabel lalPdfExport = new JLabel("Export Folder");
+	private JTextField jtfPdfPath = new JTextField();
+	private JButton jbtPdfBrowse = new JButton("Browse");
+	private JLabel lalPdfName = new JLabel("File Name"); 
+	private JTextField jtfFileName = new JTextField();
+	private JLabel lal_pdf = new JLabel(".pdf");
+	private JButton jbtExportPdf = new JButton("Export Pdf File");
+	private File exportPdfFile = new File(""); 
+	private JFileChooser jfcExportPdfFile = new JFileChooser();
+	
+	//Panel Preview Export
+	private JPanel jpPreviewExport = new JPanel();
+	private JPanel jpPreviewWindow = new JPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -98,6 +119,7 @@ public class MainWindow {
 		      public void run() {
 		        try {
 		          	UIManager.setLookAndFeel(new SubstanceRavenGraphiteLookAndFeel());
+		        //	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		        } catch (Exception e) {
 		        	e.printStackTrace();
 		        }
@@ -122,25 +144,180 @@ public class MainWindow {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 556, 402);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//menu
-		JMenu jmSkin = new JMenu("Skins");
-		jmb.add(jmSkin);
-		
-		
+		//Top Side-Buttons	
+		initializeTopButton();
+		//Import Panel
+		initializeImportPanel();
+		//Export Panel
+		initializeExportPanel();
 	
 		
-		JLabel lblThisIsPane2 = new JLabel("PanelFilter");
-		jpFilter.add(lblThisIsPane2);
+		//Panels
+		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
+		jpStatic.add(jbtImport);
+		jpStatic.add(jbtFilter);
+		jpStatic.add(jbtExport);
+		jbtImport.setEnabled(true);
+		jbtImport.setSelected(true);
+		jbtFilter.setEnabled(false);
+		jbtExport.setEnabled(false);
 		
-		JLabel lblThisIsPane3 = new JLabel("PanelExport");
-		jpExport.add(lblThisIsPane3);
+		//MainWindow layout
+		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
+	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+	//    jpFilter.setVisible(false);
+	//	jpExport.setVisible(false);
 		
+		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
+		frame.setLocationRelativeTo(null);
+		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
+		frame.setIconImage(ico.getImage());
 		
+	
+	}
+	public void initializeImportPanel(){
 		
-		//Top Side-Buttons
+		/*PanelImport*/
+		jpImport.setLayout(new GridLayout(4, 1, 0, 0));
+		jpImport.add(jpImportExcel);
+		jpImport.add(jpImportImg);
+		jpImport.add(jpImportTxt);
+		jpImport.add(jpImportNext);
+		jpImportExcel.setLayout(null);
+		lblImportExcel.setBounds(30, 18, 66, 59);
+		jpImportExcel.add(lblImportExcel);
+		jtfExcelPath.setBounds(127, 36, 283, 23);
+		jpImportExcel.add(jtfExcelPath);
+		jfcImportExcelFile.setFileFilter(filterExcel);
+		jbtBrowseExcel.setBounds(449, 36, 69, 23);
+		jbtBrowseExcel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = jfcImportExcelFile.showOpenDialog(jbtBrowseExcel);			
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					importExcelFile = jfcImportExcelFile.getSelectedFile();
+					jtfExcelPath.setText(importExcelFile.getAbsolutePath());
+				}
+			}
+		});
+		jpImportExcel.add(jbtBrowseExcel);
+		
+		//PanelTxtImport
+		jpImportTxt.setLayout(null);
+		lblImportTxt.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImportTxt.setBounds(33, 19, 61, 59);
+		jpImportTxt.add(lblImportTxt);
+		jtfTxtPath.setBounds(127, 37, 282, 23);
+		jpImportTxt.add(jtfTxtPath);
+		jfcImportTxtFile.setFileFilter(filterTxt);
+		jbtBrowseTxt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = jfcImportTxtFile.showOpenDialog(jbtBrowseTxt);			
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					importTxtFile = jfcImportTxtFile.getSelectedFile();
+					jtfTxtPath.setText(importTxtFile.getAbsolutePath());
+				}
+			}
+		});
+		jbtBrowseTxt.setBounds(449, 37, 69, 23);
+		jpImportTxt.add(jbtBrowseTxt);
+		//PanelImgPath
+		jfcImportImgFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+		jpImportImg.setLayout(null);
+		lblImportImg.setBounds(22, 11, 82, 62);
+		jpImportImg.add(lblImportImg);
+		jtfImgPath.setBounds(127, 31, 283, 23);
+		jpImportImg.add(jtfImgPath);
+		jbtBrowseImg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = jfcImportImgFile.showOpenDialog(jbtBrowseImg);			
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					importImgFile = jfcImportImgFile.getSelectedFile();
+					jtfImgPath.setText(importImgFile.getAbsolutePath());
+				}
+			}
+		});
+		jbtBrowseImg.setBounds(449, 31, 69, 23);
+		jpImportImg.add(jbtBrowseImg);
+		jpImportNext.setLayout(null);
+		jbtImportNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(jtfExcelPath.getText().trim().length()<1 || jtfImgPath.getText().trim().length()<1){
+					if(jtfExcelPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose the Excel Path!");
+					else if(jtfImgPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose the Image Source Folder!");
+				}
+				else{					
+				jpImport.setVisible(false);
+				jbtFilter.setEnabled(true);
+				jpFilter.setVisible(true);
+				jpExport.setVisible(false);
+				jbtImport.setSelected(false);
+				jbtFilter.setSelected(true);
+				jbtExport.setSelected(false);
+				frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+				}
+				
+			}
+		});
+		jbtImportNext.setBounds(449, 33, 69, 23);
+		//PanelNextImport
+		jpImportNext.add(jbtImportNext);
+	}
+	public void initializeFilterPanel(){
+		
+	}
+	public void initializeExportPanel(){
+		jpExport.setLayout(null);
+		jpPathExport.setBounds(0, 0, 284, 340);
+		jpExport.add(jpPathExport);
+		jpPreviewExport.setBounds(282, 0, 258, 340);
+		jpExport.add(jpPreviewExport);
+		//Path Export Panel
+		jpPathExport.setLayout(null);
+		jpPathExport.setLayout(null);
+		lalPdfExport.setBounds(20, 42, 78, 15);
+		jpPathExport.add(lalPdfExport);
+		jtfPdfPath.setBounds(20, 67, 175, 22);
+		jpPathExport.add(jtfPdfPath);
+		jfcExportPdfFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+		jbtPdfBrowse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = jfcExportPdfFile.showOpenDialog(jbtPdfBrowse);			
+				if(returnVal == JFileChooser.APPROVE_OPTION){
+					exportPdfFile = jfcExportPdfFile.getSelectedFile();
+					jtfPdfPath.setText(exportPdfFile.getAbsolutePath());
+				}
+				
+			}
+		});
+		
+		jbtPdfBrowse.setBounds(205, 66, 69, 23);
+		jpPathExport.add(jbtPdfBrowse);
+		lalPdfName.setBounds(20, 108, 54, 15);
+		jpPathExport.add(lalPdfName);
+		jtfFileName.setBounds(20, 136, 175, 22);
+		jpPathExport.add(jtfFileName);
+		lal_pdf.setBounds(205, 139, 24, 15);
+		jpPathExport.add(lal_pdf);
+		jbtExportPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		jbtExportPdf.setBounds(20, 197, 123, 30);
+		jpPathExport.add(jbtExportPdf);
+		jpPreviewExport.setLayout(null);
+		jpPreviewWindow.setBorder(new TitledBorder(null, "File Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		jpPreviewWindow.setBounds(10, 10, 228, 320);
+		jpPreviewExport.add(jpPreviewWindow);
+	}
+	
+	public void initializeTopButton(){
 		jbtImport = new JButton("Import");
 		jbtImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -178,119 +355,5 @@ public class MainWindow {
 			}
 		});
 		
-		
-		//Panels
-		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
-	//	jpStatic.setLayout(null);
-	//	jpStatic.setSize(frame.getWidth(),1000000);
-		jpStatic.add(jbtImport);
-		jpStatic.add(jbtFilter);
-		jpStatic.add(jbtExport);
-		jbtImport.setEnabled(true);
-		jbtImport.setSelected(true);
-		jbtFilter.setEnabled(false);
-		jbtExport.setEnabled(false);
-		
-		
-		
-		//PanelImport
-		jpImport.setLayout(new GridLayout(4, 1, 0, 0));
-		jpImport.add(jpImportExcel);
-		jpImport.add(jpImportTxt);
-		jpImport.add(jpImportImg);
-		jpImport.add(jpImportNext);
-		jpImportExcel.setLayout(null);
-		lblImportExcel.setBounds(32, 0, 66, 59);
-		jpImportExcel.add(lblImportExcel);
-		jtfExcelPath.setBounds(122, 18, 204, 23);
-		jpImportExcel.add(jtfExcelPath);
-		jfcImportExcelFile.setFileFilter(filterExcel);
-		jbtBrowseExcel.setBounds(352, 18, 69, 23);
-		jbtBrowseExcel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = jfcImportExcelFile.showOpenDialog(jbtBrowseExcel);			
-				if(returnVal == JFileChooser.APPROVE_OPTION){
-					importExcelFile = jfcImportExcelFile.getSelectedFile();
-					jtfExcelPath.setText(importExcelFile.getAbsolutePath());
-				}
-			}
-		});
-		jpImportExcel.add(jbtBrowseExcel);
-		
-		//PanelTxtImport
-		jpImportTxt.setLayout(null);
-		lblImportTxt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImportTxt.setBounds(31, 0, 69, 59);
-		jpImportTxt.add(lblImportTxt);
-		jtfTxtPath.setBounds(122, 18, 204, 23);
-		jpImportTxt.add(jtfTxtPath);
-		jfcImportTxtFile.setFileFilter(filterTxt);
-		jbtBrowseTxt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = jfcImportTxtFile.showOpenDialog(jbtBrowseTxt);			
-				if(returnVal == JFileChooser.APPROVE_OPTION){
-					importTxtFile = jfcImportTxtFile.getSelectedFile();
-					jtfTxtPath.setText(importTxtFile.getAbsolutePath());
-				}
-			}
-		});
-		jbtBrowseTxt.setBounds(352, 18, 69, 23);
-		jpImportTxt.add(jbtBrowseTxt);
-		//PanelImgPath
-		jfcImportImgFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-		jpImportImg.setLayout(null);
-		lblImportImg.setBounds(24, 0, 82, 62);
-		jpImportImg.add(lblImportImg);
-		jtfImgPath.setBounds(122, 20, 204, 23);
-		jpImportImg.add(jtfImgPath);
-		jbtBrowseImg.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int returnVal = jfcImportImgFile.showOpenDialog(jbtBrowseImg);			
-				if(returnVal == JFileChooser.APPROVE_OPTION){
-					importImgFile = jfcImportImgFile.getSelectedFile();
-					jtfImgPath.setText(importImgFile.getAbsolutePath());
-				}
-			}
-		});
-		jbtBrowseImg.setBounds(352, 20, 69, 23);
-		jpImportImg.add(jbtBrowseImg);
-		jpImportNext.setLayout(null);
-		jbtImportNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(jtfExcelPath.getText().trim().length()<1 || jtfImgPath.getText().trim().length()<1){
-					if(jtfExcelPath.getText().trim().length()<1)
-						JOptionPane.showMessageDialog(null,"Please choose the Excel Path!");
-					else if(jtfImgPath.getText().trim().length()<1)
-						JOptionPane.showMessageDialog(null,"Please choose the Image Source Folder!");
-				}
-				else{					
-				jpImport.setVisible(false);
-				jbtFilter.setEnabled(true);
-				jpFilter.setVisible(true);
-				jpExport.setVisible(false);
-				jbtImport.setSelected(false);
-				jbtFilter.setSelected(true);
-				jbtExport.setSelected(false);
-				frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-				}
-				
-			}
-		});
-		jbtImportNext.setBounds(352, 10, 69, 23);
-		//PanelNextImport
-		jpImportNext.add(jbtImportNext);
-		
-		//MainWindow layout
-		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
-		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		jpFilter.setVisible(false);
-		jpFilter.setVisible(false);
-		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-	//	frame.setJMenuBar(jmb);
-		frame.setLocationRelativeTo(null);
-		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
-		frame.setIconImage(ico.getImage());
 	}
-
 }
