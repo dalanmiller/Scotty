@@ -68,14 +68,16 @@ import javax.swing.JList;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Component; 
+import java.awt.Component;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.table.DefaultTableModel; 
 
 
 
 public class MainWindow {
 
 	//Test for import File
-	
 	
 	private JFrame frame;
 	private JPanel jpStatic = new JPanel();
@@ -85,7 +87,6 @@ public class MainWindow {
 	private JButton jbtImport;
 	private JButton jbtFilter;
 	private JButton jbtExport;
-
 	
 	//Panel Import
 	private JPanel jpImportExcel = new JPanel();
@@ -114,12 +115,8 @@ public class MainWindow {
 	//Panel Next Import
 	private JPanel jpImportNext = new JPanel();
 	private JButton jbtImportNext = new JButton("Next>>");
+	private final JButton button = new JButton("Next>>");
 		
-		private final JButton button = new JButton("Next>>");
-		
-	
-	
-	
 	//Panel Path Export
 	private JPanel jpPathExport = new JPanel();
 	private JLabel lalPdfExport = new JLabel("Export Folder");
@@ -135,6 +132,12 @@ public class MainWindow {
 	//Panel Preview Export
 	private JPanel jpPreviewExport = new JPanel();
 	private JPanel jpPreviewWindow = new JPanel();
+	private final JPanel jpFilterList = new JPanel();
+	private final JPanel jpFilterCtrl = new JPanel();
+	private final JLabel lblNewLabel = new JLabel("Country:");
+	private JComboBox programSelector;
+	private JTable studentsList;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -200,17 +203,16 @@ public class MainWindow {
 		jpStatic.add(jbtExport);
 		jbtImport.setEnabled(true);
 		jbtImport.setSelected(true);
-	//	jbtExport.setEnabled(false);
+
 		
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-	//    jpFilter.setVisible(false);
-	//	jpExport.setVisible(false);
-		
-		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
 		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+		
+		
 		frame.setLocationRelativeTo(null);
 		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
 		frame.setIconImage(ico.getImage());
@@ -341,11 +343,106 @@ public class MainWindow {
 		DefaultListModel<String> dlm = new DefaultListModel<String>();
 		
 		for(Student s: students){
+			System.out.println(s.toString());
 			dlm.addElement(s.toString());
 		}
+		jpFilter.setLayout(null);
+		jpFilterList.setBounds(189, 11, 351, 329);
+		jpFilterList.setPreferredSize(new Dimension(50, 50));
+		jpFilterList.setMinimumSize(new Dimension(50, 50));
 		
-		JList list = new JList(dlm);
-		jpFilter.add(list);
+		jpFilter.add(jpFilterList);
+		
+		jpFilterList.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 351, 329);
+//		scrollPane.setDoubleBuffered(true);
+		
+		JTable studentsTable = new JTable();
+		studentsTable.setBounds(new Rectangle(100, 10, 50, 50));
+		
+		studentsTable.setModel(new DefaultTableModel(
+				new Object[][] {
+					{"danielam", "Daniel", "Miller", "GMISM", "UNITED STATES OF AMERICA"},
+				},
+				new String[] {
+					"Andrew ID", "First Name", "Last Name", "Program", "Country"
+				}
+			) {
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+		});
+        studentsTable.setFillsViewportHeight(true);		
+		studentsTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+		scrollPane.add(studentsTable);
+		scrollPane.setViewportView(studentsTable);
+		jpFilterList.add(scrollPane);
+				
+		jpFilterCtrl.setBounds(10, 11, 173, 329);
+		
+		jpFilter.add(jpFilterCtrl);
+//		jpFilterCtrl.setLayout(null);
+		
+		
+		String[] programOptions = new String[]{"All Programs", "GMISM", "MSIT", "MSPPM"};
+		jpFilterCtrl.setLayout(null);
+		
+		JLabel lblProgram = new JLabel("Program:");
+		lblProgram.setBounds(0, 8, 44, 14);
+		jpFilterCtrl.add(lblProgram);
+		
+		programSelector = new JComboBox(programOptions);
+		
+		//NEED TO CREATE EVENT TO HANDLE RELOADING THE LIST OF STUDENTS WHEN PROPERTY CHANGES
+		programSelector.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+			}
+		});
+		programSelector.setBounds(54, 5, 109, 20);
+		jpFilterCtrl.add(programSelector);
+		
+		ArrayList<String> countryOptions = new ArrayList<String>();
+		
+		//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
+		//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
+
+		countryOptions.add("Global");
+	
+		lblNewLabel.setBounds(0, 39, 43, 14);
+		
+		jpFilterCtrl.add(lblNewLabel);
+		
+		String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
+		System.out.println(countryOptionsArray);
+		JComboBox countrySelector = new JComboBox(countryOptionsArray);
+		countrySelector.setBounds(54,36,109,20);
+		jpFilterCtrl.add(countrySelector);
+		
+		JButton filterNext = new JButton("Next");
+		filterNext.setBounds(108, 74, 55, 23);
+		jpFilterCtrl.add(filterNext);
+		
+		//NEED TO CREATE ACTIONS TO SWITCH TO EXPORT WINDOW
+		filterNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				jpImport.setVisible(false);
+				jbtExport.setEnabled(true);
+				jpFilter.setVisible(false);
+				jpExport.setVisible(true);
+				
+				jbtImport.setSelected(false);
+				jbtFilter.setSelected(false);
+				jbtExport.setSelected(true);
+				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+			}
+		});
+		
 	}
 	public void initializeExportPanel() throws IOException{
 		jpExport.setLayout(null);
@@ -469,5 +566,8 @@ public class MainWindow {
 		frame.setLocationRelativeTo(null);
 		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
 		frame.setIconImage(ico.getImage());*/
+	}
+	public JComboBox getProgramSelector() {
+		return programSelector;
 	}
 }
