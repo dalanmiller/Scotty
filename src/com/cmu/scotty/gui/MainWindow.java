@@ -3,6 +3,7 @@ package com.cmu.scotty.gui;
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.controller.*;
 import com.cmu.scotty.persistence.*;
+import com.itextpdf.text.DocumentException;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
@@ -115,7 +116,7 @@ public class MainWindow {
 	private JPanel jpImportNext = new JPanel();
 	private JButton jbtImportNext = new JButton("Next>>");
 		
-		private final JButton button = new JButton("Next>>");
+	private final JButton button = new JButton("Next>>");
 		
 	
 	
@@ -145,9 +146,8 @@ public class MainWindow {
 		      public void run() {
 		        try {
 		          	UIManager.setLookAndFeel(new SubstanceRavenGraphiteLookAndFeel());
-		        //	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		        } catch (Exception e) {
-		        	e.printStackTrace();
+		        	JOptionPane.showMessageDialog(null,"Error: Failed Generating skins for the window!");
 		        }
 		        MainWindow window;
 				try {
@@ -155,7 +155,7 @@ public class MainWindow {
 					window.frame.setVisible(true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Error: Failed import/export files!");
 				}
 		        
 			
@@ -205,7 +205,7 @@ public class MainWindow {
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-	//    jpFilter.setVisible(false);
+	//  jpFilter.setVisible(false);
 	//	jpExport.setVisible(false);
 		
 		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
@@ -306,7 +306,7 @@ public class MainWindow {
 		});
 		
 				
-		jbtImportNext.setBounds(352, 10, 69, 23);
+		jbtImportNext.setBounds(449, 22, 69, 23);
 
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
@@ -347,7 +347,7 @@ public class MainWindow {
 		JList list = new JList(dlm);
 		jpFilter.add(list);
 	}
-	public void initializeExportPanel() throws IOException{
+	public void initializeExportPanel() {
 		jpExport.setLayout(null);
 		jpPathExport.setBounds(0, 0, 284, 340);
 		jpExport.add(jpPathExport);
@@ -382,6 +382,23 @@ public class MainWindow {
 		jpPathExport.add(lal_pdf);
 		jbtExportPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(jtfPdfPath.getText().trim().length()<1 || jtfFileName.getText().trim().length()<1){
+					if(jtfPdfPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose Folder for the Export File!");
+					else if(jtfFileName.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please input the file name!");
+				}
+				else{	
+					String path = jtfPdfPath.getText().trim()+jtfFileName.getText().trim();
+					PdfCreator.c.setExportLocation(path);
+					try {
+						PdfCreator.c.printTable3();
+					} catch (IOException | DocumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
 			}
 		});
 		jbtExportPdf.setBounds(20, 197, 123, 30);
@@ -392,21 +409,27 @@ public class MainWindow {
 		jpPreviewExport.add(jpPreviewWindow);
 		
 		// Preview Window
-		 File file = new File("Student_List1.pdf");  
-	     RandomAccessFile raf = new RandomAccessFile(file, "r");  
-	     FileChannel channel = raf.getChannel();  
-	     ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());  
-	     PDFFile pdffile = new PDFFile(buf);  
+		
+		try {
+			 File file = new File("Student_List1.pdf");  
+		     RandomAccessFile raf;
+		     FileChannel channel;
+		     ByteBuffer buf;
+		     PDFFile pdffile;
+			raf = new RandomAccessFile(file, "r");
+			channel = raf.getChannel();  
+			buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+			pdffile = new PDFFile(buf);  
+		
 	     int pages = pdffile.getNumPages();
 	     Image img;
-	//   jpPicture.setLayout(new GridLayout(pages, 1, 0, 0));
-	//     for(int i=1; i<= pages;i++) {
+
 	     PDFPage page = pdffile.getPage(1);
 	     Rectangle rect =
              new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
 
 	         //generate the image
-	       //  img = page.getImage(rect.width/2, rect.height/2, //width &amp; height
+	      
 	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
 	                 rect, // clip rect
 	                 null, // null for the ImageObserver
@@ -414,6 +437,13 @@ public class MainWindow {
 	                 true) // block until drawing is done
 	         ;
 	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null,"Error: Target file not found!");
+		}  catch (IOException e){
+			JOptionPane.showMessageDialog(null,"Error: Failed generating pdf!");
+		}
+	   
 	}
 	
 	public void initializeTopButton(){
@@ -455,19 +485,6 @@ public class MainWindow {
 		});
 		
 
-		/*MainWindow layout
-		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
-		
 	
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-		button.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		button.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-		jpFilter.add(button);
-//		frame.setJMenuBar(jmb);
-		frame.setLocationRelativeTo(null);
-		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
-		frame.setIconImage(ico.getImage());*/
 	}
 }

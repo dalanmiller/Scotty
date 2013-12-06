@@ -31,12 +31,13 @@ public class PdfCreator {
     /** The resulting PDF. 
      * @throws DocumentException 
      * @throws IOException */
+	public static PdfCreator c;
 
-	public static void main(String[]args) throws IOException, DocumentException{
+	public static void test() throws IOException, DocumentException{
 		ArrayList<Student> s=new<Student> ArrayList();
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
-		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
+		//a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
 		Student b= new Student("a","asdf","asdf",
 				"MISM","F/T","China", "13F","");
 		s.add(a);
@@ -55,7 +56,7 @@ public class PdfCreator {
 		s.add(a);
 		s.add(a);
 		s.add(a);
-		PdfCreator c= new PdfCreator(s);
+		 c= new PdfCreator(s);
 		c.printTable3();
 	}
 
@@ -76,7 +77,7 @@ public class PdfCreator {
     ="lib/logo/logo.png";
     public static final String UNAVAILABILE
     ="lib/logo/nopic.png";
-    public static final String TITLE
+    public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
 
@@ -98,7 +99,9 @@ public class PdfCreator {
     	RESULT=path;
     }
     
-
+    public void setTitle(String t){
+    	TITLE = t;
+    }
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
@@ -119,8 +122,30 @@ public class PdfCreator {
             createThirdTable();
        
             document.close();
-            }
-    
+    }
+ 
+
+    public void printTablePreview()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            setTitle("Preview File");
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream("preview.pdf"));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+           
+            createThirdTable();
+       
+            document.close();
+    }
    
 
    
