@@ -11,7 +11,7 @@ import com.cmu.scotty.exception.*;
 
 public class ReadExcel {
 
-	public ArrayList<Student> read(String inputexcel) throws IOException, BiffException,wrongexcelexception  {
+	public ArrayList<Student> read(String inputexcel) throws IOException, BiffException,WrongExcelException  {
 		File inputWorkbook = new File(inputexcel);
 	    Workbook w;
 	    w = Workbook.getWorkbook(inputWorkbook);
@@ -21,7 +21,7 @@ public class ReadExcel {
 	    if(!(sheet.getCell(0,0).getContents().equals("First Name")&& sheet.getCell(1,0).getContents().equals("Last Name")
 	    		&&sheet.getCell(2,0).getContents().equals("Andrew ID")&&sheet.getCell(3,0).getContents().equals("Program Track")
 	    		&&sheet.getCell(4,0).getContents().equals("Part-time/Full Time")&&sheet.getCell(5,0).getContents().equals("Country")
-	    		&&sheet.getCell(6,0).getContents().equals("Semester"))) throw new wrongexcelexception();
+	    		&&sheet.getCell(6,0).getContents().equals("Semester"))) throw new WrongExcelException();
 	    for (int i = 1; i < sheet.getRows(); i++) {
 	    	String firstName = sheet.getCell(0, i).getContents();
 	    	String lastName = sheet.getCell(1, i).getContents();

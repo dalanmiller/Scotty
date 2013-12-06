@@ -2,7 +2,7 @@
 myDB
 scottyDB
 .classpath
-
+.project
 
 # Package Files #
 #*.jar
@@ -26,3 +26,6 @@ Student.java
 
 #SILLY MACS!
 .DS_Store
+
+
+src/**/*.pdf

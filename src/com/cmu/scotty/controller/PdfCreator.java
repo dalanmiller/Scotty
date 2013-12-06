@@ -37,16 +37,18 @@ public class PdfCreator {
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
 		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
+		Student b= new Student("a","asdf","asdf",
+				"MISM","F/T","China", "13F","");
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
 		s.add(a);
+		s.add(b);
 		s.add(a);
 		s.add(a);
-		s.add(a);
-		s.add(a);
+		s.add(b);
 		s.add(a);
 		s.add(a);
 		s.add(a);
@@ -59,7 +61,7 @@ public class PdfCreator {
 
 	
     public static String RESULT
-        = "src/Student_List.pdf";
+        = "src/Student_List1.pdf";
     /** The movie poster. */
     public ArrayList <String> image=new<String> ArrayList();
     public ArrayList <String> program=new<String> ArrayList();
@@ -71,7 +73,9 @@ public class PdfCreator {
     public ArrayList <String> intake=new<String> ArrayList();
     
     public static final String LOGO
-    ="/Users/ruiwang/Pictures/logo.jpg";
+    ="lib/logo/logo.png";
+    public static final String UNAVAILABILE
+    ="lib/logo/nopic.png";
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
@@ -142,8 +146,10 @@ public class PdfCreator {
         	
         	if(i%9==0){
         	    cell = new PdfPCell();
+        	    
                 cell.setBorder(0);
                 Image logo = Image.getInstance(LOGO);
+               
                 logo.scaleAbsoluteHeight(20);
                 logo.scaleAbsoluteWidth(20);
                 logo.scalePercent(23);
@@ -154,14 +160,19 @@ public class PdfCreator {
                 cell = new PdfPCell();
           
                 cell.setBorder(0);
+                cell.addElement(new Phrase("\n \n"));
                 cell.addElement(new Phrase(TITLE,fontbold));
                 
                 table.addCell(cell);
-               /* cell.setBorder(0);
-                table.addCell(" ");
-                table.addCell(" ");
-
-                table.addCell(" ");*/
+               cell.setBorder(0);
+               PdfPCell cell1 = new PdfPCell();
+               cell1.setColspan(3);  
+               cell1.setBorder(0);
+               Paragraph p = new Paragraph();
+               p.add(new Phrase(" "));
+               cell1.addElement(p);
+                table.addCell(cell1);
+               
 
                 
         	}
@@ -176,14 +187,20 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
-        	    if(image.get(i)!=null){
+        	    if(image.get(i)!=null && !image.get(i).isEmpty()){
         	    Image img = Image.getInstance(image.get(i));
-       
-            	img.scaleToFit(300, 135);
-            	img.scalePercent(90);
-    	     
+        	    img.scaleAbsolute(130f, 130f);
+            
+            	
 
    	         ph.add(new Chunk(img, 0, 0, true));
+        	    }else{
+        	    	
+        	    	Image img= Image.getInstance(UNAVAILABILE);
+        	    	//img.scaleToFit(300, 135);
+        	    	img.scaleAbsolute(130f, 130f);
+                	
+                	ph.add(new Chunk(img, 0, 0, true));
         	    }
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
    	         ph.add(new Phrase(lastname.get(i)+" ",font1));
@@ -192,7 +209,7 @@ public class PdfCreator {
    	         ph.add(new Phrase("\n"+time.get(i)+" "));
    	         ph.add(new Phrase("|"+country.get(i)+" "));
    	         ph.add(new Phrase("|"+intake.get(i)+" "));
-   	      ph.add(new Phrase("\n \n \n \n"));
+   	      ph.add(new Phrase("\n \n "));
    	         p.add(ph);
    	         p.setAlignment(Element.ALIGN_CENTER);
  

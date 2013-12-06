@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import com.cmu.scotty.controller.PdfCreator;
+import com.cmu.scotty.controller.ReadExcel;
 import com.cmu.scotty.controller.ScottyController;
 import com.cmu.scotty.model.Student;
 import com.cmu.scotty.persistence.StudentDao;
@@ -47,18 +49,47 @@ public class testMain {
 		arrStudents.add(student1);
 		arrStudents.add(student2);
 		
+		ArrayList<Student> studentD = new ArrayList<Student>();
 		
+		StudentDao studentDao = new StudentDao();
 		
 		try
 		{
+			studentDao.dropTable();		    
+		   // studentDao.insertStudent(student2);
+			
+			boolean tableExists = studentDao.checkTable();
+			System.out.print(tableExists);
+			
+			
+			
+			studentDao.createTable();
+			//studentDao.insertStudent(student1);
+			tableExists = studentDao.checkTable();
+			
+			System.out.print(tableExists);
+			
 			//studentDao.dropTable();
 			//scottyCon.importExcel(arrStudents);
-			scottyCon.selectStudent("andrewId", "Daniel");
+			//studentD = scottyCon.selectStudent("andrewId", "0078");
+			
+			//System.out.println(studentD);
+			
+			//ArrayList<Student> arrStu = new ArrayList<Student>();
+			
+			//ReadExcel readExcel = new ReadExcel();
+			//arrStu = readExcel.read("testimport\\Testimport\\testExcelSheet.xls");
+			
+			//PdfCreator pdfC = new PdfCreator(arrStu);
+			//pdfC.setExportLocation(path);
+			
+			//pdfC.printTable3();
 	
 		}
+		
 		catch(Exception e)
 		{
-			System.out.println(" Error ");
+			e.printStackTrace();
 		}
 		
 		

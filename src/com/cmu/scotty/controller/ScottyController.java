@@ -17,6 +17,8 @@ public class ScottyController {
 	
 	public void importExcel(ArrayList<Student> arrStudents)
 	{
+		
+		
 		studentDao.dropTable();
 		studentDao.createTable();
         //readExcel.read(inputexcel);

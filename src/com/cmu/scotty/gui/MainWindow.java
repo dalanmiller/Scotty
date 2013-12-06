@@ -2,13 +2,23 @@ package com.cmu.scotty.gui;
 
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.controller.*;
+import com.cmu.scotty.persistence.*;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,7 +31,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
@@ -30,6 +42,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
@@ -44,7 +61,14 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+
 import java.awt.Color; 
+
+import javax.swing.JList;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.Component; 
 
 
 
@@ -90,7 +114,9 @@ public class MainWindow {
 	//Panel Next Import
 	private JPanel jpImportNext = new JPanel();
 	private JButton jbtImportNext = new JButton("Next>>");
-	
+		
+		private final JButton button = new JButton("Next>>");
+		
 	
 	
 	
@@ -123,25 +149,35 @@ public class MainWindow {
 		        } catch (Exception e) {
 		        	e.printStackTrace();
 		        }
-		        MainWindow window = new MainWindow();
+		        MainWindow window;
+				try {
+					window = new MainWindow();
+					window.frame.setVisible(true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		        
-				window.frame.setVisible(true);
+			
 		      }
 		 });
-	
+		
+		
 	}
 
 	/**
 	 * Create the application.
+	 * @throws IOException 
 	 */
-	public MainWindow() {
+	public MainWindow() throws IOException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
 	 */
-	private void initialize() {
+	private void initialize() throws IOException {
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 556, 402);
@@ -151,10 +187,12 @@ public class MainWindow {
 		initializeTopButton();
 		//Import Panel
 		initializeImportPanel();
+		//Filter Panel
+		initializeFilterPanel();
 		//Export Panel
 		initializeExportPanel();
 	
-		
+
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
 		jpStatic.add(jbtImport);
@@ -162,8 +200,7 @@ public class MainWindow {
 		jpStatic.add(jbtExport);
 		jbtImport.setEnabled(true);
 		jbtImport.setSelected(true);
-		jbtFilter.setEnabled(false);
-		jbtExport.setEnabled(false);
+	//	jbtExport.setEnabled(false);
 		
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
@@ -177,12 +214,13 @@ public class MainWindow {
 		frame.setLocationRelativeTo(null);
 		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
 		frame.setIconImage(ico.getImage());
-		
+
 	
 	}
 	public void initializeImportPanel(){
 		
 		/*PanelImport*/
+
 		jpImport.setLayout(new GridLayout(4, 1, 0, 0));
 		jpImport.add(jpImportExcel);
 		jpImport.add(jpImportImg);
@@ -253,26 +291,63 @@ public class MainWindow {
 						JOptionPane.showMessageDialog(null,"Please choose the Image Source Folder!");
 				}
 				else{					
-				jpImport.setVisible(false);
-				jbtFilter.setEnabled(true);
-				jpFilter.setVisible(true);
-				jpExport.setVisible(false);
-				jbtImport.setSelected(false);
-				jbtFilter.setSelected(true);
-				jbtExport.setSelected(false);
-				frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+					jpImport.setVisible(false);
+					jbtFilter.setEnabled(true);
+					jpFilter.setVisible(true);
+					jpExport.setVisible(false);
+					
+					jbtImport.setSelected(false);
+					jbtFilter.setSelected(true);
+					jbtExport.setSelected(false);
+					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
 				}
 				
 			}
 		});
-		jbtImportNext.setBounds(449, 33, 69, 23);
+		
+				
+		jbtImportNext.setBounds(352, 10, 69, 23);
+
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 	}
 	public void initializeFilterPanel(){
+		ArrayList<Student> students = new ArrayList<Student>();
 		
+     	Student student1 = new Student();
+     	
+	     	student1.setAndrewID("44435slkf");
+	     	student1.setFirstName("Tania");
+	     	student1.setLastName("Dasgupta");
+	     	student1.setCountry("India");
+	     	student1.setFullTime("Yes");
+	     	student1.setProgramTrack("MISM");
+	     	student1.setSemester("1st");
+	     	student1.setPhotoPath("jndj\\bsdfsd");
+			
+		Student student2 = new Student();
+			student2.setAndrewID("0078");
+			student2.setFirstName("Daniel");
+			student2.setLastName("Miller");
+			student2.setCountry("U.S");
+			student2.setFullTime("Yes");
+			student2.setProgramTrack("MISM");
+			student2.setSemester("1st");
+			student2.setPhotoPath("j\\ndj\\bsdfsd");
+			
+		students.add(student1);
+		students.add(student2);
+		
+		DefaultListModel<String> dlm = new DefaultListModel<String>();
+		
+		for(Student s: students){
+			dlm.addElement(s.toString());
+		}
+		
+		JList list = new JList(dlm);
+		jpFilter.add(list);
 	}
-	public void initializeExportPanel(){
+	public void initializeExportPanel() throws IOException{
 		jpExport.setLayout(null);
 		jpPathExport.setBounds(0, 0, 284, 340);
 		jpExport.add(jpPathExport);
@@ -315,6 +390,30 @@ public class MainWindow {
 		jpPreviewWindow.setBorder(new TitledBorder(null, "File Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		jpPreviewWindow.setBounds(10, 10, 228, 320);
 		jpPreviewExport.add(jpPreviewWindow);
+		
+		// Preview Window
+		 File file = new File("Student_List1.pdf");  
+	     RandomAccessFile raf = new RandomAccessFile(file, "r");  
+	     FileChannel channel = raf.getChannel();  
+	     ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());  
+	     PDFFile pdffile = new PDFFile(buf);  
+	     int pages = pdffile.getNumPages();
+	     Image img;
+	//   jpPicture.setLayout(new GridLayout(pages, 1, 0, 0));
+	//     for(int i=1; i<= pages;i++) {
+	     PDFPage page = pdffile.getPage(1);
+	     Rectangle rect =
+             new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
+
+	         //generate the image
+	       //  img = page.getImage(rect.width/2, rect.height/2, //width &amp; height
+	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
+	                 rect, // clip rect
+	                 null, // null for the ImageObserver
+	                 true, // fill background with white
+	                 true) // block until drawing is done
+	         ;
+	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
 	}
 	
 	public void initializeTopButton(){
@@ -355,5 +454,20 @@ public class MainWindow {
 			}
 		});
 		
+
+		/*MainWindow layout
+		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
+		
+	
+		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+		button.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		button.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		jpFilter.add(button);
+//		frame.setJMenuBar(jmb);
+		frame.setLocationRelativeTo(null);
+		ImageIcon ico = new ImageIcon("img/scottie-dog.jpg");
+		frame.setIconImage(ico.getImage());*/
 	}
 }
