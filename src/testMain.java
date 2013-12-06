@@ -40,8 +40,8 @@ public class testMain {
 		student2.setAndrewID("0078");
 		student2.setFirstName("Daniel");
 		student2.setLastName("Miller");
-		student2.setCountry("U.S");
-		student2.setFullTime("Yes");
+		//student2.setCountry("U.S");
+		//student2.setFullTime("Yes");
 		student2.setProgramTrack("MISM");
 		student2.setSemester("1st");
 		student2.setPhotoPath("j\\ndj\\bsdfsd");
@@ -51,23 +51,36 @@ public class testMain {
 		
 		ArrayList<Student> studentD = new ArrayList<Student>();
 		
+		ArrayList<String> columnNameArr = new ArrayList<String>();
+		columnNameArr.add("PROGRAMTRACK");
+		//columnNameArr.add("COUNTRY");
+	
+		ArrayList<String> columnValueArr = new ArrayList<String>();
+		columnValueArr.add("MISM");
+		//columnValueArr.add("India");
+		
 		StudentDao studentDao = new StudentDao();
 		
 		try
 		{
-			studentDao.dropTable();		    
+			//studentDao.dropTable();		    
 		   // studentDao.insertStudent(student2);
 			
 			boolean tableExists = studentDao.checkTable();
 			System.out.print(tableExists);
 			
+			studentDao.updateStudent(student2);
 			
 			
-			studentDao.createTable();
-			//studentDao.insertStudent(student1);
-			tableExists = studentDao.checkTable();
 			
-			System.out.print(tableExists);
+			//studentDao.createTable();
+			//studentDao.insertStudents(arrStudents);
+			
+			//tableExists = studentDao.checkTable();
+			
+			//System.out.print(tableExists);
+			
+			//studentDao.selectStudent(columnNameArr, columnValueArr);
 			
 			//studentDao.dropTable();
 			//scottyCon.importExcel(arrStudents);
