@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.cmu.scotty.model.*;
 import com.itextpdf.text.BadElementException;
@@ -63,14 +65,14 @@ public class PdfCreator {
     public static String RESULT
         = "src/Student_List1.pdf";
     /** The movie poster. */
-    public ArrayList <String> image=new<String> ArrayList();
-    public ArrayList <String> program=new<String> ArrayList();
-    public ArrayList <String> firstname=new<String> ArrayList();
-    public ArrayList <String> lastname=new<String> ArrayList();
-    public ArrayList <String> email=new<String> ArrayList();
-    public ArrayList <String> time=new<String> ArrayList();
-    public ArrayList <String> country=new<String> ArrayList();
-    public ArrayList <String> intake=new<String> ArrayList();
+    public ArrayList <String> image=new ArrayList<String>();
+    public ArrayList <String> program=new ArrayList<String>();
+    public ArrayList <String> firstname=new ArrayList<String>();
+    public ArrayList <String> lastname=new ArrayList<String>();
+    public ArrayList <String> email=new ArrayList<String>();
+    public ArrayList <String> time=new ArrayList<String>();
+    public ArrayList <String> country=new ArrayList<String>();
+    public ArrayList <String> intake=new ArrayList<String>();
     
     public static final String LOGO
     ="lib/logo/logo.png";
@@ -81,7 +83,17 @@ public class PdfCreator {
     public static Document document;
 
     public PdfCreator(ArrayList<Student> s){
-
+    	
+    	//Sorting Student ArrayList
+    	
+    	Collections.sort(s, new Comparator<Student>() {
+    	    
+			@Override
+			public int compare(Student arg0, Student arg1) {
+				return arg0.getLastName().compareTo(arg1.getLastName());
+			}
+    	});
+    	
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
     		program.add(s.get(i).getProgramTrack());
