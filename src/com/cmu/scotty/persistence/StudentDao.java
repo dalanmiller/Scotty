@@ -124,43 +124,63 @@ public class StudentDao {
     }
     
     
-    public void insertStudents(ArrayList<Student> studentArr)
+    public void insertStudents(ArrayList<Student> studentArr) throws SQLException
     {
-    	Iterator iterator = studentArr.iterator();
-    	while(iterator.hasNext())
-    	{
-    		insertStudent((Student)iterator.next());
-    	}
+    		boolean insertStatus = false;
+        	Iterator iterator = studentArr.iterator();
+        	while(iterator.hasNext())
+        	{
+        		insertStudent((Student)iterator.next());
+        	}
+    	
+    	
     }
     
-    public void insertStudent(Student student)
+    public void insertStudent(Student student) throws SQLException
     {
-        try
-        {    
-        	if(conn==null)
+          		
+        // Put a check for andrew Id
+    	
+    	String firstName = student.getFirstName() == null ? " " : student.getFirstName().trim();
+        String lastName = student.getLastName()==null ? " " : student.getLastName().trim();
+        String programTrack = student.getProgramTrack() == " " ? null : student.getProgramTrack().trim();
+        String fullTime = student.getFullTime() == null ? " " : student.getFullTime().trim();
+        String country = student.getCountry() == null ? " " : student.getCountry().trim();
+        String semester = student.getSemester() == null ? " " : student.getSemester().trim();
+        String pathName = student.getPhotoPath() == null ? " " : student.getPhotoPath().trim();
+       
+        //String andrewId = student.getAndrewID().trim();
+    
+    	
+    	try{
+    		
+    		if(conn==null)
         	{
         		conn = createConnection();
         	}
             stmt = conn.createStatement();
             String query = "insert into " + tableName + " values (" 
        		     + "'" + student.getAndrewID() + "'," 
-       		     + "'" + student.getFirstName().trim().toUpperCase() + "',"
-       		     + "'" + student.getLastName().trim().toUpperCase() + "',"
-       		     + "'" + student.getProgramTrack().trim().toUpperCase() + "',"
-       		     + "'" + student.getFullTime().trim().toUpperCase() + "',"
-       		     + "'" + student.getCountry().trim().toUpperCase() + "',"
-       		     + "'" + student.getSemester().trim().toUpperCase() + "',"
-       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";
+       		     + "'" + firstName + "',"
+       		     + "'" + lastName + "',"
+       		     + "'" + programTrack + "',"
+       		     + "'" + fullTime + "',"
+       		     + "'" + country + "',"
+       		     + "'" + semester + "',"
+       		     + "'" + pathName + "')";
             
-            System.out.println(query);
-            
-            stmt.execute(query);            		     
+            System.out.println(query);            
+            stmt.execute(query);  
             stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-        }
+    	}
+        	
+    	catch(SQLException sqlE)
+    	{
+    		throw sqlE;
+    	}
+            
+       
+            
     }
     
     
@@ -293,7 +313,10 @@ public class StudentDao {
         	}
         	
         	stmt = conn.createStatement();
-            String query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " = " + "'" + columnValue.trim().toUpperCase() + "'"; 
+        	
+        	//Put nulll checks for column value and column name
+        	
+            String query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " = " + "'" + columnValue.trim() + "'"; 
             
             ResultSet results = stmt.executeQuery(query);
             
@@ -307,13 +330,13 @@ public class StudentDao {
             	Student student = new Student();
             	
                 student.setAndrewID(results.getString(1));
-                student.setFirstName(results.getString(2).trim().toUpperCase());            
-                student.setLastName(results.getString(3).trim().toUpperCase());
-                student.setProgramTrack(results.getString(4).trim().toUpperCase());
-                student.setFullTime(results.getString(5).trim().toUpperCase());
-                student.setCountry(results.getString(6).trim().toUpperCase());
-                student.setSemester(results.getString(7).trim().toUpperCase());
-                student.setPhotoPath(results.getString(6).trim().toUpperCase());
+                student.setFirstName(results.getString(2));            
+                student.setLastName(results.getString(3));
+                student.setProgramTrack(results.getString(4));
+                student.setFullTime(results.getString(5));
+                student.setCountry(results.getString(6));
+                student.setSemester(results.getString(7));
+                student.setPhotoPath(results.getString(6));
                 System.out.println(student.getAndrewID() 
                 		           + "\t\t" + student.getFirstName() 
                 		           + "\t\t" + student.getLastName()
@@ -334,6 +357,49 @@ public class StudentDao {
             sqlExcept.printStackTrace();
         }
 		return studentsArr;
+    }
+    
+    public ArrayList<String> selectCountries()
+    {   
+    	
+    	ArrayList<String> countriesArr = new ArrayList<String>() ;
+    	
+    	String query = null;
+        	
+        try
+        {
+        	if(conn==null)
+        	{
+        		conn = createConnection();
+        	}
+        	
+        	stmt = conn.createStatement();
+        	  
+        	query = "select distinct(COUNTRY) from " + tableName;        	
+        	        	
+        	System.out.println(query);
+        	
+            
+            ResultSet results = stmt.executeQuery(query);
+            
+            
+            ResultSetMetaData rsmd = results.getMetaData();
+            int numberCols = rsmd.getColumnCount();
+            
+            while(results.next())
+            {
+               	countriesArr.add(results.getString(1));
+            }
+            
+            results.close();
+            stmt.close();
+           
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+		return countriesArr;
     }
     
     

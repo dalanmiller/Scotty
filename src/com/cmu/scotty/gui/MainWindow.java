@@ -2,6 +2,7 @@ package com.cmu.scotty.gui;
 
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.controller.*;
+import com.cmu.scotty.exception.WrongExcelException;
 import com.cmu.scotty.persistence.*;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -47,6 +48,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
@@ -69,6 +71,8 @@ import javax.swing.JList;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Component; 
+
+import jxl.read.biff.BiffException;
 
 
 
@@ -135,6 +139,10 @@ public class MainWindow {
 	//Panel Preview Export
 	private JPanel jpPreviewExport = new JPanel();
 	private JPanel jpPreviewWindow = new JPanel();
+	
+	// Controller 
+	private ScottyController controller = new ScottyController();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -300,6 +308,31 @@ public class MainWindow {
 					jbtFilter.setSelected(true);
 					jbtExport.setSelected(false);
 					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+					
+					try
+					{
+						ArrayList<Student> studentD = new ArrayList<Student>();
+						controller.readExcel(jtfExcelPath.getText().trim());
+						studentD = controller.selectStudent("andrewId", "abmd3");
+						System.out.println("Hi");
+					}
+					catch(IOException ioException)
+					{
+						JOptionPane.showMessageDialog(null, ioException.getMessage());
+					}
+					catch(BiffException biffException)
+					{
+						JOptionPane.showMessageDialog(null, biffException.getMessage());
+					}
+					catch(WrongExcelException wrongExcelException)
+					{
+						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
+					}
+					catch(SQLException sqlException)
+					{
+						JOptionPane.showMessageDialog(null, sqlException.getMessage());
+					}
+					
 				}
 				
 			}

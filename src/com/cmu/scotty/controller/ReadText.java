@@ -7,7 +7,7 @@ import com.cmu.scotty.exception.*;
 
 public class ReadText {
 	
-	public ArrayList<Student> Read(String inputtext) throws IOException,WrongTextException{ 
+	public ArrayList<Student> read(String inputtext) throws IOException,WrongTextException{ 
 		File file= new File(inputtext);
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String tempString;
