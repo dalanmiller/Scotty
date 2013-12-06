@@ -147,6 +147,12 @@ public class MainWindow {
 	private JTable studentsList;
 	private JTextField textField;
 	
+	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("ANDREWID"); add("PROGRAMTRACK"); add("COUNTRY");}};
+	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null); add(null);}};
+	
+	private JTable studentsTable = new JTable();
+
+	
 	/**
 	 * Launch the application.
 	 */
@@ -396,7 +402,6 @@ public class MainWindow {
 		scrollPane.setBounds(0, 0, 351, 329);
 //		scrollPane.setDoubleBuffered(true);
 		
-		JTable studentsTable = new JTable();
 		studentsTable.setBounds(new Rectangle(100, 10, 50, 50));
 		
 		studentsTable.setModel(new DefaultTableModel(
@@ -427,7 +432,7 @@ public class MainWindow {
 //		jpFilterCtrl.setLayout(null);
 		
 		
-		String[] programOptions = new String[]{"All Programs", "GMISM", "MSIT", "MSPPM"};
+		String[] programOptions = new String[]{"All Programs", "MISMAU", "MSGLOB", "MS3-AU", "MSIT"};
 		jpFilterCtrl.setLayout(null);
 		
 		JLabel lblProgram = new JLabel("Program:");
@@ -439,6 +444,7 @@ public class MainWindow {
 		//NEED TO CREATE EVENT TO HANDLE RELOADING THE LIST OF STUDENTS WHEN PROPERTY CHANGES
 		programSelector.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
+				filters.set(1, (String)arg0.getNewValue());
 			}
 		});
 		programSelector.setBounds(54, 5, 109, 20);
@@ -462,9 +468,16 @@ public class MainWindow {
 		jpFilterCtrl.add(lblNewLabel);
 		
 		String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
-		System.out.println(countryOptionsArray);
+
 		JComboBox countrySelector = new JComboBox(countryOptionsArray);
 		countrySelector.setBounds(54,36,109,20);
+		
+		countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
+			public void propertyChange(PropertyChangeEvent arg0){
+				filters.set(2, arg0.getNewValue() );
+			}
+		});
+		
 		jpFilterCtrl.add(countrySelector);
 		
 		JButton filterNext = new JButton("Next");
