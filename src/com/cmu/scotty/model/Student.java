@@ -1,6 +1,8 @@
 
 package com.cmu.scotty.model;
 
+import java.lang.StringBuilder;
+
 
 public class Student {
 	private String andrewID;
@@ -111,6 +113,10 @@ public class Student {
 		this.photoPath=null;
 	}
 	
+	@Override
+	public String toString(){		
+		return String.format("%6s | %6s, %6s | %6s | %6s", andrewID, lastName, firstName, programTrack, country);
+	}
 	
 	
 }
