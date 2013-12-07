@@ -27,7 +27,7 @@ public class testMain {
 		ArrayList<Student> arrStudents = new ArrayList<Student>();
 		
      	Student student1 = new Student();
-     	student1.setAndrewID("44435");
+     	student1.setAndrewID("999");
      	student1.setFirstName("Tania");
      	student1.setLastName("Dasgupta");
      	student1.setCountry("India");
@@ -37,7 +37,7 @@ public class testMain {
      	student1.setPhotoPath("jndj\\bsdfsd");
 		
 		Student student2 = new Student();
-		student2.setAndrewID("0078");
+		student2.setAndrewID("278");
 		student2.setFirstName("Daniel");
 		student2.setLastName("Miller");
 		//student2.setCountry("U.S");
@@ -50,6 +50,8 @@ public class testMain {
 		arrStudents.add(student2);
 		
 		ArrayList<Student> studentD = new ArrayList<Student>();
+		ArrayList<String> ctrArr = new ArrayList<String>();
+		ArrayList<String> stuArr = new ArrayList<String>();
 		
 		ArrayList<String> columnNameArr = new ArrayList<String>();
 		columnNameArr.add("PROGRAMTRACK");
@@ -69,13 +71,25 @@ public class testMain {
 			boolean tableExists = studentDao.checkTable();
 			System.out.print(tableExists);
 			
-			studentDao.updateStudent(student2);
+			//studentDao.updateStudent(student2);
 			
 			
 			
 			//studentDao.createTable();
 			//studentDao.insertStudents(arrStudents);
 			
+			//studentD = scottyCon.selectStudent("andrewId", "abmd3");
+			//ctrArr = scottyCon.selectCountries();
+			
+			stuArr = scottyCon.selectAndrewIds();
+			ArrayList<Student> stuArrNotInDb  = scottyCon.selectStudentOnAndrewIds(stuArr);
+			
+			//ArrayList<Student> stuArrNotInDb  = scottyCon.fetchStuPresentInDb(arrStudents);
+			
+			System.out.print("Hi");
+			
+			System.out.println(stuArrNotInDb);
+						
 			//tableExists = studentDao.checkTable();
 			
 			//System.out.print(tableExists);
