@@ -473,10 +473,12 @@ public class MainWindow {
 
 		JComboBox countrySelector = new JComboBox(countryOptionsArray);
 		countrySelector.setBounds(54,36,109,20);
-		
+
 		countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent arg0){
+
 				filters.set(2, (String) arg0.getNewValue() );
+
 			}
 		});
 		
@@ -502,6 +504,11 @@ public class MainWindow {
 		});
 		
 	}
+
+	public void redoStudentTable(ArrayList<Student> newStudents) {
+
+	}
+
 	public void initializeExportPanel() throws IOException{
 		jpExport.setLayout(null);
 		jpPathExport.setBounds(0, 0, 284, 340);
