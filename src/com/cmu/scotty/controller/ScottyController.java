@@ -25,15 +25,7 @@ public class ScottyController {
 	
 	public ReadText readText = new ReadText();
 	
-	/*public void importExcel(ArrayList<Student> arrStudents)
-	{		
-		studentDao.dropTable();
-		studentDao.createTable();
-        //readExcel.read(inputexcel);
-		
-	}*/
-	
-	
+
 	public void readExcel (String excelPath) throws BiffException, IOException, WrongExcelException, SQLException, Exception
 	{
 		ArrayList<Student> arrStudents = readExcel.read(excelPath);	
@@ -137,5 +129,11 @@ public class ScottyController {
 	{
 		ArrayList<String> arrCountries = studentDao.selectCountries();
 		return arrCountries;
+	}
+	
+	public ArrayList<Student> selectStudent() throws SQLException, Exception
+	{
+		ArrayList<Student> arrStudents = studentDao.selectAllStudents();
+		return arrStudents;
 	}
 }
