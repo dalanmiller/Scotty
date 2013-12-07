@@ -1,32 +1,26 @@
 package com.cmu.scotty.controller;
 
 
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.cmu.scotty.model.*;
-import com.itextpdf.text.BadElementException;
+import com.cmu.scotty.model.Student;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class PdfCreator {
  
@@ -35,7 +29,7 @@ public class PdfCreator {
      * @throws IOException */
 
 	public static void main(String[]args) throws IOException, DocumentException{
-		ArrayList<Student> s=new<Student> ArrayList();
+		ArrayList<Student> s = new ArrayList<Student>();
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
 		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
