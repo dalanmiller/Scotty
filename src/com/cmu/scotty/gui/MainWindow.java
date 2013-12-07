@@ -158,8 +158,8 @@ public class MainWindow {
 	private JComboBox countrySelector;
 
 	
-	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("ANDREWID"); add("PROGRAMTRACK"); add("COUNTRY");}};
-	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null); add(null);}};
+	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("PROGRAMTRACK"); add("COUNTRY");}};
+	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null);}};
 	
 	private JTable studentsTable = new JTable();
 
@@ -413,13 +413,37 @@ public class MainWindow {
 					countrySelector.setBounds(54,36,109,20);
 					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 						public void propertyChange(PropertyChangeEvent arg0){
-							//filters.set(2, arg0.getNewValue().toString() );
-
+//							System.out.println(arg0);
+//							if (arg0.get)
+//							filters.set(1, arg0.getNewValue().toString() );
+							String country = countrySelector.getSelectedItem().toString();
+							if (country.equals("Global")){
+								filters.set(1, null);
+							} else {
+								filters.set(1, country);
+							}
+							try {
+								redoStudentTable();
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					});
 					jpFilterCtrl.add(countrySelector);
 					
-					
+					try {
+						redoStudentTable();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					//Filter Panel
 					initializeFilterPanel();
@@ -505,7 +529,21 @@ public class MainWindow {
 		//NEED TO CREATE EVENT TO HANDLE RELOADING THE LIST OF STUDENTS WHEN PROPERTY CHANGES
 		programSelector.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
-//				filters.set(1, arg0.getNewValue().toString());
+				String program = programSelector.getSelectedItem().toString();
+				if (program.equals("All Programs")){
+					filters.set(0, null);
+				} else {
+					filters.set(0, program);
+				}
+				try {
+					redoStudentTable();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		programSelector.setBounds(54, 5, 109, 20);
@@ -596,7 +634,7 @@ public class MainWindow {
 		
 	}
 
-	public void redoStudentTable() {
+	public void redoStudentTable() throws SQLException, Exception {
 		
 		ArrayList<Object[]> studentsData = new ArrayList<Object[]>();
 		
@@ -608,12 +646,22 @@ public class MainWindow {
 			}
 		}
 			
-		if (nonNull == true){
+		if (nonNull == false){
 			for(Student s: controller.selectStudent() ){
 				studentsData.add(s.toRow());
 			}
-		} else {
-			for(Student s: controller.selectStudent( dbColumns , filters)){
+		} else {			
+			ArrayList<String> specFilters = (ArrayList<String>) filters.clone();
+			ArrayList<String> specColNames = (ArrayList<String>) dbColumns.clone();
+			
+			for (int i = 0; i < specFilters.size(); i++){
+				if (specFilters.get(i) == null){
+					specFilters.remove(i);
+					specColNames.remove(i);
+				}
+			}
+			
+			for(Student s: controller.selectStudent(specColNames , specFilters)){
 				studentsData.add(s.toRow());
 			}
 		}
