@@ -141,12 +141,16 @@ public class MainWindow {
 	// Controller 
 	private ScottyController controller = new ScottyController();
 
+	
+	// FILTER
 	private final JPanel jpFilterList = new JPanel();
 	private final JPanel jpFilterCtrl = new JPanel();
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
 	private JTextField textField;
+	private JComboBox countrySelector;
+
 	
 	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("ANDREWID"); add("PROGRAMTRACK"); add("COUNTRY");}};
 	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null); add(null);}};
@@ -322,6 +326,7 @@ public class MainWindow {
 					jbtFilter.setSelected(true);
 					jbtExport.setSelected(false);
 					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+
 					
 					try
 					{
@@ -346,6 +351,24 @@ public class MainWindow {
 					{
 						JOptionPane.showMessageDialog(null, sqlException.getMessage());
 					}
+					
+					//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
+					//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
+					ArrayList<String> countryOptions = new ArrayList<String>();
+					countryOptions.add("Global");
+					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
+					for (String country: controller.selectCountries()){
+						countryOptions.add(country);
+					}
+					countrySelector = new JComboBox(countryOptionsArray);
+					countrySelector.setBounds(54,36,109,20);
+					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
+						public void propertyChange(PropertyChangeEvent arg0){
+							filters.set(2, arg0.getNewValue().toString() );
+
+						}
+					});
+					jpFilterCtrl.add(countrySelector);
 					
 				}
 				
@@ -446,44 +469,17 @@ public class MainWindow {
 		//NEED TO CREATE EVENT TO HANDLE RELOADING THE LIST OF STUDENTS WHEN PROPERTY CHANGES
 		programSelector.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
-				filters.set(1, (String)arg0.getNewValue());
+//				filters.set(1, arg0.getNewValue().toString());
 			}
 		});
 		programSelector.setBounds(54, 5, 109, 20);
 		jpFilterCtrl.add(programSelector);
 		
-		ArrayList<String> countryOptions = new ArrayList<String>();
-		
-		//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
-		//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
-		
-
-
-		countryOptions.add("Global");
-		
-		for (String country: controller.selectCountries()){
-			countryOptions.add(country);
-		}
 	
 		lblNewLabel.setBounds(0, 39, 43, 14);
 		
 		jpFilterCtrl.add(lblNewLabel);
-		
-		String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
-
-		JComboBox countrySelector = new JComboBox(countryOptionsArray);
-		countrySelector.setBounds(54,36,109,20);
-
-		countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
-			public void propertyChange(PropertyChangeEvent arg0){
-
-				filters.set(2, (String) arg0.getNewValue() );
-
-			}
-		});
-		
-		jpFilterCtrl.add(countrySelector);
-		
+			
 		JButton filterNext = new JButton("Next");
 		filterNext.setBounds(108, 74, 55, 23);
 		jpFilterCtrl.add(filterNext);
