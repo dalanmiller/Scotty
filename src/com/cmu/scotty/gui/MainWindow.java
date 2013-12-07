@@ -89,8 +89,9 @@ public class MainWindow {
 	private JPanel jpFilter = new JPanel();
 	private JPanel jpExport = new JPanel();
 	private JButton jbtImport;
-	private JButton jbtFilter;
 	private JButton jbtExport;
+	private JButton jbtFilter;
+
 	
 	//Panel Import
 	private JPanel jpImportExcel = new JPanel();
@@ -224,8 +225,9 @@ public class MainWindow {
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
 		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+
 
 		
 		frame.setLocationRelativeTo(null);
@@ -474,7 +476,7 @@ public class MainWindow {
 		
 		countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent arg0){
-				filters.set(2, arg0.getNewValue() );
+				filters.set(2, (String) arg0.getNewValue() );
 			}
 		});
 		
