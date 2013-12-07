@@ -6,6 +6,7 @@ import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
 import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.persistence.*;
+import com.itextpdf.text.DocumentException;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
@@ -82,6 +83,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.table.DefaultTableModel; 
 
 import jxl.read.biff.BiffException;
+
 
 
 
@@ -166,6 +168,8 @@ public class MainWindow {
 	
 	private final ArrayList columnNames = new ArrayList();
 	private final ArrayList columnValues = new ArrayList();
+	
+	private PdfCreator pdfCreator; 
 	
 	/**
 	 * Launch the application.
@@ -570,7 +574,26 @@ public class MainWindow {
 				jbtFilter.setSelected(false);
 				jbtExport.setSelected(true);
 				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-				// Rebecca print preview
+				
+				try {
+					pdfCreator = new PdfCreator( getCurrentStudentSubSet() );
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				try {
+					pdfCreator.printTablePreview();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DocumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -632,6 +655,35 @@ public class MainWindow {
 		
 		
 		
+	}
+	
+	public ArrayList<Student> getCurrentStudentSubSet() throws SQLException, Exception{
+		
+		ArrayList<Object[]> studentsData = new ArrayList<Object[]>();
+		
+		boolean nonNull = false;
+		for (String s : filters){
+			if (s != null){
+				nonNull = true;
+				break;
+			}
+		}
+			
+		if (nonNull == false){
+			return controller.selectStudent();
+		} else {			
+			ArrayList<String> specFilters = (ArrayList<String>) filters.clone();
+			ArrayList<String> specColNames = (ArrayList<String>) dbColumns.clone();
+			
+			for (int i = 0; i < specFilters.size(); i++){
+				if (specFilters.get(i) == null){
+					specFilters.remove(i);
+					specColNames.remove(i);
+				}
+			}
+		
+			return controller.selectStudent(specColNames, specFilters);
+		}
 	}
 
 	public void redoStudentTable() throws SQLException, Exception {
@@ -749,14 +801,11 @@ public class MainWindow {
 	     PDFFile pdffile = new PDFFile(buf);  
 	     int pages = pdffile.getNumPages();
 	     Image img;
-	//   jpPicture.setLayout(new GridLayout(pages, 1, 0, 0));
-	//     for(int i=1; i<= pages;i++) {
+	
 	     PDFPage page = pdffile.getPage(1);
 	     Rectangle rect =
              new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
-
-	         //generate the image
-	       //  img = page.getImage(rect.width/2, rect.height/2, //width &amp; height
+	     
 	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
 	                 rect, // clip rect
 	                 null, // null for the ImageObserver
