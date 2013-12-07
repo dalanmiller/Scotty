@@ -2,7 +2,9 @@ package com.cmu.scotty.gui;
 
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.controller.*;
+import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
+import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.persistence.*;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -50,6 +52,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
 
@@ -73,6 +78,7 @@ import java.awt.event.MouseEvent;
 import java.awt.Component;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+
 import javax.swing.table.DefaultTableModel; 
 
 import jxl.read.biff.BiffException;
@@ -158,6 +164,9 @@ public class MainWindow {
 	private JTable studentsTable = new JTable();
 
 	
+	private final ArrayList columnNames = new ArrayList();
+	private final ArrayList columnValues = new ArrayList();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -210,8 +219,7 @@ public class MainWindow {
 		initializeTopButton();
 		//Import Panel
 		initializeImportPanel();
-		//Filter Panel
-		initializeFilterPanel();
+		
 		//Export Panel
 		initializeExportPanel();
 	
@@ -228,10 +236,8 @@ public class MainWindow {
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-
+		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 
 		
 		frame.setLocationRelativeTo(null);
@@ -308,6 +314,8 @@ public class MainWindow {
 		jbtBrowseImg.setBounds(449, 31, 69, 23);
 		jpImportImg.add(jbtBrowseImg);
 		jpImportNext.setLayout(null);
+		
+		//THIS IS THE NEXT BUTTON ON THE IMPORT PAGE AND THE ACTION BELOW WHICH HAPPENS AFTER YOU CLICK IT
 		jbtImportNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(jtfExcelPath.getText().trim().length()<1 || jtfImgPath.getText().trim().length()<1){
@@ -332,44 +340,89 @@ public class MainWindow {
 					{
 						ArrayList<Student> studentD = new ArrayList<Student>();
 						controller.readExcel(jtfExcelPath.getText().trim());
-						studentD = controller.selectStudent("andrewId", "abmd3");
-						System.out.println("Hi");
+						
+						// Read the text file if it is not empty
+						if(jtfTxtPath.getText().trim().length()>=1)
+						{
+							controller.insertText(jtfTxtPath.getText().trim());
+						}
+						//studentD = controller.selectStudent("andrewId", "abmd3");
+						//System.out.println("Hi");
 					}
 					catch(IOException ioException)
 					{
+						ioException.printStackTrace();
 						JOptionPane.showMessageDialog(null, ioException.getMessage());
 					}
 					catch(BiffException biffException)
 					{
+						biffException.printStackTrace();
 						JOptionPane.showMessageDialog(null, biffException.getMessage());
 					}
 					catch(WrongExcelException wrongExcelException)
 					{
+						wrongExcelException.printStackTrace();
 						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
+						
+					}
+					catch(WrongTextException wrongTextException)
+					{
+						wrongTextException.printStackTrace();
+						JOptionPane.showMessageDialog(null, wrongTextException.getMessage());
 					}
 					catch(SQLException sqlException)
 					{
+						sqlException.printStackTrace();
 						JOptionPane.showMessageDialog(null, sqlException.getMessage());
+					}
+					catch(Exception except)
+					{
+						except.printStackTrace();
+						JOptionPane.showMessageDialog(null, except.getMessage());
 					}
 					
 					//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
 					//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
 					ArrayList<String> countryOptions = new ArrayList<String>();
 					countryOptions.add("Global");
-					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
-					for (String country: controller.selectCountries()){
-						countryOptions.add(country);
+						
+					
+					try {
+						ArrayList<String> inputCountries= controller.selectCountries();
+						
+						Collections.sort(countryOptions, new Comparator<String>() {
+						    @Override
+						    public int compare(String arg0, String arg1) {
+								return arg0.compareTo(arg1);
+							}
+						});
+						
+						for (String country: inputCountries){
+							countryOptions.add(country);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					
+					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
 					countrySelector = new JComboBox(countryOptionsArray);
 					countrySelector.setBounds(54,36,109,20);
 					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 						public void propertyChange(PropertyChangeEvent arg0){
-							filters.set(2, arg0.getNewValue().toString() );
+							//filters.set(2, arg0.getNewValue().toString() );
 
 						}
 					});
 					jpFilterCtrl.add(countrySelector);
 					
+					
+					
+					//Filter Panel
+					initializeFilterPanel();
 				}
 				
 			}
@@ -381,6 +434,8 @@ public class MainWindow {
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 	}
+	
+	
 	public void initializeFilterPanel(){
 		ArrayList<Student> students = new ArrayList<Student>();
 		
@@ -408,12 +463,7 @@ public class MainWindow {
 		students.add(student1);
 		students.add(student2);
 		
-		DefaultListModel<String> dlm = new DefaultListModel<String>();
 		
-		for(Student s: students){
-			System.out.println(s.toString());
-			dlm.addElement(s.toString());
-		}
 		jpFilter.setLayout(null);
 		jpFilterList.setBounds(189, 11, 351, 329);
 		jpFilterList.setPreferredSize(new Dimension(50, 50));
@@ -429,21 +479,7 @@ public class MainWindow {
 		
 		studentsTable.setBounds(new Rectangle(100, 10, 50, 50));
 		
-		studentsTable.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"danielam", "Daniel", "Miller", "GMISM", "UNITED STATES OF AMERICA"},
-				},
-				new String[] {
-					"Andrew ID", "First Name", "Last Name", "Program", "Country"
-				}
-			) {
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-		});
+		
         studentsTable.setFillsViewportHeight(true);		
 		studentsTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
@@ -496,13 +532,109 @@ public class MainWindow {
 				jbtFilter.setSelected(false);
 				jbtExport.setSelected(true);
 				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+				// Rebecca print preview
 			}
 		});
 		
+		ArrayList<Student> stuFrmText = new ArrayList<Student>();
+		ArrayList<String> andrewIds = new ArrayList<String>();
+		ArrayList<Student> currStuFrmText = new ArrayList<Student>();
+		ArrayList<Student> currStudentFrmFilter = new ArrayList<Student>();
+		Student studentNew = new Student();
+		
+		
+		try
+		{
+			if(jtfTxtPath.getText().trim().length()>=1)
+			{
+				//controller.insertText(jtfTxtPath.getText().trim());
+				stuFrmText = controller.readText(jtfTxtPath.getText().trim());
+				
+				Iterator iterator = stuFrmText.iterator();
+				
+				columnNames.add("PROGRAMTRACK");
+				columnNames.add("MSIT-AU");
+				
+				while(iterator.hasNext())
+				{
+					studentNew = (Student)iterator.next();
+				}
+								
+				
+				try {
+					currStuFrmText = controller.selectStudentOnAndrewIds(andrewIds);
+					currStudentFrmFilter = controller.selectStudent(columnNames, columnValues);
+				} catch (ArrayListDoesNotMatch e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (SQLException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				
+				
+			}
+			
+			//currStudent.add
+		}
+		catch(IOException ioExc)
+		{
+			ioExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, ioExc.getMessage());
+			
+		} catch (WrongTextException wrgTxtExc) {
+			
+			wrgTxtExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, wrgTxtExc.getMessage());
+		}
+		
+		
+		
+		
 	}
 
-	public void redoStudentTable(ArrayList<Student> newStudents) {
-
+	public void redoStudentTable() {
+		
+		ArrayList<Object[]> studentsData = new ArrayList<Object[]>();
+		
+		boolean nonNull = false;
+		for (String s : filters){
+			if (s != null){
+				nonNull = true;
+				break;
+			}
+		}
+			
+		if (nonNull == true){
+			for(Student s: controller.selectStudent() ){
+				studentsData.add(s.toRow());
+			}
+		} else {
+			for(Student s: controller.selectStudent( dbColumns , filters)){
+				studentsData.add(s.toRow());
+			}
+		}
+		
+		DefaultTableModel studentsTableModel = new DefaultTableModel(	
+					studentsData.toArray(new Object[studentsData.size()][]),
+					new String[] {
+						"Andrew ID", "First Name", "Last Name", "Program", "Country"
+					}
+				) {
+					boolean[] columnEditables = new boolean[] {
+						false, false, false, false, false
+					};
+					public boolean isCellEditable(int row, int column) {
+						return columnEditables[column];
+					}
+		};
+		
+		
+		studentsTable.setModel(studentsTableModel);
+		
 	}
 
 	public void initializeExportPanel() throws IOException{

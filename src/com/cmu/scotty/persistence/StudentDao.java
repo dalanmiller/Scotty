@@ -24,7 +24,7 @@ public class StudentDao {
     private static Statement stmt = null;
 
     
-    public Connection createConnection()
+    public Connection createConnection() throws SQLException , Exception
     {
         try
         {
@@ -32,16 +32,22 @@ public class StudentDao {
             //Get a connection
             conn = DriverManager.getConnection(dbURL); 
         }
+        
+        catch (SQLException sqlExcept)
+        {
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
         catch (Exception except)
         {
-            except.printStackTrace();
-            
+        	except.printStackTrace();
+        	throw except;
         }
         
         return conn;
     }
     
-    public boolean checkTable()
+    public boolean checkTable() throws SQLException , Exception
     {
     	ResultSet results = null;
     	
@@ -67,14 +73,19 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-            return false;
-        }  	 	
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
 		
     	return true;
     }
     
-    public void dropTable()
+    public void dropTable() throws SQLException , Exception
     {
         try
         {   
@@ -90,12 +101,18 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
     }
     
     
-    public void createTable()
+    public void createTable() throws SQLException , Exception
     {
         try
         {   
@@ -120,31 +137,48 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
     }
     
     
-    public void insertStudents(ArrayList<Student> studentArr) throws SQLException
+    public void insertStudents(ArrayList<Student> studentArr) throws SQLException , Exception
     {
-    		boolean insertStatus = false;
+        try
+        {
+    	   boolean insertStatus = false;
         	Iterator iterator = studentArr.iterator();
         	while(iterator.hasNext())
         	{
         		insertStudent((Student)iterator.next());
         	}
-    	
-    	
+        }
+        	 catch (SQLException sqlExcept)
+             {
+             	sqlExcept.printStackTrace();
+             	throw sqlExcept;
+             }  
+         	catch (Exception except)
+             {
+         		except.printStackTrace();
+         		throw except;
+             }  
     }
     
-    public void insertStudent(Student student) throws SQLException
+    public void insertStudent(Student student) throws SQLException,Exception
     {
           		
         // Put a check for andrew Id
     	
     	String firstName = student.getFirstName() == null ? " " : student.getFirstName().trim();
         String lastName = student.getLastName()==null ? " " : student.getLastName().trim();
-        String programTrack = student.getProgramTrack() == " " ? null : student.getProgramTrack().trim();
+        String programTrack = student.getProgramTrack() == null ? " " : student.getProgramTrack().trim();
         String fullTime = student.getFullTime() == null ? " " : student.getFullTime().trim();
         String country = student.getCountry() == null ? " " : student.getCountry().trim();
         String semester = student.getSemester() == null ? " " : student.getSemester().trim();
@@ -175,17 +209,23 @@ public class StudentDao {
             stmt.close();
     	}
         	
-    	catch(SQLException sqlE)
-    	{
-    		throw sqlE;
-    	}
+    	 catch (SQLException sqlExcept)
+         {
+         	sqlExcept.printStackTrace();
+         	throw sqlExcept;
+         }  
+     	catch (Exception except)
+         {
+     		except.printStackTrace();
+     		throw except;
+         }  
             
        
             
     }
     
     
-    public void updateStudent(Student student)
+   /* public void updateStudent(Student student)
     {
         try
         {    
@@ -281,14 +321,14 @@ public class StudentDao {
             	            	
             query = query + " where andrewId = '" + student.getAndrewID() + "' ";
             
-       		    /* + "'" + student.getAndrewID() + "'," 
+       		     + "'" + student.getAndrewID() + "'," 
        		     + "'" + student.getFirstName().trim().toUpperCase() + "',"
        		     + "'" + student.getLastName().trim().toUpperCase() + "',"
        		     + "'" + student.getProgramTrack().trim().toUpperCase() + "',"
        		     + "'" + student.getFullTime().trim().toUpperCase() + "',"
        		     + "'" + student.getCountry().trim().toUpperCase() + "',"
        		     + "'" + student.getSemester().trim().toUpperCase() + "',"
-       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";*/
+       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";
             
             System.out.println(query);
             
@@ -299,9 +339,96 @@ public class StudentDao {
         {
             sqlExcept.printStackTrace();
         }
+    }*/
+    
+    
+    public ArrayList<Student> selectStudents(ArrayList<String> andrewIds) throws SQLException , Exception
+    {   
+    	
+    	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
+    	int count = 0;
+    	
+        try
+        {
+        	if(conn==null)
+        	{
+        		conn = createConnection();
+        	}
+        	
+        	stmt = conn.createStatement();
+        	
+        	
+        	//Put null checks for column value and column name
+        	
+        	String query = " select * from " + tableName + " where andrewId in ( " ; 
+        	
+        	Iterator iterator = andrewIds.iterator();
+        	
+        	while(iterator.hasNext())
+        	{
+        		if(count>0){ query = query + " , "; }
+        		String andrewId = (String)iterator.next();
+        		query = query + " '" + andrewId + "' ";
+        		count ++;
+        	}
+            
+        	query = query + " ) ";
+        	
+        	System.out.println(query);
+        	
+            ResultSet results = stmt.executeQuery(query);
+            
+            
+            ResultSetMetaData rsmd = results.getMetaData();
+            int numberCols = rsmd.getColumnCount();
+            
+            while(results.next())
+            {
+            	
+            	Student student = new Student();
+            	
+                student.setAndrewID(results.getString(1));
+                student.setFirstName(results.getString(2));            
+                student.setLastName(results.getString(3));
+                student.setProgramTrack(results.getString(4));
+                student.setFullTime(results.getString(5));
+                student.setCountry(results.getString(6));
+                student.setSemester(results.getString(7));
+                student.setPhotoPath(results.getString(6));
+                System.out.println(student.getAndrewID() 
+                		           + "\t\t" + student.getFirstName() 
+                		           + "\t\t" + student.getLastName()
+                		           + "\t\t" + student.getProgramTrack()
+                		           + "\t\t" + student.getFullTime()
+                		           + "\t\t" + student.getCountry()
+                		           + "\t\t" + student.getSemester()
+                		           + "\t\t" + student.getPhotoPath());
+                studentsArr.add(student);
+            }
+            
+            results.close();
+            stmt.close();
+           
+        }
+        catch (SQLException sqlExcept)
+        {
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
+		return studentsArr;
     }
     
-    public ArrayList<Student> selectStudent(String columnName, String columnValue)
+    
+    
+    
+    
+    
+    public ArrayList<Student> selectStudent(String columnName, String columnValue) throws SQLException , Exception
     {   
     	
     	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
@@ -317,7 +444,18 @@ public class StudentDao {
         	
         	//Put nulll checks for column value and column name
         	
-            String query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " = " + "'" + columnValue.trim() + "'"; 
+        	String query = null;
+        	
+            if(columnName.equalsIgnoreCase("programtrack"))
+            {
+            	query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " likes " + "'%" + columnValue.trim() + "%'"; 	
+            }
+            else
+            {
+            	 query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " = " + "'" + columnValue.trim() + "'"; 
+            }
+        	
+           
             
             ResultSet results = stmt.executeQuery(query);
             
@@ -355,12 +493,18 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
 		return studentsArr;
     }
     
-    public ArrayList<String> selectCountries()
+    public ArrayList<String> selectCountries() throws SQLException , Exception
     {   
     	
     	ArrayList<String> countriesArr = new ArrayList<String>() ;
@@ -398,13 +542,69 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
 		return countriesArr;
     }
     
     
-    public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws ArrayListDoesNotMatch
+    public ArrayList<String> selectAndrewIds() throws SQLException , Exception
+    {   
+    	
+    	ArrayList<String> andrewIdsArr = new ArrayList<String>() ;
+    	
+    	String query = null;
+        	
+        try
+        {
+        	if(conn==null)
+        	{
+        		conn = createConnection();
+        	}
+        	
+        	stmt = conn.createStatement();
+        	  
+        	query = "select distinct(andrewId) from " + tableName;        	
+        	        	
+        	System.out.println(query);
+        	
+            
+            ResultSet results = stmt.executeQuery(query);
+            
+            
+            ResultSetMetaData rsmd = results.getMetaData();
+            int numberCols = rsmd.getColumnCount();
+            
+            while(results.next())
+            {
+            	andrewIdsArr.add(results.getString(1));
+            }
+            
+            results.close();
+            stmt.close();
+           
+        }
+        catch (SQLException sqlExcept)
+        {
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
+		return andrewIdsArr;
+    }
+    
+    
+    public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws ArrayListDoesNotMatch, SQLException , Exception
     {   
     	
     	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
@@ -493,14 +693,20 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            sqlExcept.printStackTrace();
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
 		return studentsArr;
     }
     
     
     
-    public void shutdown()
+    public void shutdown() throws SQLException , Exception
     {
         try
         {
@@ -516,8 +722,14 @@ public class StudentDao {
         }
         catch (SQLException sqlExcept)
         {
-            
-        }
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
 
     }
 

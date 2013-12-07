@@ -75,7 +75,9 @@ public class PdfCreator {
     public static final String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-
+    
+    
+    // 1
     public PdfCreator(ArrayList<Student> s){
     	
     	//Sorting Student ArrayList
@@ -100,11 +102,12 @@ public class PdfCreator {
     	}
     }
     
+    // 2
     public void setExportLocation(String path){
     	RESULT=path;
     }
     
-
+    // 3
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
