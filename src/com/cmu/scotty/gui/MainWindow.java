@@ -2,7 +2,9 @@ package com.cmu.scotty.gui;
 
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.controller.*;
+import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
+import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.persistence.*;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -50,6 +52,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
 
@@ -73,6 +76,7 @@ import java.awt.event.MouseEvent;
 import java.awt.Component;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+
 import javax.swing.table.DefaultTableModel; 
 
 import jxl.read.biff.BiffException;
@@ -145,6 +149,9 @@ public class MainWindow {
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
+	
+	private final ArrayList columnNames = new ArrayList();
+	private final ArrayList columnValues = new ArrayList();
 	
 	/**
 	 * Launch the application.
@@ -315,24 +322,43 @@ public class MainWindow {
 					{
 						ArrayList<Student> studentD = new ArrayList<Student>();
 						controller.readExcel(jtfExcelPath.getText().trim());
-						studentD = controller.selectStudent("andrewId", "abmd3");
-						System.out.println("Hi");
+						if(jtfTxtPath!=null)
+						{
+							controller.insertText(jtfTxtPath.getText().trim());
+						}
+						//studentD = controller.selectStudent("andrewId", "abmd3");
+						//System.out.println("Hi");
 					}
 					catch(IOException ioException)
 					{
+						ioException.printStackTrace();
 						JOptionPane.showMessageDialog(null, ioException.getMessage());
 					}
 					catch(BiffException biffException)
 					{
+						biffException.printStackTrace();
 						JOptionPane.showMessageDialog(null, biffException.getMessage());
 					}
 					catch(WrongExcelException wrongExcelException)
 					{
+						wrongExcelException.printStackTrace();
 						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
+						
+					}
+					catch(WrongTextException wrongTextException)
+					{
+						wrongTextException.printStackTrace();
+						JOptionPane.showMessageDialog(null, wrongTextException.getMessage());
 					}
 					catch(SQLException sqlException)
 					{
+						sqlException.printStackTrace();
 						JOptionPane.showMessageDialog(null, sqlException.getMessage());
+					}
+					catch(Exception except)
+					{
+						except.printStackTrace();
+						JOptionPane.showMessageDialog(null, except.getMessage());
 					}
 					
 				}
@@ -346,6 +372,8 @@ public class MainWindow {
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 	}
+	
+	
 	public void initializeFilterPanel(){
 		ArrayList<Student> students = new ArrayList<Student>();
 		
@@ -473,8 +501,67 @@ public class MainWindow {
 				jbtFilter.setSelected(false);
 				jbtExport.setSelected(true);
 				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+				// Rebecca print preview
 			}
 		});
+		
+		ArrayList<Student> stuFrmText = new ArrayList<Student>();
+		ArrayList<String> andrewIds = new ArrayList<String>();
+		ArrayList<Student> currStuFrmText = new ArrayList<Student>();
+		ArrayList<Student> currStudentFrmFilter = new ArrayList<Student>();
+		Student studentNew = new Student();
+		
+		
+		try
+		{
+			if(jtfTxtPath!=null)
+			{
+				//controller.insertText(jtfTxtPath.getText().trim());
+				stuFrmText = controller.readText(jtfTxtPath.getText().trim());
+				
+				Iterator iterator = stuFrmText.iterator();
+				
+				columnNames.add("PROGRAMTRACK");
+				columnNames.add("MSIT-AU");
+				
+				while(iterator.hasNext())
+				{
+					studentNew = (Student)iterator.next();
+				}
+								
+				
+				try {
+					currStuFrmText = controller.selectStudentOnAndrewIds(andrewIds);
+					currStudentFrmFilter = controller.selectStudent(columnNames, columnValues);
+				} catch (ArrayListDoesNotMatch e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (SQLException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				
+				
+			}
+			
+			//currStudent.add
+		}
+		catch(IOException ioExc)
+		{
+			ioExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, ioExc.getMessage());
+			
+		} catch (WrongTextException wrgTxtExc) {
+			
+			wrgTxtExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, wrgTxtExc.getMessage());
+		}
+		
+		
+		
 		
 	}
 	public void initializeExportPanel() throws IOException{
