@@ -424,10 +424,72 @@ public class StudentDao {
     }
     
     
+    public ArrayList<Student> selectAllStudents() throws SQLException , Exception
+    {   
+    	
+    	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
+    	   	
+        try
+        {
+        	if(conn==null)
+        	{
+        		conn = createConnection();
+        	}
+        	
+        	stmt = conn.createStatement();
+        	
+        	
+        	//Put null checks for column value and column name
+        	
+        	String query = " select * from " + tableName ;      	
+        	System.out.println(query);
+        	
+            ResultSet results = stmt.executeQuery(query);	                    
+            ResultSetMetaData rsmd = results.getMetaData();
+            int numberCols = rsmd.getColumnCount();
+            
+            while(results.next())
+            {
+            	
+            	Student student = new Student();
+            	
+                student.setAndrewID(results.getString(1));
+                student.setFirstName(results.getString(2));            
+                student.setLastName(results.getString(3));
+                student.setProgramTrack(results.getString(4));
+                student.setFullTime(results.getString(5));
+                student.setCountry(results.getString(6));
+                student.setSemester(results.getString(7));
+                student.setPhotoPath(results.getString(6));
+                System.out.println(student.getAndrewID() 
+                		           + "\t\t" + student.getFirstName() 
+                		           + "\t\t" + student.getLastName()
+                		           + "\t\t" + student.getProgramTrack()
+                		           + "\t\t" + student.getFullTime()
+                		           + "\t\t" + student.getCountry()
+                		           + "\t\t" + student.getSemester()
+                		           + "\t\t" + student.getPhotoPath());
+                studentsArr.add(student);
+            }
+            
+            results.close();
+            stmt.close();
+           
+        }
+        catch (SQLException sqlExcept)
+        {
+        	sqlExcept.printStackTrace();
+        	throw sqlExcept;
+        }  
+    	catch (Exception except)
+        {
+    		except.printStackTrace();
+    		throw except;
+        }  
+		return studentsArr;
+    }
     
-    
-    
-    
+        
     public ArrayList<Student> selectStudent(String columnName, String columnValue) throws SQLException , Exception
     {   
     	
