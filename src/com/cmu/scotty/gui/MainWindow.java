@@ -18,8 +18,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -43,11 +43,17 @@ import jxl.read.biff.BiffException;
 
 import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
 
+import com.cmu.scotty.controller.PdfCreator;
 import com.cmu.scotty.controller.ScottyController;
+import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
+import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.model.Student;
+import com.itextpdf.text.DocumentException;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
+
+
 
 
 
@@ -61,8 +67,9 @@ public class MainWindow {
 	private JPanel jpFilter = new JPanel();
 	private JPanel jpExport = new JPanel();
 	private JButton jbtImport;
-	private JButton jbtFilter;
 	private JButton jbtExport;
+	private JButton jbtFilter;
+
 	
 	//Panel Import
 	private JPanel jpImportExcel = new JPanel();
@@ -112,18 +119,27 @@ public class MainWindow {
 	// Controller 
 	private ScottyController controller = new ScottyController();
 
+	
+	// FILTER
 	private final JPanel jpFilterList = new JPanel();
 	private final JPanel jpFilterCtrl = new JPanel();
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
 	private JTextField textField;
+	private JComboBox countrySelector;
+
 	
-	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("ANDREWID"); add("PROGRAMTRACK"); add("COUNTRY");}};
-	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null); add(null);}};
+	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("PROGRAMTRACK"); add("COUNTRY");}};
+	private ArrayList<String> filters = new ArrayList<String>(){{add(null); add(null);}};
 	
 	private JTable studentsTable = new JTable();
 
+	
+	private final ArrayList columnNames = new ArrayList();
+	private final ArrayList columnValues = new ArrayList();
+	
+	private PdfCreator pdfCreator; 
 	
 	/**
 	 * Launch the application.
@@ -177,8 +193,7 @@ public class MainWindow {
 		initializeTopButton();
 		//Import Panel
 		initializeImportPanel();
-		//Filter Panel
-		initializeFilterPanel();
+		
 		//Export Panel
 		initializeExportPanel();
 	
@@ -195,9 +210,8 @@ public class MainWindow {
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
-		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
-		frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 
 		
 		frame.setLocationRelativeTo(null);
@@ -274,6 +288,8 @@ public class MainWindow {
 		jbtBrowseImg.setBounds(449, 31, 69, 23);
 		jpImportImg.add(jbtBrowseImg);
 		jpImportNext.setLayout(null);
+		
+		//THIS IS THE NEXT BUTTON ON THE IMPORT PAGE AND THE ACTION BELOW WHICH HAPPENS AFTER YOU CLICK IT
 		jbtImportNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(jtfExcelPath.getText().trim().length()<1 || jtfImgPath.getText().trim().length()<1){
@@ -292,31 +308,121 @@ public class MainWindow {
 					jbtFilter.setSelected(true);
 					jbtExport.setSelected(false);
 					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+
+					
+					controller.setImgPath(jtfImgPath.getText());
 					
 					try
 					{
 						ArrayList<Student> studentD = new ArrayList<Student>();
 						controller.readExcel(jtfExcelPath.getText().trim());
-						studentD = controller.selectStudent("andrewId", "abmd3");
-						System.out.println("Hi");
+						
+						// Read the text file if it is not empty
+						if(jtfTxtPath.getText().trim().length()>=1)
+						{
+							controller.insertText(jtfTxtPath.getText().trim());
+						}
+						//studentD = controller.selectStudent("andrewId", "abmd3");
+						//System.out.println("Hi");
 					}
 					catch(IOException ioException)
 					{
+						ioException.printStackTrace();
 						JOptionPane.showMessageDialog(null, ioException.getMessage());
 					}
 					catch(BiffException biffException)
 					{
+						biffException.printStackTrace();
 						JOptionPane.showMessageDialog(null, biffException.getMessage());
 					}
 					catch(WrongExcelException wrongExcelException)
 					{
+						wrongExcelException.printStackTrace();
 						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
+						
+					}
+					catch(WrongTextException wrongTextException)
+					{
+						wrongTextException.printStackTrace();
+						JOptionPane.showMessageDialog(null, wrongTextException.getMessage());
 					}
 					catch(SQLException sqlException)
 					{
+						sqlException.printStackTrace();
 						JOptionPane.showMessageDialog(null, sqlException.getMessage());
 					}
+					catch(Exception except)
+					{
+						except.printStackTrace();
+						JOptionPane.showMessageDialog(null, except.getMessage());
+					}
 					
+					//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
+					//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
+					ArrayList<String> countryOptions = new ArrayList<String>();
+					countryOptions.add("Global");
+						
+					
+					try {
+						ArrayList<String> inputCountries= controller.selectCountries();
+						
+						Collections.sort(countryOptions, new Comparator<String>() {
+						    @Override
+						    public int compare(String arg0, String arg1) {
+								return arg0.compareTo(arg1);
+							}
+						});
+						
+						for (String country: inputCountries){
+							countryOptions.add(country);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
+					countrySelector = new JComboBox(countryOptionsArray);
+					countrySelector.setBounds(54,36,109,20);
+					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
+						public void propertyChange(PropertyChangeEvent arg0){
+//							System.out.println(arg0);
+//							if (arg0.get)
+//							filters.set(1, arg0.getNewValue().toString() );
+							String country = countrySelector.getSelectedItem().toString();
+							if (country.equals("Global")){
+								filters.set(1, null);
+							} else {
+								filters.set(1, country);
+							}
+							try {
+								redoStudentTable();
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
+					jpFilterCtrl.add(countrySelector);
+					
+					try {
+						redoStudentTable();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//Filter Panel
+					initializeFilterPanel();
 				}
 				
 			}
@@ -328,6 +434,8 @@ public class MainWindow {
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 	}
+	
+	
 	public void initializeFilterPanel(){
 		ArrayList<Student> students = new ArrayList<Student>();
 		
@@ -355,12 +463,7 @@ public class MainWindow {
 		students.add(student1);
 		students.add(student2);
 		
-		DefaultListModel<String> dlm = new DefaultListModel<String>();
 		
-		for(Student s: students){
-			System.out.println(s.toString());
-			dlm.addElement(s.toString());
-		}
 		jpFilter.setLayout(null);
 		jpFilterList.setBounds(189, 11, 351, 329);
 		jpFilterList.setPreferredSize(new Dimension(50, 50));
@@ -376,21 +479,7 @@ public class MainWindow {
 		
 		studentsTable.setBounds(new Rectangle(100, 10, 50, 50));
 		
-		studentsTable.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"danielam", "Daniel", "Miller", "GMISM", "UNITED STATES OF AMERICA"},
-				},
-				new String[] {
-					"Andrew ID", "First Name", "Last Name", "Program", "Country"
-				}
-			) {
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-		});
+		
         studentsTable.setFillsViewportHeight(true);		
 		studentsTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
@@ -416,42 +505,30 @@ public class MainWindow {
 		//NEED TO CREATE EVENT TO HANDLE RELOADING THE LIST OF STUDENTS WHEN PROPERTY CHANGES
 		programSelector.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
-				filters.set(1, (String)arg0.getNewValue());
+				String program = programSelector.getSelectedItem().toString();
+				if (program.equals("All Programs")){
+					filters.set(0, null);
+				} else {
+					filters.set(0, program);
+				}
+				try {
+					redoStudentTable();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		programSelector.setBounds(54, 5, 109, 20);
 		jpFilterCtrl.add(programSelector);
-		
-		ArrayList<String> countryOptions = new ArrayList<String>();
-		
-		//GET ALL STUDENTS FROM MAIN CONTROLLER, CREATE SET OF THEIR COUNRIES, CREATE LIST FROM SET OF COUNTRIES
-		//FOR COUNTRY IN STUDENTS ADD ITEMS TO countrySelector
-		
-
-
-		countryOptions.add("Global");
-		
-		for (String country: controller.selectCountries()){
-			countryOptions.add(country);
-		}
 	
 		lblNewLabel.setBounds(0, 39, 43, 14);
 		
 		jpFilterCtrl.add(lblNewLabel);
-		
-		String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
-
-		JComboBox countrySelector = new JComboBox(countryOptionsArray);
-		countrySelector.setBounds(54,36,109,20);
-
-		countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
-			public void propertyChange(PropertyChangeEvent arg0){
-				filters.set(2, (String) arg0.getNewValue());
-			}
-		});
-		
-		jpFilterCtrl.add(countrySelector);
-		
+			
 		JButton filterNext = new JButton("Next");
 		filterNext.setBounds(108, 74, 55, 23);
 		jpFilterCtrl.add(filterNext);
@@ -468,13 +545,167 @@ public class MainWindow {
 				jbtFilter.setSelected(false);
 				jbtExport.setSelected(true);
 				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+				
+				try {
+					pdfCreator = new PdfCreator( getCurrentStudentSubSet() );
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				try {
+					pdfCreator.printTablePreview();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (DocumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		
+		ArrayList<Student> stuFrmText = new ArrayList<Student>();
+		ArrayList<String> andrewIds = new ArrayList<String>();
+		ArrayList<Student> currStuFrmText = new ArrayList<Student>();
+		ArrayList<Student> currStudentFrmFilter = new ArrayList<Student>();
+		Student studentNew = new Student();
+		
+		
+		try
+		{
+			if(jtfTxtPath.getText().trim().length()>=1)
+			{
+				//controller.insertText(jtfTxtPath.getText().trim());
+				stuFrmText = controller.readText(jtfTxtPath.getText().trim());
+				
+				Iterator iterator = stuFrmText.iterator();
+				
+				columnNames.add("PROGRAMTRACK");
+				columnNames.add("MSIT-AU");
+				
+				while(iterator.hasNext())
+				{
+					studentNew = (Student)iterator.next();
+				}
+								
+				
+				try {
+					currStuFrmText = controller.selectStudentOnAndrewIds(andrewIds);
+					currStudentFrmFilter = controller.selectStudent(columnNames, columnValues);
+				} catch (ArrayListDoesNotMatch e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (SQLException e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				
+				
+			}
+			
+			//currStudent.add
+		}
+		catch(IOException ioExc)
+		{
+			ioExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, ioExc.getMessage());
+			
+		} catch (WrongTextException wrgTxtExc) {
+			
+			wrgTxtExc.printStackTrace();
+			JOptionPane.showMessageDialog(null, wrgTxtExc.getMessage());
+		}
+		
+		
+		
+		
+	}
+	
+	public ArrayList<Student> getCurrentStudentSubSet() throws SQLException, Exception{
+		
+		ArrayList<Object[]> studentsData = new ArrayList<Object[]>();
+		
+		boolean nonNull = false;
+		for (String s : filters){
+			if (s != null){
+				nonNull = true;
+				break;
+			}
+		}
+			
+		if (nonNull == false){
+			return controller.selectStudent();
+		} else {			
+			ArrayList<String> specFilters = (ArrayList<String>) filters.clone();
+			ArrayList<String> specColNames = (ArrayList<String>) dbColumns.clone();
+			
+			for (int i = 0; i < specFilters.size(); i++){
+				if (specFilters.get(i) == null){
+					specFilters.remove(i);
+					specColNames.remove(i);
+				}
+			}
+		
+			return controller.selectStudent(specColNames, specFilters);
+		}
 	}
 
-	public void redoStudentTable(ArrayList<Student> newStudents) {
-
+	public void redoStudentTable() throws SQLException, Exception {
+		
+		ArrayList<Object[]> studentsData = new ArrayList<Object[]>();
+		
+		boolean nonNull = false;
+		for (String s : filters){
+			if (s != null){
+				nonNull = true;
+				break;
+			}
+		}
+			
+		if (nonNull == false){
+			for(Student s: controller.selectStudent() ){
+				studentsData.add(s.toRow());
+			}
+		} else {			
+			ArrayList<String> specFilters = (ArrayList<String>) filters.clone();
+			ArrayList<String> specColNames = (ArrayList<String>) dbColumns.clone();
+			
+			for (int i = 0; i < specFilters.size(); i++){
+				if (specFilters.get(i) == null){
+					specFilters.remove(i);
+					specColNames.remove(i);
+				}
+			}
+			
+			for(Student s: controller.selectStudent(specColNames , specFilters)){
+				studentsData.add(s.toRow());
+			}
+		}
+		
+		DefaultTableModel studentsTableModel = new DefaultTableModel(	
+					studentsData.toArray(new Object[studentsData.size()][]),
+					new String[] {
+						"Andrew ID", "First Name", "Last Name", "Program", "Country"
+					}
+				) {
+					boolean[] columnEditables = new boolean[] {
+						false, false, false, false, false
+					};
+					public boolean isCellEditable(int row, int column) {
+						return columnEditables[column];
+					}
+		};
+		
+		
+		studentsTable.setModel(studentsTableModel);
+		
 	}
 
 	public void initializeExportPanel() throws IOException{
@@ -541,14 +772,11 @@ public class MainWindow {
 	     PDFFile pdffile = new PDFFile(buf);  
 	     int pages = pdffile.getNumPages();
 	     Image img;
-	//   jpPicture.setLayout(new GridLayout(pages, 1, 0, 0));
-	//     for(int i=1; i<= pages;i++) {
+	
 	     PDFPage page = pdffile.getPage(1);
 	     Rectangle rect =
              new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
-
-	         //generate the image
-	       //  img = page.getImage(rect.width/2, rect.height/2, //width &amp; height
+	     
 	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
 	                 rect, // clip rect
 	                 null, // null for the ImageObserver

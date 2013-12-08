@@ -118,5 +118,9 @@ public class Student {
 		return String.format("%6s | %6s, %6s | %6s | %6s", andrewID, lastName, firstName, programTrack, country);
 	}
 	
+	public Object[] toRow(){
+		return new Object[]{ andrewID, firstName, lastName, programTrack, country };
+	}
+	
 	
 }
