@@ -1,52 +1,17 @@
 package com.cmu.scotty.gui;
 
-import com.cmu.scotty.model.*;
-import com.cmu.scotty.controller.*;
-import com.cmu.scotty.exception.ArrayListDoesNotMatch;
-import com.cmu.scotty.exception.WrongExcelException;
-import com.cmu.scotty.exception.WrongTextException;
-import com.cmu.scotty.persistence.*;
-import com.itextpdf.text.DocumentException;
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
-
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Graphics2D;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -57,32 +22,39 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
-
-import java.awt.FlowLayout;
-
-import javax.swing.BoxLayout;
-
-import java.awt.CardLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-
-import java.awt.Color; 
-
-import javax.swing.JList;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Component;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-
-import javax.swing.table.DefaultTableModel; 
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 import jxl.read.biff.BiffException;
+
+import org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel;
+
+import com.cmu.scotty.controller.PdfCreator;
+import com.cmu.scotty.controller.ScottyController;
+import com.cmu.scotty.exception.ArrayListDoesNotMatch;
+import com.cmu.scotty.exception.WrongExcelException;
+import com.cmu.scotty.exception.WrongTextException;
+import com.cmu.scotty.model.Student;
+import com.itextpdf.text.DocumentException;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
+
 
 
 
