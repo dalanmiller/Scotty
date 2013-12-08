@@ -1,5 +1,6 @@
 package com.cmu.scotty.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,10 +26,32 @@ public class ScottyController {
 	
 	public ReadText readText = new ReadText();
 	
+	public String imgPath;
+	
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
 
 	public void readExcel (String excelPath) throws BiffException, IOException, WrongExcelException, SQLException, Exception
 	{
 		ArrayList<Student> arrStudents = readExcel.read(excelPath);	
+		Student student = new Student();
+		String joinPath;
+		
+		Iterator iterator = arrStudents.iterator();
+		
+		while(iterator.hasNext())
+		{
+			student = (Student)iterator.next();
+			joinPath = new File(imgPath,student.getAndrewID()).getAbsolutePath();
+			student.setPhotoPath(joinPath);
+			System.out.println(joinPath);
+		}
 		
 		ArrayList<Student> arrStuNotInDb = fetchStuPresentInDb(arrStudents);
 		

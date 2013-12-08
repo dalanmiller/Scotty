@@ -328,6 +328,8 @@ public class MainWindow {
 					jbtExport.setSelected(false);
 					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
 					
+					controller.setImgPath(jtfImgPath.getText());
+					
 					try
 					{
 						ArrayList<Student> studentD = new ArrayList<Student>();
@@ -487,9 +489,9 @@ public class MainWindow {
 
 		countryOptions.add("Global");
 		
-		for (String country: controller.selectCountries()){
+		/*for (String country: controller.selectCountries()){
 			countryOptions.add(country);
-		}
+		}*/
 	
 		lblNewLabel.setBounds(0, 39, 43, 14);
 		

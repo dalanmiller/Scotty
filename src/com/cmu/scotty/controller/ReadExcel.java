@@ -30,8 +30,8 @@ public class ReadExcel {
 	    	String fullTime = sheet.getCell(4, i).getContents();
 	    	String country = sheet.getCell(5, i).getContents();
 	    	String semester = sheet.getCell(6, i).getContents();
-	    	String photoPath = sheet.getCell(7, i).getContents();
-	    	Student stu = new Student( andrewID, firstName, lastName, programTrack, fullTime, country,  semester, photoPath);
+	    	//String photoPath = sheet.getCell(7, i).getContents();
+	    	Student stu = new Student( andrewID, firstName, lastName, programTrack, fullTime, country,  semester, null);
 	    	students.add(stu);
 	    	}
 	    return students;
