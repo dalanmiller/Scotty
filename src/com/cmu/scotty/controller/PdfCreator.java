@@ -31,39 +31,9 @@ public class PdfCreator {
     /** The resulting PDF. 
      * @throws DocumentException 
      * @throws IOException */
-	public static PdfCreator c;
 
-	public static void test() throws IOException, DocumentException{
 
-		ArrayList<Student> s = new ArrayList<Student> ();
-
-		Student a=new Student("ruiw","Rui","Wang",
-				"MISMasdfsdgasdgas","F/T","Chinaasdfasgasd", "13Fasdgasg","");
-		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
-		Student b= new Student("a","asdf","asdf",
-				"MISM","F/T","China", "13F","");
-		b.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/a.jpg");
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		 c= new PdfCreator(s);
-		c.printTable3();
-	}
-
-	
+		
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -83,9 +53,7 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-    public static void main(String []args) throws IOException, DocumentException{
-    	c.test();
-    }
+ 
 
     public PdfCreator(ArrayList<Student> s){
 
