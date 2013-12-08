@@ -1,38 +1,43 @@
 package com.cmu.scotty.controller;
 
 
+import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
-import com.cmu.scotty.model.Student;
+import com.cmu.scotty.model.*;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 public class PdfCreator {
  
     /** The resulting PDF. 
      * @throws DocumentException 
      * @throws IOException */
+	public static PdfCreator c;
 
-	public static void main(String[]args) throws IOException, DocumentException{
-		ArrayList<Student> s = new ArrayList<Student>();
+	public static void test() throws IOException, DocumentException{
+		ArrayList<Student> s = new ArrayList<Student> ();
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
-		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
+		//a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
 		Student b= new Student("a","asdf","asdf",
 				"MISM","F/T","China", "13F","");
 		s.add(a);
@@ -51,7 +56,7 @@ public class PdfCreator {
 		s.add(a);
 		s.add(a);
 		s.add(a);
-		PdfCreator c= new PdfCreator(s);
+		 c= new PdfCreator(s);
 		c.printTable3();
 	}
 
@@ -72,24 +77,12 @@ public class PdfCreator {
     ="lib/logo/logo.png";
     public static final String UNAVAILABILE
     ="lib/logo/nopic.png";
-    public static final String TITLE
+    public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-    
-    
-    // 1
+
     public PdfCreator(ArrayList<Student> s){
-    	
-    	//Sorting Student ArrayList
-    	
-    	Collections.sort(s, new Comparator<Student>() {
-    	    
-			@Override
-			public int compare(Student arg0, Student arg1) {
-				return arg0.getLastName().compareTo(arg1.getLastName());
-			}
-    	});
-    	
+
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
     		program.add(s.get(i).getProgramTrack());
@@ -102,12 +95,13 @@ public class PdfCreator {
     	}
     }
     
-    // 2
     public void setExportLocation(String path){
     	RESULT=path;
     }
     
-    // 3
+    public void setTitle(String t){
+    	TITLE = t;
+    }
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
@@ -128,10 +122,30 @@ public class PdfCreator {
             createThirdTable();
        
             document.close();
-            }
-    
-   
+    }
+ 
 
+    public void printTablePreview()
+            throws IOException, DocumentException {
+        	// step 1
+        
+            document
+                = new Document(PageSize.A4, 30, 30, 30, 30);
+            // step 2
+            setTitle("Preview File");
+            PdfWriter writer
+                = PdfWriter.getInstance(document, new FileOutputStream("preview.pdf"));
+            writer.setCompressionLevel(0);
+            // step 3
+            document.setMargins(20,20,0,30);
+            document.open();
+            // step 4
+      
+           
+            createThirdTable();
+       
+            document.close();
+    }
    
     
     public void createThirdTable() throws DocumentException, IOException {
