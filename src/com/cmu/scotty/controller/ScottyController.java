@@ -20,13 +20,35 @@ public class ScottyController {
 	
 	public static final String studentTable = "STUDENT";
 	
-	public StudentDao studentDao = new StudentDao();
+	public static StudentDao studentDao = new StudentDao();
 	
 	public ReadExcel readExcel = new ReadExcel();
 	
 	public ReadText readText = new ReadText();
 	
 	public String imgPath;
+	
+	 static {
+		 boolean chkTbleStatus = false;
+		try {
+			chkTbleStatus = studentDao.checkTable();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			if(chkTbleStatus==false)
+			{
+				try {
+					studentDao.createTable();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+   }
 	
 
 	public String getImgPath() {
@@ -48,12 +70,12 @@ public class ScottyController {
 		while(iterator.hasNext())
 		{
 			student = (Student)iterator.next();
-			joinPath = new File(imgPath,student.getAndrewID()).getAbsolutePath();
+			joinPath = new File(imgPath,student.getAndrewID()+".jpg").getAbsolutePath();
 			student.setPhotoPath(joinPath);
 			System.out.println(joinPath);
 		}
 		
-		ArrayList<Student> arrStuNotInDb = fetchStuPresentInDb(arrStudents);
+		ArrayList<Student> arrStuNotInDb = fetchStuNotPresentInDb(arrStudents);
 		
 		if(arrStuNotInDb!=null)
 		{
@@ -67,10 +89,12 @@ public class ScottyController {
 				// Insert or Update
 				studentDao.insertStudents(arrStuNotInDb);
 			}		
-		}			
+		}
+		
+		studentDao.updateStudents(arrStudents);
 	}
 	
-	public ArrayList<Student> fetchStuPresentInDb(ArrayList<Student> studentsNotInDb) throws SQLException, Exception
+	public ArrayList<Student> fetchStuNotPresentInDb(ArrayList<Student> studentsNotInDb) throws SQLException, Exception
 	{
 		ArrayList<String> arrPrAndId = selectAndrewIds();
 		ArrayList<Student> arrStuNotPrDb = new ArrayList();
@@ -97,7 +121,7 @@ public class ScottyController {
 		ArrayList<Student> arrStudents = readText(textPath);	
 		//arrStudents = readText.read(textPath);
 		
-		ArrayList<Student> arrStuNotInDb = fetchStuPresentInDb(arrStudents);
+		ArrayList<Student> arrStuNotInDb = fetchStuNotPresentInDb(arrStudents);
 		
 		if(arrStuNotInDb!=null)
 		{
@@ -112,6 +136,8 @@ public class ScottyController {
 				studentDao.insertStudents(arrStuNotInDb);
 			}
 		}
+		
+		studentDao.updateStudents(arrStudents);
 	    
 	}
 	
