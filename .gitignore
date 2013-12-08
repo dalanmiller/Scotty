@@ -3,6 +3,7 @@ myDB
 scottyDB
 .classpath
 .project
+.DS_Store
 
 # Package Files #
 #*.jar

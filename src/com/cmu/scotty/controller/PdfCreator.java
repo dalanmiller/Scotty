@@ -34,7 +34,9 @@ public class PdfCreator {
 	public static PdfCreator c;
 
 	public static void test() throws IOException, DocumentException{
-		ArrayList<Student> s=new<Student> ArrayList();
+
+		ArrayList<Student> s = new ArrayList<Student> ();
+
 		Student a=new Student("ruiw","Rui","Wang",
 				"MISM","F/T","China", "13F","");
 		//a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
@@ -64,14 +66,14 @@ public class PdfCreator {
     public static String RESULT
         = "src/Student_List1.pdf";
     /** The movie poster. */
-    public ArrayList <String> image=new<String> ArrayList();
-    public ArrayList <String> program=new<String> ArrayList();
-    public ArrayList <String> firstname=new<String> ArrayList();
-    public ArrayList <String> lastname=new<String> ArrayList();
-    public ArrayList <String> email=new<String> ArrayList();
-    public ArrayList <String> time=new<String> ArrayList();
-    public ArrayList <String> country=new<String> ArrayList();
-    public ArrayList <String> intake=new<String> ArrayList();
+    public ArrayList <String> image=new ArrayList<String>();
+    public ArrayList <String> program=new ArrayList<String>();
+    public ArrayList <String> firstname=new ArrayList<String>();
+    public ArrayList <String> lastname=new ArrayList<String>();
+    public ArrayList <String> email=new ArrayList<String>();
+    public ArrayList <String> time=new ArrayList<String>();
+    public ArrayList <String> country=new ArrayList<String>();
+    public ArrayList <String> intake=new ArrayList<String>();
     
     public static final String LOGO
     ="lib/logo/logo.png";
@@ -146,8 +148,6 @@ public class PdfCreator {
        
             document.close();
     }
-   
-
    
     
     public void createThirdTable() throws DocumentException, IOException {

@@ -27,7 +27,7 @@ public class testMain {
 		ArrayList<Student> arrStudents = new ArrayList<Student>();
 		
      	Student student1 = new Student();
-     	student1.setAndrewID("44435");
+     	student1.setAndrewID("999");
      	student1.setFirstName("Tania");
      	student1.setLastName("Dasgupta");
      	student1.setCountry("India");
@@ -37,11 +37,11 @@ public class testMain {
      	student1.setPhotoPath("jndj\\bsdfsd");
 		
 		Student student2 = new Student();
-		student2.setAndrewID("0078");
+		student2.setAndrewID("278");
 		student2.setFirstName("Daniel");
 		student2.setLastName("Miller");
-		student2.setCountry("U.S");
-		student2.setFullTime("Yes");
+		//student2.setCountry("U.S");
+		//student2.setFullTime("Yes");
 		student2.setProgramTrack("MISM");
 		student2.setSemester("1st");
 		student2.setPhotoPath("j\\ndj\\bsdfsd");
@@ -50,24 +50,51 @@ public class testMain {
 		arrStudents.add(student2);
 		
 		ArrayList<Student> studentD = new ArrayList<Student>();
+		ArrayList<String> ctrArr = new ArrayList<String>();
+		ArrayList<String> stuArr = new ArrayList<String>();
+		
+		ArrayList<String> columnNameArr = new ArrayList<String>();
+		columnNameArr.add("PROGRAMTRACK");
+		//columnNameArr.add("COUNTRY");
+	
+		ArrayList<String> columnValueArr = new ArrayList<String>();
+		columnValueArr.add("MISM");
+		//columnValueArr.add("India");
 		
 		StudentDao studentDao = new StudentDao();
 		
 		try
 		{
-			studentDao.dropTable();		    
+			//studentDao.dropTable();		    
 		   // studentDao.insertStudent(student2);
 			
 			boolean tableExists = studentDao.checkTable();
 			System.out.print(tableExists);
 			
+			//studentDao.updateStudent(student2);
 			
 			
-			studentDao.createTable();
-			//studentDao.insertStudent(student1);
-			tableExists = studentDao.checkTable();
 			
-			System.out.print(tableExists);
+			//studentDao.createTable();
+			//studentDao.insertStudents(arrStudents);
+			
+			//studentD = scottyCon.selectStudent("andrewId", "abmd3");
+			//ctrArr = scottyCon.selectCountries();
+			
+			stuArr = scottyCon.selectAndrewIds();
+			ArrayList<Student> stuArrNotInDb  = scottyCon.selectStudentOnAndrewIds(stuArr);
+			
+			//ArrayList<Student> stuArrNotInDb  = scottyCon.fetchStuPresentInDb(arrStudents);
+			
+			System.out.print("Hi");
+			
+			System.out.println(stuArrNotInDb);
+						
+			//tableExists = studentDao.checkTable();
+			
+			//System.out.print(tableExists);
+			
+			//studentDao.selectStudent(columnNameArr, columnValueArr);
 			
 			//studentDao.dropTable();
 			//scottyCon.importExcel(arrStudents);
