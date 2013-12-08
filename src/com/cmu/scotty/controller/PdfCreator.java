@@ -38,10 +38,11 @@ public class PdfCreator {
 		ArrayList<Student> s = new ArrayList<Student> ();
 
 		Student a=new Student("ruiw","Rui","Wang",
-				"MISM","F/T","China", "13F","");
-		//a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
+				"MISMasdfsdgasdgas","F/T","Chinaasdfasgasd", "13Fasdgasg","");
+		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
 		Student b= new Student("a","asdf","asdf",
 				"MISM","F/T","China", "13F","");
+		b.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/a.jpg");
 		s.add(a);
 		s.add(a);
 		s.add(a);
@@ -64,7 +65,7 @@ public class PdfCreator {
 
 	
     public static String RESULT
-        = "src/Student_List1.pdf";
+        = "src/Student_List2.pdf";
     /** The movie poster. */
     public ArrayList <String> image=new ArrayList<String>();
     public ArrayList <String> program=new ArrayList<String>();
@@ -82,18 +83,55 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
+    public static void main(String []args) throws IOException, DocumentException{
+    	c.test();
+    }
 
     public PdfCreator(ArrayList<Student> s){
 
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
-    		program.add(s.get(i).getProgramTrack());
-    		firstname.add(s.get(i).getFirstName());
-    		lastname.add(s.get(i).getLastName().toUpperCase());
-    		email.add(s.get(i).getAndrewID()+"@andrew.cmu.edu");
-    		time.add(s.get(i).getFullTime());
-    		country.add(s.get(i).getCountry());
-    		intake.add(s.get(i).getSemester());
+    		if(s.get(i).getProgramTrack().trim().length()>10){
+    		program.add(s.get(i).getProgramTrack().trim().substring(0,10));
+    		}
+    		else{
+    			program.add(s.get(i).getProgramTrack().trim());	
+    		}
+    		if(s.get(i).getFirstName().trim().length()>10){
+    		firstname.add(s.get(i).getFirstName().trim().substring(0,10));
+    		}else{
+    			firstname.add(s.get(i).getFirstName().trim());
+    		}
+    		if(s.get(i).getLastName().trim().length()>10){
+        		lastname.add(s.get(i).getLastName().trim().substring(0,10));
+        		}
+    		else {
+    		lastname.add(s.get(i).getLastName().toUpperCase().trim());
+    		} 
+    		if(s.get(i).getAndrewID().trim().length()>8){
+    		email.add(s.get(i).getAndrewID().trim().substring(0,8)+"@andrew.cmu.edu");
+    		}else{
+    			email.add(s.get(i).getAndrewID().trim()+"@andrew.cmu.edu");
+    		}
+    		if(s.get(i).getFullTime().length()>3){
+    			time.add(s.get(i).getFullTime().trim().substring(0,3));
+    		}
+    		else{
+    		
+    		time.add(s.get(i).getFullTime().trim());
+    		}
+    		if(s.get(i).getCountry().length()>10){
+    		country.add(s.get(i).getCountry().trim().substring(0,10));
+    		}else{
+    			country.add(s.get(i).getCountry().trim());
+    		
+    		}
+    		if(s.get(i).getSemester().length()>5){
+    			intake.add(s.get(i).getSemester().trim().substring(0,5));
+    		}
+    		else{
+    		intake.add(s.get(i).getSemester().trim());
+    		}
     	}
     }
     
@@ -167,8 +205,9 @@ public class PdfCreator {
         font.setColor(30, 144, 255);;
         Font fontbold = FontFactory.getFont("Times-Roman", 12, Font.BOLD);
         // the cell object
+      
         for(int i=0; i<image.size();i++){
-        	
+        
         	if(i%9==0){
         	    cell = new PdfPCell();
         	    
@@ -212,22 +251,24 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
-        	    if(image.get(i)!=null && !image.get(i).isEmpty()){
+        	    try{
+        	 
         	    Image img = Image.getInstance(image.get(i));
         	    img.scaleAbsolute(130f, 130f);
             
             	
 
    	         ph.add(new Chunk(img, 0, 0, true));
-        	    }else{
+        	    }catch(IOException e){
         	    	
         	    	Image img= Image.getInstance(UNAVAILABILE);
         	    	//img.scaleToFit(300, 135);
         	    	img.scaleAbsolute(130f, 130f);
                 	
                 	ph.add(new Chunk(img, 0, 0, true));
-        	    }
+        	    }finally{
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
+   	       
    	         ph.add(new Phrase(lastname.get(i)+" ",font1));
    	         ph.add(new Phrase("\n"+email.get(i)+" ",font));
    	         ph.add(new Phrase("\nPROGRAM: "+program.get(i)+" "));
@@ -242,7 +283,7 @@ public class PdfCreator {
            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
        	table.addCell(cell);
            	
-            	
+        	    }
            
       
     }
