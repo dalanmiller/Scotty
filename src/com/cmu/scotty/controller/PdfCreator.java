@@ -202,7 +202,7 @@ public class PdfCreator {
         	    cell = new PdfPCell();
         	    
                 cell.setBorder(0);
-                Image logo = Image.getInstance(getClass().getResource(LOGO));
+                Image logo = Image.getInstance(LOGO);
                
                 logo.scaleAbsoluteHeight(20);
                 logo.scaleAbsoluteWidth(20);

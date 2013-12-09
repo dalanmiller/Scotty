@@ -27,6 +27,7 @@ public class ReadExcel {
 	 * @throws WrongExcelException
 	 */
 	public ArrayList<Student> read(String inputexcel) throws IOException, BiffException,WrongExcelException  {
+	//	if (inputexcel.endsWith(".xls"))
 		File inputWorkbook = new File(inputexcel);
 	    Workbook w;
 	    w = Workbook.getWorkbook(inputWorkbook);
