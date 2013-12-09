@@ -1,7 +1,13 @@
+/**
+ * @version 1.0
+ * @author Daniel Alan Miller
+ * @author Tania Dasgupta
+ * @author Rijia 'Rebecca' Hou
+ */
+
 package com.cmu.scotty.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -59,6 +65,12 @@ import com.sun.pdfview.PDFPage;
 
 
 
+//This class MainWindow is responsible for the entirety of our little application. 
+// It handles the tabs located along the top of the application and swtiching between enabled windows.
+// It also handles rendering and positioning of all elements which are present on all the pages of our application. 
+// In some instances we tried to move as much functionality as we could into the ScottyController class, but some of the PDFCreator code
+// had to go here because of dependencies on the pdfPreview window. 
+// Ultimately this class handles everything you can see and then some of the things that we had to put in here. 
 
 public class MainWindow {
 
@@ -195,8 +207,8 @@ public class MainWindow {
 		initializeTopButton();
 		//Import Panel
 		initializeImportPanel();
-		
-		
+	//	initializeFilterPanel();
+	//	initializeImportPanel();
 
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
@@ -367,9 +379,12 @@ public class MainWindow {
 					try {
 						ArrayList<String> inputCountries= controller.selectCountries();
 						
-						Collections.sort(countryOptions, new Comparator<String>() {
+						Collections.sort(inputCountries,
+								new Comparator<String>() {
 						    @Override
 						    public int compare(String arg0, String arg1) {
+										System.out.println("arg0:" + arg0
+												+ " | arg1" + arg1);
 								return arg0.compareTo(arg1);
 							}
 						});
@@ -387,12 +402,10 @@ public class MainWindow {
 					
 					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
 					countrySelector = new JComboBox(countryOptionsArray);
-					countrySelector.setBounds(54,36,109,20);
+					countrySelector.setBounds(0,86,163,20);
 					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 						public void propertyChange(PropertyChangeEvent arg0){
-//							System.out.println(arg0);
-//							if (arg0.get)
-//							filters.set(1, arg0.getNewValue().toString() );
+
 							String country = countrySelector.getSelectedItem().toString();
 							if (country.equals("Global")){
 								filters.set(1, null);
@@ -472,6 +485,7 @@ public class MainWindow {
 		}
 		
 	}
+
 	public void initializeFilterPanel(){
 		
 		jpFilter.setLayout(null);
@@ -507,7 +521,7 @@ public class MainWindow {
 		jpFilterCtrl.setLayout(null);
 		
 		JLabel lblProgram = new JLabel("Program:");
-		lblProgram.setBounds(0, 8, 44, 14);
+		lblProgram.setBounds(0, 8, 85, 14);
 		jpFilterCtrl.add(lblProgram);
 		
 		programSelector = new JComboBox(programOptions);
@@ -532,15 +546,15 @@ public class MainWindow {
 				}
 			}
 		});
-		programSelector.setBounds(54, 5, 109, 20);
+		programSelector.setBounds(0, 32, 163, 20);
 		jpFilterCtrl.add(programSelector);
 	
-		lblNewLabel.setBounds(0, 39, 43, 14);
+		lblNewLabel.setBounds(0, 62, 67, 14);
 		
 		jpFilterCtrl.add(lblNewLabel);
 			
-		JButton filterNext = new JButton("Next");
-		filterNext.setBounds(108, 74, 55, 23);
+		JButton filterNext = new JButton("Next>>");
+		filterNext.setBounds(87, 139, 76, 23);
 		jpFilterCtrl.add(filterNext);
 		
 		//NEED TO CREATE ACTIONS TO SWITCH TO EXPORT WINDOW

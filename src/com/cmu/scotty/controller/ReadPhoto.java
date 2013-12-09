@@ -2,13 +2,23 @@ package com.cmu.scotty.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import com.cmu.scotty.exception.WrongPhotoException;
-import com.cmu.scotty.exception.WrongPhotoException;
-import com.cmu.scotty.model.Student;
 
+/**
+ * 
+ * @author Leo, Rebacca, Ray, Tania, Daniel
+ * 
+ * This is a class for reading photo folder
+ *
+ */
 public class ReadPhoto {
+	/**
+	 * This is a method to read the photo folder path
+	 * @param inputphotos
+	 * @return String
+	 * @throws IOException
+	 * @throws WrongPhotoException
+	 */
 	public String readPhoto(String inputphotos)throws IOException, WrongPhotoException{
 		File Dir=new File(inputphotos);
 		File[] files=Dir.listFiles();

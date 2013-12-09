@@ -8,7 +8,6 @@ import java.util.Iterator;
 
 import jxl.read.biff.BiffException;
 
-import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
 import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.model.Student;
@@ -32,22 +31,17 @@ public class ScottyController {
 		 boolean chkTbleStatus = false;
 		try {
 			chkTbleStatus = studentDao.checkTable();
+			
+			if(chkTbleStatus==true)
+			{
+				studentDao.dropTable();
+			}
+			studentDao.createTable();
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			if(chkTbleStatus==false)
-			{
-				try {
-					studentDao.createTable();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
    }
 	
 
@@ -116,14 +110,38 @@ public class ScottyController {
 		return arrStuNotPrDb;
 	}
 	
+	
+	public ArrayList<Student> fetchStuPresentInDb(ArrayList<Student> arrStudents) throws SQLException, Exception
+	{
+		ArrayList<String> arrPrAndId = selectAndrewIds();
+		ArrayList<Student> arrStuPrDb = new ArrayList();
+		Student student = new Student();
+		
+		String studentId = null;
+		
+		Iterator iteratorStu = arrStudents.iterator();
+		
+		while(iteratorStu.hasNext())
+		{
+			student = (Student)iteratorStu.next();
+			if(arrPrAndId.contains(student.getAndrewID()))
+			{
+				arrStuPrDb.add(student);
+			}
+		}
+		
+		return arrStuPrDb;
+	}
+	
+	
 	public void insertText (String textPath) throws IOException,WrongTextException, SQLException,Exception
 	{
 		ArrayList<Student> arrStudents = readText(textPath);	
 		//arrStudents = readText.read(textPath);
 		
-		ArrayList<Student> arrStuNotInDb = fetchStuNotPresentInDb(arrStudents);
+		ArrayList<Student> arrStuInDb = fetchStuPresentInDb(arrStudents);
 		
-		if(arrStuNotInDb!=null)
+		if(arrStuInDb!=null)
 		{
 			boolean chkTbleStatus =  studentDao.checkTable();
 			if(chkTbleStatus==false)
@@ -133,11 +151,11 @@ public class ScottyController {
 			else
 			{
 				// Insert
-				studentDao.insertStudents(arrStuNotInDb);
+				studentDao.insertStudents(arrStuInDb);
 			}
 		}
 		
-		studentDao.updateStudents(arrStudents);
+		studentDao.updateStudents(arrStuInDb);
 	    
 	}
 	

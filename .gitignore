@@ -4,12 +4,12 @@ scottyDB
 .classpath
 .project
 .DS_Store
+preview.pdf
 
 # Package Files #
 #*.jar
 *.war
 *.ear
-*.xml
 *.properties
 *.mf
 *.log
