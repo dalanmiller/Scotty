@@ -315,15 +315,7 @@ public class MainWindow {
 						JOptionPane.showMessageDialog(null,"Please choose the Image Source Folder!");
 				}
 				else{					
-					jpImport.setVisible(false);
-					jbtFilter.setEnabled(true);
-					jpFilter.setVisible(true);
-					jpExport.setVisible(false);
-					
-					jbtImport.setSelected(false);
-					jbtFilter.setSelected(true);
-					jbtExport.setSelected(false);
-					frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+				
 
 					
 					controller.setImgPath(jtfImgPath.getText());
@@ -340,36 +332,46 @@ public class MainWindow {
 						}
 						//studentD = controller.selectStudent("andrewId", "abmd3");
 						//System.out.println("Hi");
+						jpImport.setVisible(false);
+						jbtFilter.setEnabled(true);
+						jpFilter.setVisible(true);
+						jpExport.setVisible(false);
+						
+						jbtImport.setSelected(false);
+						jbtFilter.setSelected(true);
+						jbtExport.setSelected(false);
+						frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
+					}
+					catch(WrongExcelException wrongExcelException)
+					{
+					//	wrongExcelException.printStackTrace();
+						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
+						
 					}
 					catch(IOException ioException)
 					{
-						ioException.printStackTrace();
+					//	ioException.printStackTrace();
 						JOptionPane.showMessageDialog(null, ioException.getMessage());
 					}
 					catch(BiffException biffException)
 					{
-						biffException.printStackTrace();
-						JOptionPane.showMessageDialog(null, biffException.getMessage());
+					//	biffException.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Wrong file type/format,please check again!");
 					}
-					catch(WrongExcelException wrongExcelException)
-					{
-						wrongExcelException.printStackTrace();
-						JOptionPane.showMessageDialog(null, wrongExcelException.getMessage());
-						
-					}
+					
 					catch(WrongTextException wrongTextException)
 					{
-						wrongTextException.printStackTrace();
+				//		wrongTextException.printStackTrace();
 						JOptionPane.showMessageDialog(null, wrongTextException.getMessage());
 					}
 					catch(SQLException sqlException)
 					{
-						sqlException.printStackTrace();
+				//		sqlException.printStackTrace();
 						JOptionPane.showMessageDialog(null, sqlException.getMessage());
 					}
 					catch(Exception except)
 					{
-						except.printStackTrace();
+				//		except.printStackTrace();
 						JOptionPane.showMessageDialog(null, except.getMessage());
 					}
 					
@@ -457,9 +459,9 @@ public class MainWindow {
 
 		File file = new File(path, "preview.pdf"); 
 		RandomAccessFile raf;
-	     FileChannel channel;
-	     ByteBuffer buf;
-	     PDFFile pdffile; 
+	    FileChannel channel;
+	    ByteBuffer buf;
+	    PDFFile pdffile; 
 		try {			
 		    
 			raf = new RandomAccessFile(file, "r");			
@@ -483,6 +485,10 @@ public class MainWindow {
 	         jpPreviewWindow.removeAll();
 	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
 	         raf.close();
+	         channel.close();
+	         buf.clear();
+	         
+	         
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null,e.getMessage());
@@ -651,12 +657,12 @@ public class MainWindow {
 		}
 		catch(IOException ioExc)
 		{
-			ioExc.printStackTrace();
+		//	ioExc.printStackTrace();
 			JOptionPane.showMessageDialog(null, ioExc.getMessage());
 			
 		} catch (WrongTextException wrgTxtExc) {
 			
-			wrgTxtExc.printStackTrace();
+		//	wrgTxtExc.printStackTrace();
 			JOptionPane.showMessageDialog(null, wrgTxtExc.getMessage());
 		}
 		
