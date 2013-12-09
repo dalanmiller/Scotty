@@ -1,7 +1,13 @@
+/**
+ * @version 1.0
+ * @author Daniel Alan Miller
+ * @author Tania Dasgupta
+ * @author Rijia 'Rebecca' Hou
+ */
+
 package com.cmu.scotty.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -59,6 +65,12 @@ import com.sun.pdfview.PDFPage;
 
 
 
+//This class MainWindow is responsible for the entirety of our little application. 
+// It handles the tabs located along the top of the application and swtiching between enabled windows.
+// It also handles rendering and positioning of all elements which are present on all the pages of our application. 
+// In some instances we tried to move as much functionality as we could into the ScottyController class, but some of the PDFCreator code
+// had to go here because of dependencies on the pdfPreview window. 
+// Ultimately this class handles everything you can see and then some of the things that we had to put in here. 
 
 public class MainWindow {
 
@@ -393,9 +405,7 @@ public class MainWindow {
 					countrySelector.setBounds(54,36,109,20);
 					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 						public void propertyChange(PropertyChangeEvent arg0){
-//							System.out.println(arg0);
-//							if (arg0.get)
-//							filters.set(1, arg0.getNewValue().toString() );
+
 							String country = countrySelector.getSelectedItem().toString();
 							if (country.equals("Global")){
 								filters.set(1, null);
