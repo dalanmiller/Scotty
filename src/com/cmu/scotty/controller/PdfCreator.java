@@ -48,14 +48,6 @@ public class PdfCreator {
      * @throws DocumentException 
      * @throws IOException */
 
-<<<<<<< HEAD
-	
-
-	
-=======
-
-		
->>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -75,11 +67,7 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-<<<<<<< HEAD
-  
-=======
- 
->>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
+
 
     public PdfCreator(ArrayList<Student> s){
 
@@ -218,7 +206,7 @@ public class PdfCreator {
         	    cell = new PdfPCell();
         	    
                 cell.setBorder(0);
-                Image logo = Image.getInstance(LOGO);
+                Image logo = Image.getInstance(getClass().getResource(LOGO));
                
                 logo.scaleAbsoluteHeight(20);
                 logo.scaleAbsoluteWidth(20);
