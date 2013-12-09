@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.1">
+  <zoom_level>4</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>292</x>
+      <y>8</y>
+      <w>428</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.model::Student
+--
+-andrewID: String
+-firstName: String
+-lastName: String
+-programTrack: String
+-fullTime: String
+-country: String
+-semester: String
+-photoPath: String
+--
++Student(String andrewID, String firstName, String lastName, String programTrack, String fullTime, String country, String semester, String photoPath): ctor
++Student(String andrewID): ctor
++Student(): ctor
++getAndrewID(): String
++setAndrewID(String andrewID): void
++getFirstName(): String
++setFirstName(String firstName): void
++getLastName(): String
++setLastName(String lastName): void
++getProgramTrack(): String
++setProgramTrack(String programTrack): void
++getFullTime(): String
++setFullTime(String fullTime): void
++getCountry(): String
++setCountry(String country): void
++getSemester(): String
++setSemester(String semester): void
++getPhotoPath(): String
++setPhotoPath(String photoPath): void
++toString(): String
++toRow(): Object[]
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>764</x>
+      <y>196</y>
+      <w>300</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.persistence::StudentDao
+--
+-dbURL = "jdbc:derby:scottyDB;create=true": String
+-tableName = "students": String
+-columnName = "andrewId": String
+-conn = null: Connection
+-stmt = null: Statement
+--
++createConnection(): Connection
++checkTable(): boolean
++dropTable(): void
++createTable(): void
++insertStudents(ArrayList&lt;Student&gt; studentArr): void
++updateStudents(ArrayList&lt;Student&gt; studentArr): void
++insertStudent(Student student): void
++updateStudent(Student student): void
++selectStudents(ArrayList&lt;String&gt; andrewIds): ArrayList&lt;Student&gt;
++selectAllStudents(): ArrayList&lt;Student&gt;
++selectStudent(String columnName, String columnValue): ArrayList&lt;Student&gt;
++selectCountries(): ArrayList&lt;String&gt;
++selectAndrewIds(): ArrayList&lt;String&gt;
++selectStudent(ArrayList&lt;String&gt; columnNameArr, ArrayList&lt;String&gt; columnValueArr): ArrayList&lt;Student&gt;
++shutdown(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1060</x>
+      <y>200</y>
+      <w>300</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.controller::PdfCreator
+--
++RESULT = "src/Student_List2.pdf": String
++image = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++program = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++firstname = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++lastname = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++email = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++time = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++country = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++intake = new ArrayList&lt;String&gt;(): ArrayList&lt;String&gt;
++LOGO = "lib/logo/logo.png": String
++UNAVAILABILE = "lib/logo/nopic.png": String
++TITLE = "Master of Information Systems Management Student List for F13 Semester (August 2013)": String
++document: Document
+--
++PdfCreator(ArrayList&lt;Student&gt; s): ctor
++setExportLocation(String path): void
++setTitle(String t): void
++printTable3(): void
++printTablePreview(): void
++createThirdTable(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>352</x>
+      <y>336</y>
+      <w>288</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.controller::ScottyController
+--
++studentTable = "STUDENT": String
++studentDao = new StudentDao(): StudentDao
++readExcel = new ReadExcel(): ReadExcel
++readText = new ReadText(): ReadText
++imgPath: String
+--
++getImgPath(): String
++setImgPath(String imgPath): void
++readExcel(String excelPath): void
++fetchStuNotPresentInDb(ArrayList&lt;Student&gt; studentsNotInDb): ArrayList&lt;Student&gt;
++insertText(String textPath): void
++readText(String textPath): ArrayList&lt;Student&gt;
++selectStudent(String columnName, String columnValue): ArrayList&lt;Student&gt;
++selectStudent(ArrayList&lt;String&gt; columnNames, ArrayList&lt;String&gt; columnValues): ArrayList&lt;Student&gt;
++selectStudentOnAndrewIds(ArrayList&lt;String&gt; andrewIds): ArrayList&lt;Student&gt;
++selectAndrewIds(): ArrayList&lt;String&gt;
++selectCountries(): ArrayList&lt;String&gt;
++selectStudent(): ArrayList&lt;Student&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>424</x>
+      <y>536</y>
+      <w>128</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.controller::ReadExcel
+--
+--
++read(String inputexcel): ArrayList&lt;Student&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>628</x>
+      <y>540</y>
+      <w>108</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.controller::ReadPhoto
+--
+--
++readPhoto(String inputphotos): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>708</x>
+      <y>440</y>
+      <w>128</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.controller::ReadText
+--
+--
++read(String inputtext): ArrayList&lt;Student&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>808</x>
+      <y>104</y>
+      <w>144</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.exception::ArrayListDoesNotMatch
+--
+--
++getMessage(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>372</x>
+      <y>616</y>
+      <w>140</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.exception::WrongExcelException
+--
+--
++getMessage(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>632</x>
+      <y>608</y>
+      <w>140</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.exception::WrongPhotoException
+--
+--
++getMessage(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>824</x>
+      <y>500</y>
+      <w>136</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.exception::WrongTextException
+--
+--
++getMessage(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>256</x>
+      <y>248</y>
+      <w>84</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>
+com.cmu.scotty.controller::PdfCreator
+--
+-id: Long
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>252</y>
+      <w>228</w>
+      <h>332</h>
+    </coordinates>
+    <panel_attributes>com.cmu.scotty.gui::MainWindow
+--
+-frame: JFrame
+-jpStatic = new JPanel(): JPanel
+-jpImport = new JPanel(): JPanel
+-jpFilter = new JPanel(): JPanel
+-jpExport = new JPanel(): JPanel
+-jbtImport: JButton
+-jbtExport: JButton
+-jbtFilter: JButton
+-jpImportExcel = new JPanel(): JPanel
+-jpImportTxt = new JPanel(): JPanel
+-jpImportImg = new JPanel(): JPanel
+-lblImportExcel = new JLabel("Excel file*"): JLabel
+-jtfExcelPath = new JTextField(): JTextField
+-jbtBrowseExcel = new JButton("Browse"): JButton
+-importExcelFile = new File(""): File
+-filterExcel = new FileNameExtensionFilter("Excel", "xls", "xlsx"): FileNameExtensionFilter
+-jfcImportExcelFile = new JFileChooser(): JFileChooser
+-lblImportTxt = new JLabel("Class Roster(.txt)"): JLabel
+-jtfTxtPath = new JTextField(): JTextField
+-jbtBrowseTxt = new JButton("Browse"): JButton
+-importTxtFile = new File(""): File
+-filterTxt = new FileNameExtensionFilter("TXT", "txt"): FileNameExtensionFilter
+-jfcImportTxtFile = new JFileChooser(): JFileChooser
+-lblImportImg = new JLabel("Image folder*"): JLabel
+-jtfImgPath = new JTextField(): JTextField
+-jbtBrowseImg = new JButton("Browse"): JButton
+-importImgFile = new File(""): File
+-jfcImportImgFile = new JFileChooser(): JFileChooser
+-jpImportNext = new JPanel(): JPanel
+-jbtImportNext = new JButton("Next&gt;&gt;"): JButton
+-button = new JButton("Next&gt;&gt;"): JButton
+-jpPathExport = new JPanel(): JPanel
+-lalPdfExport = new JLabel("Export Folder"): JLabel
+-jtfPdfPath = new JTextField(): JTextField
+-jbtPdfBrowse = new JButton("Browse"): JButton
+-lalPdfName = new JLabel("File Name"): JLabel
+-jtfFileName = new JTextField(): JTextField
+-lal_pdf = new JLabel(".pdf"): JLabel
+-jbtExportPdf = new JButton("Export Pdf File"): JButton
+-exportPdfFile = new File(""): File
+-jfcExportPdfFile = new JFileChooser(): JFileChooser
+-jpPreviewExport = new JPanel(): JPanel
+-jpPreviewWindow = new JPanel(): JPanel
+-controller = new ScottyController(): ScottyController
+-jpFilterList = new JPanel(): JPanel
+-jpFilterCtrl = new JPanel(): JPanel
+-lblNewLabel = new JLabel("Country:"): JLabel
+-programSelector: JComboBox
+-studentsList: JTable
+-jtfpdfTitle: JTextField
+-countrySelector: JComboBox
+-dbColumns = new ArrayList&lt;String&gt;() {
+
+    {
+        add("PROGRAMTRACK");
+        add("COUNTRY");
+    }
+}: ArrayList&lt;String&gt;
+-filters = new ArrayList&lt;String&gt;() {
+
+    {
+        add(null);
+        add(null);
+    }
+}: ArrayList&lt;String&gt;
+-studentsTable = new JTable(): JTable
+-columnNames = new ArrayList(): ArrayList
+-columnValues = new ArrayList(): ArrayList
+-pdfCreator: PdfCreator
+--
++MainWindow(): ctor
++main(String[] args): void
+-initialize(): void
++initializeImportPanel(): void
++pdfPreview(): void
++initializeFilterPanel(): void
++getCurrentStudentSubSet(): ArrayList&lt;Student&gt;
++redoStudentTable(): void
++initializeExportPanel(): void
++initializeTopButton(): void
++getProgramSelector(): JComboBox
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>484</x>
+      <y>216</y>
+      <w>24</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>16;12;12;120</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>632</x>
+      <y>272</y>
+      <w>132</w>
+      <h>92</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+&lt;&lt;someStereotype&gt;&gt;</panel_attributes>
+    <additional_attributes>12;84;124;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>216</x>
+      <y>384</y>
+      <w>144</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+</panel_attributes>
+    <additional_attributes>12;24;136;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>440</x>
+      <y>552</y>
+      <w>52</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>12;60;44;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>480</x>
+      <y>464</y>
+      <w>28</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>12;68;20;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>612</x>
+      <y>460</y>
+      <w>76</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>68;72;12;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>688</x>
+      <y>564</y>
+      <w>28</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>20;44;12;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>628</x>
+      <y>412</y>
+      <w>84</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>76;36;12;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>804</x>
+      <y>464</y>
+      <w>92</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>84;32;12;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>880</x>
+      <y>120</y>
+      <w>24</w>
+      <h>76</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>16;68;12;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>216</x>
+      <y>312</y>
+      <w>84</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+</panel_attributes>
+    <additional_attributes>12;76;76;12</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>288</x>
+      <y>316</y>
+      <w>68</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.&gt;
+</panel_attributes>
+    <additional_attributes>60;72;12;12</additional_attributes>
+  </element>
+</diagram>
