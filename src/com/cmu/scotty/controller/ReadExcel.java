@@ -8,9 +8,24 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.exception.*;
-
+/**
+ * 
+ * @author Leo, Rebacca, Ray, Tania, Daniel
+ * 
+ * This is a class for reading excel files
+ *
+ */
 public class ReadExcel {
 
+	/**
+	 * This is a method to read excel file path.
+	 * The method read every cells in the sheet and return an ArrayList of Student
+	 * @param inputexcel
+	 * @return ArrayList<Student>
+	 * @throws IOException
+	 * @throws BiffException
+	 * @throws WrongExcelException
+	 */
 	public ArrayList<Student> read(String inputexcel) throws IOException, BiffException,WrongExcelException  {
 		File inputWorkbook = new File(inputexcel);
 	    Workbook w;
