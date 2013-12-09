@@ -202,7 +202,7 @@ public class PdfCreator {
         	    cell = new PdfPCell();
         	    
                 cell.setBorder(0);
-                Image logo = Image.getInstance(LOGO);
+                Image logo = Image.getInstance(getClass().getResource(LOGO));
                
                 logo.scaleAbsoluteHeight(20);
                 logo.scaleAbsoluteWidth(20);
@@ -241,6 +241,7 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
+        	   
         	    try{
         	 
         	    Image img = Image.getInstance(image.get(i));
@@ -250,12 +251,13 @@ public class PdfCreator {
 
    	         ph.add(new Chunk(img, 0, 0, true));
         	    }catch(IOException e){
-        	    	
+        	    	 if(!image.get(i).isEmpty()){
         	    	Image img= Image.getInstance(UNAVAILABILE);
         	    	//img.scaleToFit(300, 135);
         	    	img.scaleAbsolute(130f, 130f);
                 	
                 	ph.add(new Chunk(img, 0, 0, true));
+        	    	 }
         	    }finally{
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
    	       
