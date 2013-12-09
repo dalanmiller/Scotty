@@ -1,5 +1,21 @@
 package com.cmu.scotty.controller;
+/**
+ * @author Rui Wang
+ * @version 1.0
+ * 9 Dec, 2013
+ */
 
+/**
+ * PdfCreator Class takes a Student ArrayList as input and print out a pdf file to the selected 
+ * location.
+ * 
+ * printTable3() method could export the pdf file to the location
+ * 
+ * createThirdTable() put all the elements to the pdf document
+ * 
+ * printPreview() method could export the pdf file in the relative path
+ *
+ */
 
 import java.awt.Color;
 import java.io.FileOutputStream;
@@ -33,35 +49,7 @@ public class PdfCreator {
      * @throws IOException */
 	public static PdfCreator c;
 
-	public static void test() throws IOException, DocumentException{
-
-		ArrayList<Student> s = new ArrayList<Student> ();
-
-		Student a=new Student("ruiw","Rui","Wang",
-				"MISMasdfsdgasdgas","F/T","Chinaasdfasgasd", "13Fasdgasg","");
-		a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
-		Student b= new Student("a","asdf","asdf",
-				"MISM","F/T","China", "13F","");
-		b.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/a.jpg");
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		 c= new PdfCreator(s);
-		c.printTable3();
-	}
+	
 
 	
     public static String RESULT
@@ -83,9 +71,7 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
-    public static void main(String []args) throws IOException, DocumentException{
-    	c.test();
-    }
+  
 
     public PdfCreator(ArrayList<Student> s){
 
@@ -134,14 +120,22 @@ public class PdfCreator {
     		}
     	}
     }
-    
+    /*
+     * setExportLocation() could set the exportation path
+     */
     public void setExportLocation(String path){
     	RESULT=path;
     }
-    
+    /*
+     * setTitle could set the document Title
+     */
     public void setTitle(String t){
     	TITLE = t;
     }
+    
+    /*
+     * printTable3()export pdf to the selected path
+     */
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
@@ -163,7 +157,9 @@ public class PdfCreator {
        
             document.close();
     }
- 
+ /*
+  * printTablePreview()generate a preview version of pdf in the software
+  */
 
     public void printTablePreview()
             throws IOException, DocumentException {
@@ -187,7 +183,9 @@ public class PdfCreator {
             document.close();
     }
    
-    
+    /*
+     * createThirdTable create a pdf file with desired elements
+     */
     public void createThirdTable() throws DocumentException, IOException {
     	int n=3-(image.size())%3;
     	
