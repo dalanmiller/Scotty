@@ -171,6 +171,30 @@ public class StudentDao {
              }  
     }
     
+    
+    public void updateStudents(ArrayList<Student> studentArr) throws SQLException , Exception
+    {
+        try
+        {
+    	    boolean insertStatus = false;
+        	Iterator iterator = studentArr.iterator();
+        	while(iterator.hasNext())
+        	{
+        		updateStudent((Student)iterator.next());
+        	}
+        }
+        	 catch (SQLException sqlExcept)
+             {
+             	sqlExcept.printStackTrace();
+             	throw sqlExcept;
+             }  
+         	catch (Exception except)
+             {
+         		except.printStackTrace();
+         		throw except;
+             }  
+    }
+    
     public void insertStudent(Student student) throws SQLException,Exception
     {
           		
@@ -225,7 +249,7 @@ public class StudentDao {
     }
     
     
-   /* public void updateStudent(Student student)
+    public void updateStudent(Student student) throws SQLException,Exception
     {
         try
         {    
@@ -239,14 +263,14 @@ public class StudentDao {
 
             int count = 0;
             
-            //String firstName = student.getFirstName().trim().toUpperCase();
-            //String lastName = student.getLastName().trim().toUpperCase();
-            //String programTrack = student.getProgramTrack().trim().toUpperCase();
-            String fullTime = student.getFullTime().trim().toUpperCase();
-            String country = student.getCountry().trim().toUpperCase();
-            String semester = student.getSemester().trim().toUpperCase();
-            String pathName = student.getPhotoPath().trim().toUpperCase();
-            String andrewId = student.getAndrewID().trim();
+           /*  = if(student.getFirstName()!=null) { String firstNamestudent.getFirstName().trim()};
+            String lastName = student.getLastName().trim();
+            String programTrack = student.getProgramTrack();
+            String fullTime = student.getFullTime().trim();
+            String country = student.getCountry().trim();
+            String semester = student.getSemester().trim();
+            String pathName = student.getPhotoPath().trim();
+            String andrewId = student.getAndrewID().trim();*/
             
             String query = " update " + tableName + " set " ;
             
@@ -257,7 +281,7 @@ public class StudentDao {
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " firstname " + " = " + "'" + student.getFirstName().trim().toUpperCase() + "'";
+            		query = query + " firstname " + " = " + "'" + student.getFirstName().trim() + "'";
             		count++;
             	}
             
@@ -267,7 +291,7 @@ public class StudentDao {
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " lastName " + " = " + "'" + student.getLastName().trim().toUpperCase() + "'";
+            		query = query + " lastName " + " = " + "'" + student.getLastName().trim() + "'";
                     count++;        	
             	}
             	if(student.getProgramTrack()!=null)
@@ -276,7 +300,7 @@ public class StudentDao {
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " programTrack " + " = " + "'" + student.getProgramTrack().trim().toUpperCase() + "'";
+            		query = query + " programTrack " + " = " + "'" + student.getProgramTrack().trim() + "'";
             	    count++;
             	}
             
@@ -286,7 +310,7 @@ public class StudentDao {
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " fullTime " + " = " + "'" + student.getFullTime().trim().toUpperCase() + "'";
+            		query = query + " fullTime " + " = " + "'" + student.getFullTime().trim() + "'";
             		count++;
             	}
             	
@@ -296,39 +320,38 @@ public class StudentDao {
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " country " + " = " + "'" + student.getCountry().trim().toUpperCase() + "'";
+            		query = query + " country " + " = " + "'" + student.getCountry().trim() + "'";
             		count++;
             	}
             
-            	if(semester!=null)
+            	if(student.getSemester()!=null)
             	{
             		if(count>0)
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " semester " + " = " + "'" + semester + "'";
+            		query = query + " semester " + " = " + "'" + student.getSemester() + "'";
             		count++;
             	}
-            	if(pathName!=null)
+            	if(student.getPhotoPath()!=null)
             	{
             		if(count>0)
                 	{
                 		query = query + " , ";
                 	}
-            		query = query + " pathName " + " = " + pathName;
+            		query = query + " pathName " + " = " +  "'" + student.getPhotoPath() +  "'" ;
             		count++;
             	}            
             	            	
-            query = query + " where andrewId = '" + student.getAndrewID() + "' ";
-            
-       		     + "'" + student.getAndrewID() + "'," 
-       		     + "'" + student.getFirstName().trim().toUpperCase() + "',"
-       		     + "'" + student.getLastName().trim().toUpperCase() + "',"
+            query = query + " where andrewId = '" + student.getAndrewID() + "'" ;        
+       		    /* + "'" + student.getAndrewID() + "'," 
+       		     + "'" + student.getFirstName().trim() + "')";*/
+       		    /* + "'" + student.getLastName().trim().toUpperCase() + "',"
        		     + "'" + student.getProgramTrack().trim().toUpperCase() + "',"
        		     + "'" + student.getFullTime().trim().toUpperCase() + "',"
        		     + "'" + student.getCountry().trim().toUpperCase() + "',"
        		     + "'" + student.getSemester().trim().toUpperCase() + "',"
-       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";
+       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";*/
             
             System.out.println(query);
             
@@ -338,8 +361,9 @@ public class StudentDao {
         catch (SQLException sqlExcept)
         {
             sqlExcept.printStackTrace();
+            throw sqlExcept;
         }
-    }*/
+    }
     
     
     public ArrayList<Student> selectStudents(ArrayList<String> andrewIds) throws SQLException , Exception
@@ -394,7 +418,7 @@ public class StudentDao {
                 student.setFullTime(results.getString(5));
                 student.setCountry(results.getString(6));
                 student.setSemester(results.getString(7));
-                student.setPhotoPath(results.getString(6));
+                student.setPhotoPath(results.getString(8));
                 System.out.println(student.getAndrewID() 
                 		           + "\t\t" + student.getFirstName() 
                 		           + "\t\t" + student.getLastName()
@@ -460,7 +484,7 @@ public class StudentDao {
                 student.setFullTime(results.getString(5));
                 student.setCountry(results.getString(6));
                 student.setSemester(results.getString(7));
-                student.setPhotoPath(results.getString(6));
+                student.setPhotoPath(results.getString(8));
                 System.out.println(student.getAndrewID() 
                 		           + "\t\t" + student.getFirstName() 
                 		           + "\t\t" + student.getLastName()
@@ -537,7 +561,7 @@ public class StudentDao {
                 student.setFullTime(results.getString(5));
                 student.setCountry(results.getString(6));
                 student.setSemester(results.getString(7));
-                student.setPhotoPath(results.getString(6));
+                student.setPhotoPath(results.getString(8));
                 System.out.println(student.getAndrewID() 
                 		           + "\t\t" + student.getFirstName() 
                 		           + "\t\t" + student.getLastName()
@@ -737,7 +761,7 @@ public class StudentDao {
                 student.setFullTime(results.getString(5).trim().toUpperCase());
                 student.setCountry(results.getString(6).trim().toUpperCase());
                 student.setSemester(results.getString(7).trim().toUpperCase());
-                student.setPhotoPath(results.getString(6).trim().toUpperCase());
+                student.setPhotoPath(results.getString(8).trim().toUpperCase());
                 System.out.println(student.getAndrewID() 
                 		           + "\t\t" + student.getFirstName() 
                 		           + "\t\t" + student.getLastName()

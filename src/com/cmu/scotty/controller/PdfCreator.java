@@ -1,5 +1,21 @@
 package com.cmu.scotty.controller;
+/**
+ * @author Rui Wang
+ * @version 1.0
+ * 9 Dec, 2013
+ */
 
+/**
+ * PdfCreator Class takes a Student ArrayList as input and print out a pdf file to the selected 
+ * location.
+ * 
+ * printTable3() method could export the pdf file to the location
+ * 
+ * createThirdTable() put all the elements to the pdf document
+ * 
+ * printPreview() method could export the pdf file in the relative path
+ *
+ */
 
 import java.awt.Color;
 import java.io.FileOutputStream;
@@ -31,38 +47,17 @@ public class PdfCreator {
     /** The resulting PDF. 
      * @throws DocumentException 
      * @throws IOException */
-	public static PdfCreator c;
 
-	public static void test() throws IOException, DocumentException{
-		ArrayList<Student> s = new ArrayList<Student> ();
-		Student a=new Student("ruiw","Rui","Wang",
-				"MISM","F/T","China", "13F","");
-		//a.setPhotoPath("/Users/ruiwang/Desktop/Project6-Resources/testImages/t1.jpg");
-		Student b= new Student("a","asdf","asdf",
-				"MISM","F/T","China", "13F","");
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(b);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		s.add(a);
-		 c= new PdfCreator(s);
-		c.printTable3();
-	}
+<<<<<<< HEAD
+	
 
 	
+=======
+
+		
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
     public static String RESULT
-        = "src/Student_List1.pdf";
+        = "src/Student_List2.pdf";
     /** The movie poster. */
     public ArrayList <String> image=new ArrayList<String>();
     public ArrayList <String> program=new ArrayList<String>();
@@ -80,28 +75,75 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
+<<<<<<< HEAD
+  
+=======
+ 
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
 
     public PdfCreator(ArrayList<Student> s){
 
     	for(int i=0;i<s.size();i++){
     		image.add(s.get(i).getPhotoPath());
-    		program.add(s.get(i).getProgramTrack());
-    		firstname.add(s.get(i).getFirstName());
-    		lastname.add(s.get(i).getLastName().toUpperCase());
-    		email.add(s.get(i).getAndrewID()+"@andrew.cmu.edu");
-    		time.add(s.get(i).getFullTime());
-    		country.add(s.get(i).getCountry());
-    		intake.add(s.get(i).getSemester());
+    		if(s.get(i).getProgramTrack().trim().length()>10){
+    		program.add(s.get(i).getProgramTrack().trim().substring(0,10));
+    		}
+    		else{
+    			program.add(s.get(i).getProgramTrack().trim());	
+    		}
+    		if(s.get(i).getFirstName().trim().length()>10){
+    		firstname.add(s.get(i).getFirstName().trim().substring(0,10));
+    		}else{
+    			firstname.add(s.get(i).getFirstName().trim());
+    		}
+    		if(s.get(i).getLastName().trim().length()>10){
+        		lastname.add(s.get(i).getLastName().trim().substring(0,10));
+        		}
+    		else {
+    		lastname.add(s.get(i).getLastName().toUpperCase().trim());
+    		} 
+    		if(s.get(i).getAndrewID().trim().length()>8){
+    		email.add(s.get(i).getAndrewID().trim().substring(0,8)+"@andrew.cmu.edu");
+    		}else{
+    			email.add(s.get(i).getAndrewID().trim()+"@andrew.cmu.edu");
+    		}
+    		if(s.get(i).getFullTime().length()>3){
+    			time.add(s.get(i).getFullTime().trim().substring(0,3));
+    		}
+    		else{
+    		
+    		time.add(s.get(i).getFullTime().trim());
+    		}
+    		if(s.get(i).getCountry().length()>10){
+    		country.add(s.get(i).getCountry().trim().substring(0,10));
+    		}else{
+    			country.add(s.get(i).getCountry().trim());
+    		
+    		}
+    		if(s.get(i).getSemester().length()>5){
+    			intake.add(s.get(i).getSemester().trim().substring(0,5));
+    		}
+    		else{
+    		intake.add(s.get(i).getSemester().trim());
+    		}
     	}
     }
-    
+    /*
+     * setExportLocation() could set the exportation path
+     */
     public void setExportLocation(String path){
     	RESULT=path;
     }
-    
+    /*
+     * setTitle could set the document Title
+     */
     public void setTitle(String t){
     	TITLE = t;
     }
+    
+    /*
+     * printTable3()export pdf to the selected path
+     */
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
@@ -123,7 +165,9 @@ public class PdfCreator {
        
             document.close();
     }
- 
+ /*
+  * printTablePreview()generate a preview version of pdf in the software
+  */
 
     public void printTablePreview()
             throws IOException, DocumentException {
@@ -147,7 +191,9 @@ public class PdfCreator {
             document.close();
     }
    
-    
+    /*
+     * createThirdTable create a pdf file with desired elements
+     */
     public void createThirdTable() throws DocumentException, IOException {
     	int n=3-(image.size())%3;
     	
@@ -165,8 +211,9 @@ public class PdfCreator {
         font.setColor(30, 144, 255);;
         Font fontbold = FontFactory.getFont("Times-Roman", 12, Font.BOLD);
         // the cell object
+      
         for(int i=0; i<image.size();i++){
-        	
+        
         	if(i%9==0){
         	    cell = new PdfPCell();
         	    
@@ -210,22 +257,24 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
-        	    if(image.get(i)!=null && !image.get(i).isEmpty()){
+        	    try{
+        	 
         	    Image img = Image.getInstance(image.get(i));
         	    img.scaleAbsolute(130f, 130f);
             
             	
 
    	         ph.add(new Chunk(img, 0, 0, true));
-        	    }else{
+        	    }catch(IOException e){
         	    	
         	    	Image img= Image.getInstance(UNAVAILABILE);
         	    	//img.scaleToFit(300, 135);
         	    	img.scaleAbsolute(130f, 130f);
                 	
                 	ph.add(new Chunk(img, 0, 0, true));
-        	    }
+        	    }finally{
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
+   	       
    	         ph.add(new Phrase(lastname.get(i)+" ",font1));
    	         ph.add(new Phrase("\n"+email.get(i)+" ",font));
    	         ph.add(new Phrase("\nPROGRAM: "+program.get(i)+" "));
@@ -240,7 +289,7 @@ public class PdfCreator {
            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
        	table.addCell(cell);
            	
-            	
+        	    }
            
       
     }

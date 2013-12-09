@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -85,7 +86,7 @@ public class MainWindow {
 	private FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("Excel", "xls", "xlsx");
 	private JFileChooser jfcImportExcelFile = new JFileChooser();
 	//Panel Txt Import
-	private JLabel lblImportTxt = new JLabel("Text file");
+	private JLabel lblImportTxt = new JLabel("Class Roster(.txt)");
 	private JTextField jtfTxtPath = new JTextField();
 	private JButton jbtBrowseTxt = new JButton("Browse");
 	private File importTxtFile = new File(""); 
@@ -128,7 +129,7 @@ public class MainWindow {
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
-	private JTextField textField;
+	private JTextField jtfpdfTitle;
 	private JComboBox countrySelector;
 
 	
@@ -153,9 +154,8 @@ public class MainWindow {
 		      public void run() {
 		        try {
 		          	UIManager.setLookAndFeel(new SubstanceRavenGraphiteLookAndFeel());
-		        //	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		        } catch (Exception e) {
-		        	e.printStackTrace();
+		        	JOptionPane.showMessageDialog(null,"Error: Failed Generating skins for the window!");
 		        }
 		        MainWindow window;
 				try {
@@ -163,7 +163,7 @@ public class MainWindow {
 					window.frame.setVisible(true);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Error: Failed import/export files!");
 				}
 		        
 			
@@ -196,9 +196,7 @@ public class MainWindow {
 		//Import Panel
 		initializeImportPanel();
 		
-		//Export Panel
-		initializeExportPanel();
-	
+		
 
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
@@ -212,6 +210,7 @@ public class MainWindow {
 		//MainWindow layout
 		frame.getContentPane().add(jpStatic, BorderLayout.NORTH);
 	    frame.getContentPane().add(jpExport, BorderLayout.CENTER);
+
 		frame.getContentPane().add(jpFilter, BorderLayout.CENTER);
 		frame.getContentPane().add(jpImport, BorderLayout.CENTER);
 
@@ -232,7 +231,7 @@ public class MainWindow {
 		jpImport.add(jpImportTxt);
 		jpImport.add(jpImportNext);
 		jpImportExcel.setLayout(null);
-		lblImportExcel.setBounds(30, 18, 66, 59);
+		lblImportExcel.setBounds(36, 18, 66, 59);
 		jpImportExcel.add(lblImportExcel);
 		jtfExcelPath.setEditable(false);
 		jtfExcelPath.setBounds(127, 36, 283, 23);
@@ -253,7 +252,7 @@ public class MainWindow {
 		//PanelTxtImport
 		jpImportTxt.setLayout(null);
 		lblImportTxt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImportTxt.setBounds(33, 19, 61, 59);
+		lblImportTxt.setBounds(10, 19, 118, 59);
 		jpImportTxt.add(lblImportTxt);
 		jtfTxtPath.setEditable(false);
 		jtfTxtPath.setBounds(127, 37, 282, 23);
@@ -273,7 +272,7 @@ public class MainWindow {
 		//PanelImgPath
 		jfcImportImgFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 		jpImportImg.setLayout(null);
-		lblImportImg.setBounds(22, 11, 82, 62);
+		lblImportImg.setBounds(28, 11, 82, 62);
 		jpImportImg.add(lblImportImg);
 		jtfImgPath.setEditable(false);
 		jtfImgPath.setBounds(127, 31, 283, 23);
@@ -380,10 +379,10 @@ public class MainWindow {
 						}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Error!");
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Error!");
 					}
 					
 					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
@@ -404,10 +403,10 @@ public class MainWindow {
 								redoStudentTable();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								JOptionPane.showMessageDialog(null,"Error!");
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								JOptionPane.showMessageDialog(null,"Error!");
 							}
 						}
 					});
@@ -417,10 +416,10 @@ public class MainWindow {
 						redoStudentTable();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Error!");
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Error!");
 					}
 					
 					//Filter Panel
@@ -431,13 +430,49 @@ public class MainWindow {
 		});
 		
 				
-		jbtImportNext.setBounds(352, 10, 69, 23);
+		jbtImportNext.setBounds(449, 22, 69, 23);
 
 		//PanelNextImport
 		jpImportNext.add(jbtImportNext);
 	}
 	
-	
+	public void pdfPreview(){
+		File file = new File("preview.pdf"); 
+		RandomAccessFile raf;
+	     FileChannel channel;
+	     ByteBuffer buf;
+	     PDFFile pdffile; 
+		try {			
+		    
+			raf = new RandomAccessFile(file, "r");			
+			channel = raf.getChannel();  
+			buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+			pdffile = new PDFFile(buf);  
+		    
+	     int pages = pdffile.getNumPages();
+	     Image img;
+
+	     PDFPage page = pdffile.getPage(1);
+	     Rectangle rect =
+             new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
+	     
+	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
+	                 rect, // clip rect
+	                 null, // null for the ImageObserver
+	                 true, // fill background with white
+	                 true) // block until drawing is done
+	         ;
+	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
+	         raf.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}  catch (IOException e){
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}
+		
+	}
+
 	public void initializeFilterPanel(){
 		
 		jpFilter.setLayout(null);
@@ -491,10 +526,10 @@ public class MainWindow {
 					redoStudentTable();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Error!");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null,"Error!");
 				}
 			}
 		});
@@ -526,20 +561,27 @@ public class MainWindow {
 					pdfCreator = new PdfCreator( getCurrentStudentSubSet() );
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
 				
 				try {
 					pdfCreator.printTablePreview();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (DocumentException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				//Export Panel
+				try {
+					initializeExportPanel();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
 			}
 		});
@@ -573,13 +615,13 @@ public class MainWindow {
 					currStuFrmText = controller.selectStudentOnAndrewIds(andrewIds);
 					currStudentFrmFilter = controller.selectStudent(columnNames, columnValues);
 				} catch (ArrayListDoesNotMatch e) {
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (SQLException e) {
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (Exception e) {
-					e.printStackTrace();
+					
 					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
 				
@@ -645,8 +687,10 @@ public class MainWindow {
 			}
 		}
 			
+		ArrayList<Student> stus;
 		if (nonNull == false){
-			for(Student s: controller.selectStudent() ){
+			stus = controller.selectStudent(); 
+			for(Student s: stus ){
 				studentsData.add(s.toRow());
 			}
 		} else {			
@@ -659,8 +703,8 @@ public class MainWindow {
 					specColNames.remove(i);
 				}
 			}
-			
-			for(Student s: controller.selectStudent(specColNames , specFilters)){
+			stus = controller.selectStudent(specColNames, specFilters);
+			for(Student s: stus){
 				studentsData.add(s.toRow());
 			}
 		}
@@ -683,7 +727,7 @@ public class MainWindow {
 		studentsTable.setModel(studentsTableModel);
 		
 	}
-
+	
 	public void initializeExportPanel() throws IOException{
 		jpExport.setLayout(null);
 		jpPathExport.setBounds(0, 0, 284, 340);
@@ -691,6 +735,9 @@ public class MainWindow {
 		jpPreviewExport.setBounds(282, 0, 258, 340);
 		jpExport.add(jpPreviewExport);
 		//Path Export Panel
+		JLabel lblReportTitle = new JLabel("Report Title");
+		lblReportTitle.setBounds(20, 21, 78, 15);
+		jpPathExport.add(lblReportTitle);
 		jpPathExport.setLayout(null);
 		jpPathExport.setLayout(null);
 		lalPdfExport.setBounds(20, 68, 78, 15);
@@ -698,6 +745,8 @@ public class MainWindow {
 		jtfPdfPath.setEditable(false);
 		jtfPdfPath.setBounds(20, 86, 175, 22);
 		jpPathExport.add(jtfPdfPath);
+		
+		
 		jfcExportPdfFile.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
 		jbtPdfBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -714,52 +763,59 @@ public class MainWindow {
 		jpPathExport.add(jbtPdfBrowse);
 		lalPdfName.setBounds(20, 119, 54, 15);
 		jpPathExport.add(lalPdfName);
-		jtfFileName.setBounds(20, 136, 220, 22);
+		jtfFileName.setBounds(20, 136, 195, 22);
 		jpPathExport.add(jtfFileName);
-		lal_pdf.setForeground(Color.DARK_GRAY);
-		lal_pdf.setBounds(250, 140, 24, 15);
+		
+		jtfpdfTitle = new JTextField();
+		jtfpdfTitle.setFont(new Font("SimSun", Font.PLAIN, 12));
+		jtfpdfTitle.setBounds(20, 39, 254, 20);
+		jpPathExport.add(jtfpdfTitle);
+		jtfpdfTitle.setColumns(10);
+		
+		lal_pdf.setBounds(225, 139, 40, 15);
 		jpPathExport.add(lal_pdf);
+		
 		jbtExportPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(jtfpdfTitle.getText().trim().length()<1 || jtfPdfPath.getText().trim().length()<1 || jtfFileName.getText().trim().length()<1){
+					if(jtfpdfTitle.getText().trim().length()<1 )
+						JOptionPane.showMessageDialog(null,"Please input the Pdf Title!");
+					else if(jtfPdfPath.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please choose Folder for the Export File!");
+					else if(jtfFileName.getText().trim().length()<1)
+						JOptionPane.showMessageDialog(null,"Please input the file name!");
+				}
+				else{	
+					String path = jtfPdfPath.getText().trim()+"\\"+jtfFileName.getText().trim()+".pdf";
+					pdfCreator.setExportLocation(path);
+					pdfCreator.setTitle(jtfpdfTitle.getText().trim());
+					try {
+						pdfCreator.printTable3();
+						JOptionPane.showMessageDialog(null,"Done!");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null,e1.getMessage());
+					} catch (DocumentException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null,e1.getMessage());
+					}
+					
+				}
 			}
 		});
 		jbtExportPdf.setBounds(20, 197, 123, 30);
 		jpPathExport.add(jbtExportPdf);
+	
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Calibri", Font.PLAIN, 10));
-		textField.setBounds(20, 39, 254, 20);
-		jpPathExport.add(textField);
-		textField.setColumns(10);
-		
-		JLabel lblReportTitle = new JLabel("Report Title");
-		lblReportTitle.setBounds(20, 21, 78, 15);
-		jpPathExport.add(lblReportTitle);
+	
 		jpPreviewExport.setLayout(null);
 		jpPreviewWindow.setBorder(new TitledBorder(null, "File Preview", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		jpPreviewWindow.setBounds(10, 10, 228, 320);
 		jpPreviewExport.add(jpPreviewWindow);
 		
 		// Preview Window
-		 File file = new File("Student_List1.pdf");  
-	     RandomAccessFile raf = new RandomAccessFile(file, "r");  
-	     FileChannel channel = raf.getChannel();  
-	     ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());  
-	     PDFFile pdffile = new PDFFile(buf);  
-	     int pages = pdffile.getNumPages();
-	     Image img;
-	
-	     PDFPage page = pdffile.getPage(1);
-	     Rectangle rect =
-             new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
-	     
-	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
-	                 rect, // clip rect
-	                 null, // null for the ImageObserver
-	                 true, // fill background with white
-	                 true) // block until drawing is done
-	         ;
-	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
+		pdfPreview();
+	   
 	}
 	
 	public void initializeTopButton(){
@@ -799,6 +855,8 @@ public class MainWindow {
 				frame.getContentPane().add(jpExport, BorderLayout.CENTER);
 			}
 		});
+		jbtFilter.setEnabled(false);
+		jbtExport.setEnabled(false);
 		
 	}
 	public JComboBox getProgramSelector() {
