@@ -542,7 +542,7 @@ public class StudentDao {
         	
             if(columnName.equalsIgnoreCase("programtrack"))
             {
-            	query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " likes " + "'%" + columnValue.trim() + "%'"; 	
+            	query = "select * from " + tableName + " where " + columnName.trim().toUpperCase() + " like " + "'%" + columnValue.trim() + "%'"; 	
             }
             else
             {
@@ -701,6 +701,12 @@ public class StudentDao {
     public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws  SQLException , Exception
     {   
     	
+    	
+    	if(columnNameArr==null || columnValueArr==null || columnNameArr.size()!=columnValueArr.size())
+    	{
+    		return null;
+    	}
+    	
     	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
     	
     	int count = 0;
@@ -713,10 +719,7 @@ public class StudentDao {
     	String columnName = null;
     	String columnValue = null;
     	
-    	if(columnNameArr.size()!=columnValueArr.size())
-    	{
-    		return null;
-    	}
+    	
     	
         try
         {
@@ -734,13 +737,30 @@ public class StudentDao {
         		columnName = (String)colNmeItr.next();
         		columnValue = (String)colValItr.next();
         		
-        		if(count==0)
-        	    {
-        			query = query + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
-        	    }
-        		else
+        		
+        		if(columnName.equalsIgnoreCase("programtrack"))
         		{
-        			query = query + " and " + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
+        			if(count==0)
+	        	    {
+	        			query = query + columnName.trim().toUpperCase() + " like " + " '%" + columnValue.trim().toUpperCase()  + "%' " ;
+	        	    }
+	        		else
+	        		{
+	        			query = query + " and " + columnName.trim().toUpperCase() + " like " + " '%" + columnValue.trim().toUpperCase()  + "%' " ;
+	        		}
+        		}
+        		else {
+        			
+        		
+	        		if(count==0)
+	        	    {
+	        			query = query + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
+	        	    }
+	        		else
+	        		{
+	        			query = query + " and " + columnName.trim().toUpperCase() + " = " + " '" + columnValue.trim().toUpperCase()  + "' " ;
+	        		}
+        		
         		}
         		
         	    count++;
