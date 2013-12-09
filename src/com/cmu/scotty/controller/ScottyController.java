@@ -32,22 +32,17 @@ public class ScottyController {
 		 boolean chkTbleStatus = false;
 		try {
 			chkTbleStatus = studentDao.checkTable();
+			
+			if(chkTbleStatus==true)
+			{
+				studentDao.dropTable();
+			}
+			studentDao.createTable();
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			if(chkTbleStatus==false)
-			{
-				try {
-					studentDao.createTable();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
    }
 	
 
