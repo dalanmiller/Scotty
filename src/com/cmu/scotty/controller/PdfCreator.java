@@ -145,7 +145,7 @@ public class PdfCreator {
       
            
             createThirdTable();
-       
+        //    writer.close();
             document.close();
     }
  /*
@@ -170,8 +170,9 @@ public class PdfCreator {
       
            
             createThirdTable();
-       
+           
             document.close();
+            writer.close();
     }
    
     /*

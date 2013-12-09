@@ -452,9 +452,9 @@ public class MainWindow {
 	public void pdfPreview(){
 		File file = new File("preview.pdf"); 
 		RandomAccessFile raf;
-	     FileChannel channel;
-	     ByteBuffer buf;
-	     PDFFile pdffile; 
+	    FileChannel channel;
+	    ByteBuffer buf;
+	    PDFFile pdffile; 
 		try {			
 		    
 			raf = new RandomAccessFile(file, "r");			
@@ -477,6 +477,10 @@ public class MainWindow {
 	         ;
 	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
 	         raf.close();
+	         channel.close();
+	         buf.clear();
+	         
+	         
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null,e.getMessage());
