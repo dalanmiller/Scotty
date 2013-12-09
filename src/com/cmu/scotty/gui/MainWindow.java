@@ -196,9 +196,7 @@ public class MainWindow {
 		//Import Panel
 		initializeImportPanel();
 		
-		//Export Panel
-		initializeExportPanel();
-	
+		
 
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
@@ -438,7 +436,43 @@ public class MainWindow {
 		jpImportNext.add(jbtImportNext);
 	}
 	
-	
+	public void pdfPreview(){
+		File file = new File("preview.pdf"); 
+		RandomAccessFile raf;
+	     FileChannel channel;
+	     ByteBuffer buf;
+	     PDFFile pdffile; 
+		try {			
+		    
+			raf = new RandomAccessFile(file, "r");			
+			channel = raf.getChannel();  
+			buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
+			pdffile = new PDFFile(buf);  
+		    
+	     int pages = pdffile.getNumPages();
+	     Image img;
+
+	     PDFPage page = pdffile.getPage(1);
+	     Rectangle rect =
+             new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
+	     
+	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
+	                 rect, // clip rect
+	                 null, // null for the ImageObserver
+	                 true, // fill background with white
+	                 true) // block until drawing is done
+	         ;
+	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
+	         raf.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}  catch (IOException e){
+			JOptionPane.showMessageDialog(null,e.getMessage());
+		}
+		
+	}
+
 	public void initializeFilterPanel(){
 		
 		jpFilter.setLayout(null);
@@ -539,6 +573,13 @@ public class MainWindow {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (DocumentException e) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+				//Export Panel
+				try {
+					initializeExportPanel();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
@@ -750,6 +791,7 @@ public class MainWindow {
 					pdfCreator.setTitle(jtfpdfTitle.getText().trim());
 					try {
 						pdfCreator.printTable3();
+						JOptionPane.showMessageDialog(null,"Done!");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null,e1.getMessage());
@@ -772,38 +814,7 @@ public class MainWindow {
 		jpPreviewExport.add(jpPreviewWindow);
 		
 		// Preview Window
-		
-		try {
-			 File file = new File("preview.pdf");  
-		     RandomAccessFile raf;
-		     FileChannel channel;
-		     ByteBuffer buf;
-		     PDFFile pdffile;
-			raf = new RandomAccessFile(file, "r");
-			channel = raf.getChannel();  
-			buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-			pdffile = new PDFFile(buf);  
-		
-	     int pages = pdffile.getNumPages();
-	     Image img;
-
-	     PDFPage page = pdffile.getPage(1);
-	     Rectangle rect =
-             new Rectangle(0, 0, (int)page.getBBox().getWidth(), (int)page.getBBox().getHeight());
-	     
-	           img = page.getImage(220, (int)(220.0/rect.width*rect.height),
-	                 rect, // clip rect
-	                 null, // null for the ImageObserver
-	                 true, // fill background with white
-	                 true) // block until drawing is done
-	         ;
-	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null,e.getMessage());
-		}  catch (IOException e){
-			JOptionPane.showMessageDialog(null,e.getMessage());
-		}
+		pdfPreview();
 	   
 	}
 	

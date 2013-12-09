@@ -1,5 +1,21 @@
 package com.cmu.scotty.controller;
+/**
+ * @author Rui Wang
+ * @version 1.0
+ * 9 Dec, 2013
+ */
 
+/**
+ * PdfCreator Class takes a Student ArrayList as input and print out a pdf file to the selected 
+ * location.
+ * 
+ * printTable3() method could export the pdf file to the location
+ * 
+ * createThirdTable() put all the elements to the pdf document
+ * 
+ * printPreview() method could export the pdf file in the relative path
+ *
+ */
 
 import java.awt.Color;
 import java.io.FileOutputStream;
@@ -32,8 +48,14 @@ public class PdfCreator {
      * @throws DocumentException 
      * @throws IOException */
 
+<<<<<<< HEAD
+	
+
+	
+=======
 
 		
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -53,7 +75,11 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
+<<<<<<< HEAD
+  
+=======
  
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
 
     public PdfCreator(ArrayList<Student> s){
 
@@ -102,14 +128,22 @@ public class PdfCreator {
     		}
     	}
     }
-    
+    /*
+     * setExportLocation() could set the exportation path
+     */
     public void setExportLocation(String path){
     	RESULT=path;
     }
-    
+    /*
+     * setTitle could set the document Title
+     */
     public void setTitle(String t){
     	TITLE = t;
     }
+    
+    /*
+     * printTable3()export pdf to the selected path
+     */
     public void printTable3()
             throws IOException, DocumentException {
         	// step 1
@@ -131,7 +165,9 @@ public class PdfCreator {
        
             document.close();
     }
- 
+ /*
+  * printTablePreview()generate a preview version of pdf in the software
+  */
 
     public void printTablePreview()
             throws IOException, DocumentException {
@@ -155,7 +191,9 @@ public class PdfCreator {
             document.close();
     }
    
-    
+    /*
+     * createThirdTable create a pdf file with desired elements
+     */
     public void createThirdTable() throws DocumentException, IOException {
     	int n=3-(image.size())%3;
     	
