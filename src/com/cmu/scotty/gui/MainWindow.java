@@ -439,32 +439,6 @@ public class MainWindow {
 	
 	
 	public void initializeFilterPanel(){
-		ArrayList<Student> students = new ArrayList<Student>();
-		
-     	Student student1 = new Student();
-     	
-	     	student1.setAndrewID("44435slkf");
-	     	student1.setFirstName("Tania");
-	     	student1.setLastName("Dasgupta");
-	     	student1.setCountry("India");
-	     	student1.setFullTime("Yes");
-	     	student1.setProgramTrack("MISM");
-	     	student1.setSemester("1st");
-	     	student1.setPhotoPath("jndj\\bsdfsd");
-			
-		Student student2 = new Student();
-			student2.setAndrewID("0078");
-			student2.setFirstName("Daniel");
-			student2.setLastName("Miller");
-			student2.setCountry("U.S");
-			student2.setFullTime("Yes");
-			student2.setProgramTrack("MISM");
-			student2.setSemester("1st");
-			student2.setPhotoPath("j\\ndj\\bsdfsd");
-			
-		students.add(student1);
-		students.add(student2);
-		
 		
 		jpFilter.setLayout(null);
 		jpFilterList.setBounds(189, 11, 351, 329);
