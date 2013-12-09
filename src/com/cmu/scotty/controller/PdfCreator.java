@@ -42,10 +42,6 @@ public class PdfCreator {
      * @throws DocumentException 
      * @throws IOException */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f56bec3d62b67b933c2da0132ac95bbfee77f0c0
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -158,13 +154,15 @@ public class PdfCreator {
     public void printTablePreview()
             throws IOException, DocumentException {
         	// step 1
-        
+        	
+    	  	String path= System.getProperty("java.io.tmpdir");
+    		
             document
                 = new Document(PageSize.A4, 30, 30, 30, 30);
             // step 2
             setTitle("Preview File");
             PdfWriter writer
-                = PdfWriter.getInstance(document, new FileOutputStream("preview.pdf"));
+                = PdfWriter.getInstance(document, new FileOutputStream(path+"//preview.pdf"));
             writer.setCompressionLevel(0);
             // step 3
             document.setMargins(20,20,0,30);
@@ -175,6 +173,7 @@ public class PdfCreator {
             createThirdTable();
        
             document.close();
+            writer.close();
     }
    
     /*
@@ -205,7 +204,8 @@ public class PdfCreator {
         	    
                 cell.setBorder(0);
                 Image logo = Image.getInstance(getClass().getResource(LOGO));
-               
+                //Image logo = Image.getInstance(LOGO);
+
                 logo.scaleAbsoluteHeight(20);
                 logo.scaleAbsoluteWidth(20);
                 logo.scalePercent(23);

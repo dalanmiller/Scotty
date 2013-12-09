@@ -71,7 +71,7 @@ public class testMain {
 			boolean tableExists = studentDao.checkTable();
 			System.out.print(tableExists);
 			
-			//studentDao.updateStudent(student2);
+			studentDao.updateStudent(student2);
 			
 			
 			
@@ -81,14 +81,14 @@ public class testMain {
 			//studentD = scottyCon.selectStudent("andrewId", "abmd3");
 			//ctrArr = scottyCon.selectCountries();
 			
-			stuArr = scottyCon.selectAndrewIds();
-			ArrayList<Student> stuArrNotInDb  = scottyCon.selectStudentOnAndrewIds(stuArr);
+			//ArrayList<Student> allStuArr = scottyCon.selectStudent();
+			//ArrayList<Student> stuArrNotInDb  = scottyCon.selectStudentOnAndrewIds(stuArr);
 			
 			//ArrayList<Student> stuArrNotInDb  = scottyCon.fetchStuPresentInDb(arrStudents);
 			
-			System.out.print("Hi");
+			//System.out.print("Hi");
 			
-			System.out.println(stuArrNotInDb);
+			//System.out.println(allStuArr);
 						
 			//tableExists = studentDao.checkTable();
 			

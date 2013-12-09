@@ -262,16 +262,7 @@ public class StudentDao {
             //String[] studentCol = new String[8];
 
             int count = 0;
-            
-           /*  = if(student.getFirstName()!=null) { String firstNamestudent.getFirstName().trim()};
-            String lastName = student.getLastName().trim();
-            String programTrack = student.getProgramTrack();
-            String fullTime = student.getFullTime().trim();
-            String country = student.getCountry().trim();
-            String semester = student.getSemester().trim();
-            String pathName = student.getPhotoPath().trim();
-            String andrewId = student.getAndrewID().trim();*/
-            
+               
             String query = " update " + tableName + " set " ;
             
             	            	
@@ -344,15 +335,7 @@ public class StudentDao {
             	}            
             	            	
             query = query + " where andrewId = '" + student.getAndrewID() + "'" ;        
-       		    /* + "'" + student.getAndrewID() + "'," 
-       		     + "'" + student.getFirstName().trim() + "')";*/
-       		    /* + "'" + student.getLastName().trim().toUpperCase() + "',"
-       		     + "'" + student.getProgramTrack().trim().toUpperCase() + "',"
-       		     + "'" + student.getFullTime().trim().toUpperCase() + "',"
-       		     + "'" + student.getCountry().trim().toUpperCase() + "',"
-       		     + "'" + student.getSemester().trim().toUpperCase() + "',"
-       		     + "'" + student.getPhotoPath().trim().toUpperCase() + "')";*/
-            
+       		            
             System.out.println(query);
             
             if(count>0){

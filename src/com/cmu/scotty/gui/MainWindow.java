@@ -141,8 +141,11 @@ public class MainWindow {
 	private final JLabel lblNewLabel = new JLabel("Country:");
 	private JComboBox programSelector;
 	private JTable studentsList;
-	private JTextField jtfpdfTitle;
+	
 	private JComboBox countrySelector;
+
+	//EXPORT
+	private JTextField jtfpdfTitle = new JTextField();
 
 	
 	private final ArrayList<String> dbColumns = new ArrayList<String>(){{add("PROGRAMTRACK"); add("COUNTRY");}};
@@ -450,7 +453,9 @@ public class MainWindow {
 	}
 	
 	public void pdfPreview(){
-		File file = new File("preview.pdf"); 
+	  	String path= System.getProperty("java.io.tmpdir");
+
+		File file = new File(path, "preview.pdf"); 
 		RandomAccessFile raf;
 	     FileChannel channel;
 	     ByteBuffer buf;
@@ -475,6 +480,7 @@ public class MainWindow {
 	                 true, // fill background with white
 	                 true) // block until drawing is done
 	         ;
+	         jpPreviewWindow.removeAll();
 	         jpPreviewWindow.add(new JLabel(new ImageIcon(img)));
 	         raf.close();
 		} catch (FileNotFoundException e) {
@@ -779,7 +785,7 @@ public class MainWindow {
 		jtfFileName.setBounds(20, 136, 195, 22);
 		jpPathExport.add(jtfFileName);
 		
-		jtfpdfTitle = new JTextField();
+		
 		jtfpdfTitle.setFont(new Font("SimSun", Font.PLAIN, 12));
 		jtfpdfTitle.setBounds(20, 39, 254, 20);
 		jpPathExport.add(jtfpdfTitle);
@@ -791,12 +797,20 @@ public class MainWindow {
 		jbtExportPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(jtfpdfTitle.getText().trim().length()<1 || jtfPdfPath.getText().trim().length()<1 || jtfFileName.getText().trim().length()<1){
-					if(jtfpdfTitle.getText().trim().length()<1 )
-						JOptionPane.showMessageDialog(null,"Please input the Pdf Title!");
-					else if(jtfPdfPath.getText().trim().length()<1)
+					if(jtfpdfTitle.getText().trim().length()<1 ){
+					//	jtfpdfTitle.setText("Output");
+					}
+					
+						
+					else if(jtfPdfPath.getText().trim().length()<1){
 						JOptionPane.showMessageDialog(null,"Please choose Folder for the Export File!");
+					}
+						
 					else if(jtfFileName.getText().trim().length()<1)
+					{
 						JOptionPane.showMessageDialog(null,"Please input the file name!");
+					}
+						
 				}
 				else{	
 					String path = jtfPdfPath.getText().trim()+"\\"+jtfFileName.getText().trim()+".pdf";

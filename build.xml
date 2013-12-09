@@ -17,6 +17,13 @@
         <pathelement location="lib/pdfcreater/itextpdf-5.4.4.jar"/>
         <pathelement location="lib/pdfcreater/PDFRenderer.jar"/>
         <pathelement location="lib/derby/derby.jar"/>
+    	<pathelement location="lib/derby/*.jar"/>
+    	<pathelement location="lib/filereader/*.jar"/>
+    	<pathelement location="lib/itext-5.4.4/*.jar"/>
+    	<pathelement location="lib/jexcelapi_2_6_12/jexcelapi/*.jar"/>
+    	<pathelement location="lib/logo/*.png"/>
+    	<pathelement location="lib/pdfcreater/*.jar"/>
+    	<pathelement location="lib/skins/*.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
