@@ -195,8 +195,8 @@ public class MainWindow {
 		initializeTopButton();
 		//Import Panel
 		initializeImportPanel();
-		
-		
+	//	initializeFilterPanel();
+	//	initializeImportPanel();
 
 		//Panels
 		jpStatic.setLayout(new GridLayout(1, 3, 0, 0));
@@ -387,7 +387,7 @@ public class MainWindow {
 					
 					String[] countryOptionsArray = countryOptions.toArray(new String[countryOptions.size()]);
 					countrySelector = new JComboBox(countryOptionsArray);
-					countrySelector.setBounds(54,36,109,20);
+					countrySelector.setBounds(0,86,163,20);
 					countrySelector.addPropertyChangeListener(new PropertyChangeListener(){
 						public void propertyChange(PropertyChangeEvent arg0){
 //							System.out.println(arg0);
@@ -508,7 +508,7 @@ public class MainWindow {
 		jpFilterCtrl.setLayout(null);
 		
 		JLabel lblProgram = new JLabel("Program:");
-		lblProgram.setBounds(0, 8, 44, 14);
+		lblProgram.setBounds(0, 8, 85, 14);
 		jpFilterCtrl.add(lblProgram);
 		
 		programSelector = new JComboBox(programOptions);
@@ -533,15 +533,15 @@ public class MainWindow {
 				}
 			}
 		});
-		programSelector.setBounds(54, 5, 109, 20);
+		programSelector.setBounds(0, 32, 163, 20);
 		jpFilterCtrl.add(programSelector);
 	
-		lblNewLabel.setBounds(0, 39, 43, 14);
+		lblNewLabel.setBounds(0, 62, 67, 14);
 		
 		jpFilterCtrl.add(lblNewLabel);
 			
-		JButton filterNext = new JButton("Next");
-		filterNext.setBounds(108, 74, 55, 23);
+		JButton filterNext = new JButton("Next>>");
+		filterNext.setBounds(87, 139, 76, 23);
 		jpFilterCtrl.add(filterNext);
 		
 		//NEED TO CREATE ACTIONS TO SWITCH TO EXPORT WINDOW
