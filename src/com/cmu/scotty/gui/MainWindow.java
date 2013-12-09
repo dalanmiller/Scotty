@@ -472,6 +472,7 @@ public class MainWindow {
 		}
 		
 	}
+
 	public void initializeFilterPanel(){
 		
 		jpFilter.setLayout(null);

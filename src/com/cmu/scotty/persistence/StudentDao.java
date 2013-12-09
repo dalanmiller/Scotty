@@ -355,7 +355,10 @@ public class StudentDao {
             
             System.out.println(query);
             
-            stmt.executeUpdate(query);            		     
+            if(count>0){
+            	 stmt.executeUpdate(query); 
+            }
+                      		     
             stmt.close();
         }
         catch (SQLException sqlExcept)
@@ -400,37 +403,42 @@ public class StudentDao {
         	
         	System.out.println(query);
         	
-            ResultSet results = stmt.executeQuery(query);
+        	if(count>0)
+        	{
+        		ResultSet results = stmt.executeQuery(query);
+                
+                
+                ResultSetMetaData rsmd = results.getMetaData();
+                int numberCols = rsmd.getColumnCount();
+                
+                while(results.next())
+                {
+                	
+                	Student student = new Student();
+                	
+                    student.setAndrewID(results.getString(1));
+                    student.setFirstName(results.getString(2));            
+                    student.setLastName(results.getString(3));
+                    student.setProgramTrack(results.getString(4));
+                    student.setFullTime(results.getString(5));
+                    student.setCountry(results.getString(6));
+                    student.setSemester(results.getString(7));
+                    student.setPhotoPath(results.getString(8));
+                    System.out.println(student.getAndrewID() 
+                    		           + "\t\t" + student.getFirstName() 
+                    		           + "\t\t" + student.getLastName()
+                    		           + "\t\t" + student.getProgramTrack()
+                    		           + "\t\t" + student.getFullTime()
+                    		           + "\t\t" + student.getCountry()
+                    		           + "\t\t" + student.getSemester()
+                    		           + "\t\t" + student.getPhotoPath());
+                    studentsArr.add(student);
+                }
+                
+                results.close();
+        	}
+        	
             
-            
-            ResultSetMetaData rsmd = results.getMetaData();
-            int numberCols = rsmd.getColumnCount();
-            
-            while(results.next())
-            {
-            	
-            	Student student = new Student();
-            	
-                student.setAndrewID(results.getString(1));
-                student.setFirstName(results.getString(2));            
-                student.setLastName(results.getString(3));
-                student.setProgramTrack(results.getString(4));
-                student.setFullTime(results.getString(5));
-                student.setCountry(results.getString(6));
-                student.setSemester(results.getString(7));
-                student.setPhotoPath(results.getString(8));
-                System.out.println(student.getAndrewID() 
-                		           + "\t\t" + student.getFirstName() 
-                		           + "\t\t" + student.getLastName()
-                		           + "\t\t" + student.getProgramTrack()
-                		           + "\t\t" + student.getFullTime()
-                		           + "\t\t" + student.getCountry()
-                		           + "\t\t" + student.getSemester()
-                		           + "\t\t" + student.getPhotoPath());
-                studentsArr.add(student);
-            }
-            
-            results.close();
             stmt.close();
            
         }
@@ -690,7 +698,7 @@ public class StudentDao {
     }
     
     
-    public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws ArrayListDoesNotMatch, SQLException , Exception
+    public ArrayList<Student> selectStudent(ArrayList<String> columnNameArr, ArrayList<String> columnValueArr) throws  SQLException , Exception
     {   
     	
     	ArrayList<Student> studentsArr = new ArrayList<Student>() ;
@@ -707,8 +715,7 @@ public class StudentDao {
     	
     	if(columnNameArr.size()!=columnValueArr.size())
     	{
-    		ArrayListDoesNotMatch arrDoesNMat = new ArrayListDoesNotMatch();
-    		throw  arrDoesNMat;
+    		return null;
     	}
     	
         try
@@ -742,38 +749,41 @@ public class StudentDao {
         	
         	System.out.println(query);
         	
-            
-            ResultSet results = stmt.executeQuery(query);
-            
-            
-            ResultSetMetaData rsmd = results.getMetaData();
-            int numberCols = rsmd.getColumnCount();
-            
-            while(results.next())
+            if (count > 0)
             {
-            	
-            	Student student = new Student();
-            	
-                student.setAndrewID(results.getString(1));
-                student.setFirstName(results.getString(2).trim().toUpperCase());            
-                student.setLastName(results.getString(3).trim().toUpperCase());
-                student.setProgramTrack(results.getString(4).trim().toUpperCase());
-                student.setFullTime(results.getString(5).trim().toUpperCase());
-                student.setCountry(results.getString(6).trim().toUpperCase());
-                student.setSemester(results.getString(7).trim().toUpperCase());
-                student.setPhotoPath(results.getString(8).trim().toUpperCase());
-                System.out.println(student.getAndrewID() 
-                		           + "\t\t" + student.getFirstName() 
-                		           + "\t\t" + student.getLastName()
-                		           + "\t\t" + student.getProgramTrack()
-                		           + "\t\t" + student.getFullTime()
-                		           + "\t\t" + student.getCountry()
-                		           + "\t\t" + student.getSemester()
-                		           + "\t\t" + student.getPhotoPath());
-                studentsArr.add(student);
+            	ResultSet results = stmt.executeQuery(query);
+                
+                
+                ResultSetMetaData rsmd = results.getMetaData();
+                int numberCols = rsmd.getColumnCount();
+                
+                while(results.next())
+                {
+                	
+                	Student student = new Student();
+                	
+                    student.setAndrewID(results.getString(1));
+                    student.setFirstName(results.getString(2).trim().toUpperCase());            
+                    student.setLastName(results.getString(3).trim().toUpperCase());
+                    student.setProgramTrack(results.getString(4).trim().toUpperCase());
+                    student.setFullTime(results.getString(5).trim().toUpperCase());
+                    student.setCountry(results.getString(6).trim().toUpperCase());
+                    student.setSemester(results.getString(7).trim().toUpperCase());
+                    student.setPhotoPath(results.getString(8).trim().toUpperCase());
+                    System.out.println(student.getAndrewID() 
+                    		           + "\t\t" + student.getFirstName() 
+                    		           + "\t\t" + student.getLastName()
+                    		           + "\t\t" + student.getProgramTrack()
+                    		           + "\t\t" + student.getFullTime()
+                    		           + "\t\t" + student.getCountry()
+                    		           + "\t\t" + student.getSemester()
+                    		           + "\t\t" + student.getPhotoPath());
+                    studentsArr.add(student);
+                }
+                
+                results.close();
             }
             
-            results.close();
             stmt.close();
            
         }
