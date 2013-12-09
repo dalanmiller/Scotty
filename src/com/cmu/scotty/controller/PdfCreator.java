@@ -42,10 +42,7 @@ public class PdfCreator {
      * @throws DocumentException 
      * @throws IOException */
 
-<<<<<<< HEAD
-=======
 
->>>>>>> f56bec3d62b67b933c2da0132ac95bbfee77f0c0
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -243,6 +240,7 @@ public class PdfCreator {
         
         	    
         	    Phrase ph = new Phrase();
+        	   
         	    try{
         	 
         	    Image img = Image.getInstance(image.get(i));
@@ -252,12 +250,13 @@ public class PdfCreator {
 
    	         ph.add(new Chunk(img, 0, 0, true));
         	    }catch(IOException e){
-        	    	
+        	    	 if(!image.get(i).isEmpty()){
         	    	Image img= Image.getInstance(UNAVAILABILE);
         	    	//img.scaleToFit(300, 135);
         	    	img.scaleAbsolute(130f, 130f);
                 	
                 	ph.add(new Chunk(img, 0, 0, true));
+        	    	 }
         	    }finally{
    	         ph.add(new Phrase("\n"+firstname.get(i)+" ",font1));
    	       
