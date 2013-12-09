@@ -2,7 +2,14 @@
 package com.cmu.scotty.model;
 
 import java.lang.StringBuilder;
-
+/**
+ * 
+ * @author Leo, Rebacca, Ray, Tania, Daniel
+ * 
+ * This is an Student class.
+ * The class contains the whole information of a student
+ * 
+ */
 
 public class Student {
 	private String andrewID;

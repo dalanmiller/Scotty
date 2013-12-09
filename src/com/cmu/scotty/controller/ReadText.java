@@ -5,8 +5,22 @@ import java.util.*;
 import com.cmu.scotty.model.*;
 import com.cmu.scotty.exception.*;
 
+/**
+ * 
+ * @author Leo, Rebacca, Ray, Tania, Daniel
+ * 
+ * This is a class for reading test files
+ *
+ */
+
 public class ReadText {
-	
+	/**
+	 * This is a method to read a text file path and return a student list 
+	 * @param inputtext
+	 * @return ArrayList<Student>
+	 * @throws IOException
+	 * @throws WrongTextException
+	 */
 	public ArrayList<Student> read(String inputtext) throws IOException,WrongTextException{ 
 		File file= new File(inputtext);
         BufferedReader reader = new BufferedReader(new FileReader(file));

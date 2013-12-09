@@ -8,7 +8,6 @@ import java.util.Iterator;
 
 import jxl.read.biff.BiffException;
 
-import com.cmu.scotty.exception.ArrayListDoesNotMatch;
 import com.cmu.scotty.exception.WrongExcelException;
 import com.cmu.scotty.exception.WrongTextException;
 import com.cmu.scotty.model.Student;
