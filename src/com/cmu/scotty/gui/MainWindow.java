@@ -367,9 +367,12 @@ public class MainWindow {
 					try {
 						ArrayList<String> inputCountries= controller.selectCountries();
 						
-						Collections.sort(countryOptions, new Comparator<String>() {
+						Collections.sort(inputCountries,
+								new Comparator<String>() {
 						    @Override
 						    public int compare(String arg0, String arg1) {
+										System.out.println("arg0:" + arg0
+												+ " | arg1" + arg1);
 								return arg0.compareTo(arg1);
 							}
 						});
