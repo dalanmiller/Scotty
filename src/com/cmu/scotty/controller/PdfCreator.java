@@ -47,11 +47,15 @@ public class PdfCreator {
     /** The resulting PDF. 
      * @throws DocumentException 
      * @throws IOException */
-	public static PdfCreator c;
 
+<<<<<<< HEAD
 	
 
 	
+=======
+
+		
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
     public static String RESULT
         = "src/Student_List2.pdf";
     /** The movie poster. */
@@ -71,7 +75,11 @@ public class PdfCreator {
     public static String TITLE
     ="Master of Information Systems Management Student List for F13 Semester (August 2013)";
     public static Document document;
+<<<<<<< HEAD
   
+=======
+ 
+>>>>>>> db9c1f9205a7a7bbd5f68148ee9088e598493311
 
     public PdfCreator(ArrayList<Student> s){
 
